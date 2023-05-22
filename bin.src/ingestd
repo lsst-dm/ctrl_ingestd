@@ -25,7 +25,7 @@ import asyncio
 import os
 import sys
 
-from lsst.ctrl.rucio.ingest.ingestd import IngestD
+from lsst.ctrl.ingestd.ingestd import IngestD
 
 if __name__ == "__main__":
     ingestd = IngestD()
