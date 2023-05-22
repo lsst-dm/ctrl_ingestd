@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  ingestd:
+    container_name: ingestd
+    environment:
+        - CTRL_RUCIO_INGEST_CONFIG=/home/lsst/ctrl_rucio_ingest/etc/ingester.yml
+    image: ingestd:${CTRL_RUCIO_INGEST_VERSION}
+    extra_hosts:
+        - "kafka:127.0.0.1"
+    build:
+      context: ./ingestd
+      args:
+        - LSST_STACK_VERSION
+        - CTRL_RUCIO_INGEST_GIT
+        - CONFLUENT_KAFKA_VERSION
+    network_mode: "host"
+  testenv-ingestd:
+    container_name: testenv-ingestd
+    environment:
+        - CTRL_RUCIO_INGEST_CONFIG=/home/lsst/ctrl_rucio_ingest/etc/ingester.yml
+    image: testenv-ingestd:${CTRL_RUCIO_INGEST_VERSION}
+    extra_hosts:
+        - "kafka:127.0.0.1"
+    build:
+      context: ./testenv-ingestd
+      args:
+        - LSST_STACK_VERSION
+        - CTRL_RUCIO_INGEST_GIT
+        - CONFLUENT_KAFKA_VERSION
+    volumes:
+      - /tmp:/tmp/
+      - ${HOME}/work/ctrl_rucio_ingest:/home/lsst/ctrl_rucio_ingest
+    network_mode: "host"
