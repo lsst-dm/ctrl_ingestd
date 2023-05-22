@@ -2,8 +2,8 @@ from confluent_kafka import Consumer
 import socket
 from typing import Dict
 import yaml
-from lsst.ctrl.rucio.ingest.rse_mapper import RseMapper
-from lsst.ctrl.rucio.ingest.message import RSE_KEY, URL_KEY, Message
+from lsst.ctrl.ingestd.rse_mapper import RseMapper
+from lsst.ctrl.ingestd.message import RSE_KEY, URL_KEY, Message
 
 rse_map = RseMapper("ingest.yaml")
 group_id = rse_map.group_id()

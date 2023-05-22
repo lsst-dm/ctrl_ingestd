@@ -4,10 +4,10 @@ import socket
 import os
 from typing import Dict
 import yaml
-from lsst.ctrl.rucio.ingest.config import Config
-from lsst.ctrl.rucio.ingest.message import Message
-from lsst.ctrl.rucio.ingest.rseButler import RseButler
-from lsst.ctrl.rucio.ingest.mapper import Mapper
+from lsst.ctrl.ingestd.config import Config
+from lsst.ctrl.ingestd.message import Message
+from lsst.ctrl.ingestd.rseButler import RseButler
+from lsst.ctrl.ingestd.mapper import Mapper
 
 LOGGER = logging.getLogger(__name__)
 
