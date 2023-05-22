@@ -12,7 +12,7 @@ services:
       context: ./ingestd
       args:
         - LSST_STACK_VERSION
-        - CTRL_INGESTD_GIT
+        - CTRL_INGESTD_GIT_VERSION
         - CONFLUENT_KAFKA_VERSION
     network_mode: "host"
   testenv-ingestd:
