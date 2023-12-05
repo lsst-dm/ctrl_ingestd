@@ -43,6 +43,8 @@ class Message:
         self._message = kafka_message
         value = self._message.value()
         self.msg = json.loads(value)
+        print(f"dir(value) = {dir(value)}")
+        print(f"value = {value}")
         self.payload = self.msg["payload"]
 
     def get_dst_rse(self) -> str:
@@ -57,7 +59,14 @@ class Message:
         """Getter to retrieve the flag indicating this is a Butler file"""
         return self.payload.get(RUBIN_BUTLER, None)
 
-    def get_rubin_sidecar(self) -> dict:
+    def get_rubin_sidecar_dict(self) -> dict:
         """Getter to retrieve the 'sidecar' metadata as a dict"""
         d = self.payload.get(RUBIN_SIDECAR, None)
         return d
+
+    def get_rubin_sidecar_str(self) -> str:
+        """Getter to retrieve the 'sidecar' metadata as a dict"""
+        d = self.get_rubin_sidecar_dict()
+        if d is None:
+            return None
+        return json.dumps(d)

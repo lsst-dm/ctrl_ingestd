@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import json
 import os.path
 import tempfile
 import lsst.utils.tests
@@ -53,15 +54,16 @@ class MessageTestCase(lsst.utils.tests.TestCase):
             "root://xrd2:1095//rucio/test/srp/data/calexp_HSC_y_HSC-Y_330_1_54_HSC_runs_RC2_w_2023_32_DM-40356_20230812T080035Z.fits",
         )
         self.assertEqual(self.msg.get_rubin_butler(), 1)
-        sidecar = self.msg.get_rubin_sidecar()
+        sidecar_str = self.msg.get_rubin_sidecar_str()
         self.assertEqual(
-            sidecar,
+            sidecar_str,
             '{"id": "00a86e99-7661-4f14-ae0d-93d3d4162e26", "datasetType": {"name": "calexp", "storageClass": "ExposureF", "dimensions": {"names": ["band", "instrument", "detector", "physical_filter", "visit"]}}, "dataId": {"dataId": {"band": "y", "instrument": "HSC", "detector": 1, "physical_filter": "HSC-Y", "visit": 330}}, "run": "HSC/runs/RC2/w_2023_32/DM-40356/20230812T080035Z"}',
         )
 
     def testNoSidecar(self):
         self.configure("nosidecar.json")
-        self.assertIsNone(self.msg.get_rubin_sidecar())
+        self.assertIsNone(self.msg.get_rubin_sidecar_dict())
+        self.assertIsNone(self.msg.get_rubin_sidecar_str())
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

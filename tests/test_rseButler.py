@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import json
 import os.path
 import tempfile
 import lsst.utils.tests
@@ -57,8 +58,8 @@ class MessageTestCase(lsst.utils.tests.TestCase):
         self.temp_file = tempfile.NamedTemporaryFile()
         # butler object is recreated here to test the existing repo path in RseButler
         butler = RseButler(self.repo_dir, "lsst.obs.subaru.HyperSuprimeCam")
-        sidecar = self.msg.get_rubin_sidecar()
-        fds = butler.createEntry(self.temp_file.name, sidecar)
+        sidecar_str = self.msg.get_rubin_sidecar_str()
+        fds = butler.create_entry(self.temp_file.name, sidecar_str)
         butler.ingest([fds])
 
 

@@ -1,4 +1,4 @@
-# This file is part of ctrl_ingestd
+#get_values() This file is part of ctrl_ingestd
 #
 # Developed for the LSST Data Management System.
 # This product includes software developed by the LSST Project
@@ -92,7 +92,7 @@ class IngestD:
         for msg in msgs:
             message = Message(msg)
             rubin_butler = message.get_rubin_butler()
-            sidecar = message.get_rubin_sidecar()
+            sidecar = message.get_rubin_sidecar_dict()
             logging.debug(f"{message=} {rubin_butler=} {sidecar=}")
 
             if rubin_butler is None:

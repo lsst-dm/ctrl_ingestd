@@ -68,7 +68,7 @@ class RseButler:
         ----------
         butler_file: `str`
             full uri to butler file location
-        sidecar: `dictj`
+        sidecar: `dict`
             dictionary of the 'sidecar' metadata
         """
         ref = DatasetRef.from_json(sidecar, registry=self.butler.registry)
