@@ -61,15 +61,15 @@ class RseButler:
 
         return butler
 
-    def createEntry(self, butler_file: str, sidecar: str) -> FileDataset:
+    def create_entry(self, butler_file: str, sidecar: dict) -> FileDataset:
         """Create a FileDatset with sidecar information
 
         Parameters
         ----------
         butler_file: `str`
             full uri to butler file location
-        sidecar: `str`
-            JSON representation of the 'sidecar' metadata
+        sidecar: `dictj`
+            dictionary of the 'sidecar' metadata
         """
         ref = DatasetRef.from_json(sidecar, registry=self.butler.registry)
         fds = FileDataset(butler_file, ref)
@@ -83,12 +83,14 @@ class RseButler:
         datasets : `list`
             List of Datasets
         """
-        ingested = False
-        while not ingested:
+        completed = False
+        while not completed:
             try:
                 self.butler.ingest(*datasets, transfer="direct")
-                print("ingest succeeded")
-                ingested = True
+                LOGGER.debug("ingest succeeded")
+                for dataset in datasets:
+                    LOGGER.info(f"ingested: {dataset.path}")
+                completed = True
             except DatasetTypeError:
                 dst_set = set()
                 for dataset in datasets:
@@ -103,3 +105,6 @@ class RseButler:
                         run_set.add(run)
                 for run in run_set:
                     self.butler.registry.registerRun(run)
+            except Exception as e:
+                LOGGER.warning(e)
+                completed = true

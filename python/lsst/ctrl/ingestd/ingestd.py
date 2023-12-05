@@ -106,9 +106,9 @@ class IngestD:
 
             # create an object that's ingestible by the butler, and add it to the list
             try:
-                entry = self.butler.createEntry(file_to_ingest, sidecar)
+                entry = self.butler.create_entry(file_to_ingest, sidecar)
             except Exception as e:
-                logger.info(e)
+                logging.info(e)
                 continue
             entries.append(entry)
         # if we've got anything in the list, try and ingest it.

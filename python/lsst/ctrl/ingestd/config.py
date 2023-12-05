@@ -57,11 +57,11 @@ class Config:
             if "instrument" not in self._butler_config:
                 raise Exception("Can't find 'instrument' in 'butler' section")
             self._instrument = self._butler_config.get("instrument")
-            LOGGER.info("butler location: {self._repo}")
-            LOGGER.info("butler instrument: {self._instrument}")
-            LOGGER.info("brokers: {self._brokers}")
-            LOGGER.info("rse topics: {self._rse_dict.keys()}")
-            LOGGER.info("will batch as many as {num_messages} at a time")
+            LOGGER.info(f"butler location: {self._repo}")
+            LOGGER.info(f"butler instrument: {self._instrument}")
+            LOGGER.info(f"brokers: {self._brokers}")
+            LOGGER.info(f"rse topics: {self._rse_dict.keys()}")
+            LOGGER.info(f"will batch as many as {self._num_messages} at a time")
 
     def get_num_messages(self) -> int:
         """Getter method to retrieve number of Kafka messages to process at a time"""

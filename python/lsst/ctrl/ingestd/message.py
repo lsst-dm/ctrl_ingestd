@@ -57,9 +57,7 @@ class Message:
         """Getter to retrieve the flag indicating this is a Butler file"""
         return self.payload.get(RUBIN_BUTLER, None)
 
-    def get_rubin_sidecar(self) -> str:
-        """Getter to retrieve the 'sidecar' metadata as a string"""
+    def get_rubin_sidecar(self) -> dict:
+        """Getter to retrieve the 'sidecar' metadata as a dict"""
         d = self.payload.get(RUBIN_SIDECAR, None)
-        if d is None:
-            return d
-        return json.dumps(d)
+        return d

@@ -22,8 +22,17 @@
 
 import argparse
 import asyncio
+import logging
 import os
 import sys
+
+import lsst.log as lsstlog
+
+lsstlog.usePythonLogging()
+
+F = "%(levelname) -10s %(asctime)s.%(msecs)03dZ %(name) -30s %(funcName) -35s %(lineno) -5d: %(message)s"
+logging.basicConfig(level=logging.INFO, format=(F), datefmt="%Y-%m-%d %H:%M:%S")
+
 
 from lsst.ctrl.ingestd.ingestd import IngestD
 
