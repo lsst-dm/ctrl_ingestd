@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  INGESTD_NAME: ingestd
+  INGESTD_NAME: ctrl_ingestd
 
 jobs:
   push:

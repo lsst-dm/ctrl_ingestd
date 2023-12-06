@@ -5,7 +5,7 @@ services:
     container_name: ingestd
     environment:
         - CTRL_INGESTD_CONFIG=/home/lsst/ctrl_ingestd/etc/ingestd.yml
-    image: ingestd:${CTRL_INGESTD_VERSION}
+    image: ctrl_ingestd
     extra_hosts:
         - "kafka:127.0.0.1"
     build:
