@@ -1,8 +1,6 @@
 name: Build Rucio/Butler ingestd container
 on:
   push:
-    branches:
-    - main
     tags:
     - v*
   pull_request:
