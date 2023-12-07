@@ -1,4 +1,14 @@
 name: "Build and push to ghcr.io"
+name: Build Rucio/Butler ingestd container
+on:
+  push:
+    tags:
+    - v*
+  pull_request:
+
+env:
+  INGESTD_NAME: ctrl_ingestd
+
 description: >
   This composite action builds a Docker image, tags it with the current git
   branch/tag ref, and pushes it to ghcr.io.
