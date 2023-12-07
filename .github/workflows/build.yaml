@@ -1,5 +1,4 @@
 name: "Build and push to ghcr.io"
-name: Build Rucio/Butler ingestd container
 on:
   push:
     tags:
