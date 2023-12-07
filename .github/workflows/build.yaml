@@ -1,4 +1,4 @@
-name: "Build and push to ghcr.io"
+name: Build Rucio/Butler ingestd container
 on:
   push:
     tags:
@@ -8,64 +8,35 @@ on:
 env:
   INGESTD_NAME: ctrl_ingestd
 
-description: >
-  This composite action builds a Docker image, tags it with the current git
-  branch/tag ref, and pushes it to ghcr.io.
-inputs:
-  github_token:
-    description: "The GitHub token to use for authentication."
-    required: true
-  image:
-    description: "The name of the Docker image to build."
-    required: true
-  dockerfile:
-    description: "The name of the Dockerfile to build."
-    required: false
-    default: "Dockerfile"
-  context:
-    description: "The build context to use."
-    required: false
-    default: "docker/ingestd"
+jobs:
   push:
-    description: "Whether to push the image to ghcr.io."
-    required: false
-    default: "true"
-outputs:
-  tag:
-    description: "The tag of the Docker image that was built."
-    value: ${{ steps.tag.outputs.tag }}
-  fully_qualified_image_digest:
-    description: "A complete, unique, immutable identifier for the built image, including the registry and digest"
-    value: "ghcr.io/${{ inputs.image }}@${{ steps.build.outputs.digest }}"
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
 
-runs:
-  using: "composite"
-  steps:
-
-    - name: Define the tag
-      id: tag
-      shell: bash
-      run: echo "tag=`bash ${{ github.action_path  }}/docker-tag.sh`" >> ${GITHUB_OUTPUT}
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+    - name: Build ingest image
+      working-directory: docker
+      run: |
+        docker-compose -f "docker-compose.yml" --env-file ingestd.env build ingestd
 
     - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v2
-      if: fromJSON(inputs.push) == true
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ inputs.github_token }}
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
 
-    - name: Build and push
-      id: build
-      uses: docker/build-push-action@v4
-      with:
-        context: "${{ inputs.context }}"
-        file: "${{ inputs.dockerfile }}"
-        push: ${{ fromJSON(inputs.push) == true }}
-        tags: |
-          ghcr.io/${{ inputs.image }}:${{ steps.tag.outputs.tag }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+    - name: Push image
+      run: |
+        INGESTD_ID=ghcr.io/${{ github.repository_owner }}/$INGESTD_NAME
+
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        # Strip "v" prefix from tag name
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        # Use Docker `latest` tag convention
+        [ "$VERSION" == "main" ] && VERSION=latest
+        echo INGESTD_ID=$INGESTD_ID
+        echo VERSION=$VERSION
+        docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
+        docker push $INGESTD_ID:$VERSION
