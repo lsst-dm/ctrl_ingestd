@@ -19,14 +19,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from confluent_kafka import Consumer
 import logging
-import socket
 import os
+import socket
+
+from confluent_kafka import Consumer
 from lsst.ctrl.ingestd.config import Config
+from lsst.ctrl.ingestd.mapper import Mapper
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
-from lsst.ctrl.ingestd.mapper import Mapper
 
 LOGGER = logging.getLogger(__name__)
 

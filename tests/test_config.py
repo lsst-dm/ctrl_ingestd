@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os.path
+
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
 

@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+
 from lsst.daf.butler import Butler, DatasetRef, FileDataset
 from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
 from lsst.pipe.base import Instrument

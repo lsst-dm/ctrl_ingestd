@@ -21,6 +21,7 @@
 
 import os.path
 import tempfile
+
 import lsst.utils.tests
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
