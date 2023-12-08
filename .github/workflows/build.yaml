@@ -18,11 +18,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Define the tag
-      id: tag
-      shell: bash
-      run: echo "tag=`${GITHUB_REF} | sed -E 's,refs/(heads|tags)/,,' | sed -E 's,/,-,g'`"
-
     - name: Build ingest image
       working-directory: docker
       run: |
@@ -43,6 +38,5 @@ jobs:
         [ "$VERSION" == "main" ] && VERSION=latest
         echo INGESTD_ID=$INGESTD_ID
         echo VERSION=$VERSION
-        echo TAG=${{ steps.tag.outputs.tag }}
-        docker tag $INGESTD_NAME $INGESTD_ID:$TAG
-        docker push $INGESTD_ID:$TAG
+        docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
+        docker push $INGESTD_ID:$VERSION
