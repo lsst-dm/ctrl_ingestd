@@ -43,6 +43,5 @@ jobs:
         [ "$VERSION" == "main" ] && VERSION=latest
         echo INGESTD_ID=$INGESTD_ID
         echo VERSION=$VERSION
-        echo TAG=${{ steps.tag.outputs.tag }}
-        docker tag $INGESTD_NAME $INGESTD_ID:$TAG
-        docker push $INGESTD_ID:$TAG
+        docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
+        docker push $INGESTD_ID:$VERSION
