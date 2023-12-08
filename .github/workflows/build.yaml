@@ -36,6 +36,7 @@ jobs:
         [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
         # Use Docker `latest` tag convention
         [ "$VERSION" == "main" ] && VERSION=latest
+        VERSION=$(echo "${{ env.sha_short }}")
         echo INGESTD_ID=$INGESTD_ID
         echo VERSION=$VERSION
         docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
