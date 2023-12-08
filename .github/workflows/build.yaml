@@ -18,6 +18,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: Define the tag
+      id: tag
+      shell: bash
+      run: echo "tag=`bash ${{ github.action_path  }}/docker-tag.sh`" >> ${GITHUB_OUTPUT}
+
     - name: Build ingest image
       working-directory: docker
       run: |
@@ -38,5 +43,6 @@ jobs:
         [ "$VERSION" == "main" ] && VERSION=latest
         echo INGESTD_ID=$INGESTD_ID
         echo VERSION=$VERSION
-        docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
-        docker push $INGESTD_ID:$VERSION
+        echo TAG=${{ steps.tag.outputs.tag }}
+        docker tag $INGESTD_NAME $INGESTD_ID:$TAG
+        docker push $INGESTD_ID:$TAG
