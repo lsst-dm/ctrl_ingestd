@@ -10,6 +10,7 @@ env:
 
 jobs:
   push:
+    using: "composite"
     runs-on: ubuntu-latest
     permissions:
       packages: write
