@@ -42,8 +42,6 @@ class Message:
         self._message = kafka_message
         value = self._message.value()
         self.msg = json.loads(value)
-        print(f"dir(value) = {dir(value)}")
-        print(f"value = {value}")
         self.payload = self.msg["payload"]
 
     def get_dst_rse(self) -> str:
