@@ -8,7 +8,8 @@ on:
 env:
   INGESTD_NAME: ctrl_ingestd
 
-build:
+jobs:
+  build:
     using: "composite"
     runs-on: ubuntu-latest
     permissions:
@@ -21,7 +22,7 @@ build:
     - name: Define the tag
       id: tag
       shell: bash
-      run: echo "tag=`bash ${{ github.action_path }}/docker-tag.sh`" >> ${GITHUB_OUTPUT}
+      run: echo "tag=`bash ${GITHUB_ACTION_PATH}/docker-tag.sh`" >> ${GITHUB_OUTPUT}
 
     - name: Build ingest image
       working-directory: docker
