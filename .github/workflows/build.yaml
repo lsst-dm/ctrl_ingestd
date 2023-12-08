@@ -10,7 +10,6 @@ env:
 
 jobs:
   build:
-    using: "composite"
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -22,7 +21,7 @@ jobs:
     - name: Define the tag
       id: tag
       shell: bash
-      run: echo "tag=`bash ${GITHUB_ACTION_PATH}/docker-tag.sh`" >> ${GITHUB_OUTPUT}
+      run: echo "tag=`${GITHUB_REF} | sed -E 's,refs/(heads|tags)/,,' | sed -E 's,/,-,g'`"
 
     - name: Build ingest image
       working-directory: docker
