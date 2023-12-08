@@ -49,16 +49,12 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
     def testNoRepo(self):
         with self.assertRaises(Exception) as execinfo:
             self.createConfig("norepo.yml")
-        self.assertTrue(
-            "Can't find 'repo' in 'butler' section" in str(execinfo.exception)
-        )
+        self.assertTrue("Can't find 'repo' in 'butler' section" in str(execinfo.exception))
 
     def testNoInstrument(self):
         with self.assertRaises(Exception) as execinfo:
             self.createConfig("noinstrument.yml")
-        self.assertTrue(
-            "Can't find 'instrument' in 'butler' section" in str(execinfo.exception)
-        )
+        self.assertTrue("Can't find 'instrument' in 'butler' section" in str(execinfo.exception))
 
     def testAttributes(self):
         self.createConfig("ingestd.yml")
@@ -86,9 +82,7 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(butler_config["repo"], "/tmp/repo")
 
         self.assertEqual(self.config.get_repo(), "/tmp/repo")
-        self.assertEqual(
-            self.config.get_instrument(), "lsst.obs.subaru.HyperSuprimeCam"
-        )
+        self.assertEqual(self.config.get_instrument(), "lsst.obs.subaru.HyperSuprimeCam")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

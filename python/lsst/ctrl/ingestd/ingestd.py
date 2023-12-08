@@ -76,9 +76,7 @@ class IngestD:
         """process one set of messages"""
 
         # read up to self.num_messages, with a timeout of self.timeout
-        msgs = self.consumer.consume(
-            num_messages=self.num_messages, timeout=self.timeout
-        )
+        msgs = self.consumer.consume(num_messages=self.num_messages, timeout=self.timeout)
         # just return if there are no messages
         if msgs is None:
             return
@@ -98,9 +96,7 @@ class IngestD:
                 continue
 
             # Rewrite the Rucio URL to actual file location
-            file_to_ingest = self.mapper.rewrite(
-                message.get_dst_rse(), message.get_dst_url()
-            )
+            file_to_ingest = self.mapper.rewrite(message.get_dst_rse(), message.get_dst_url())
 
             # create an object that's ingestible by the butler
             # and add it to the list
