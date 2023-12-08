@@ -1,2 +1,2 @@
 # ctrl_ingestd
-Butler ingest daemon for Rucio
+Butler/Rucio ingest daemon
