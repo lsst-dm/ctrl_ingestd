@@ -20,8 +20,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-from typing import Dict
-import yaml
 
 
 LOGGER = logging.getLogger(__name__)

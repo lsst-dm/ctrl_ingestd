@@ -21,7 +21,6 @@
 
 import json
 import logging
-from typing import Dict, Tuple
 
 LOGGER = logging.getLogger(__name__)
 RSE_KEY = "dst-rse"

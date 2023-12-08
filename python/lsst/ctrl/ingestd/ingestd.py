@@ -1,4 +1,4 @@
-#get_values() This file is part of ctrl_ingestd
+# This file is part of ctrl_ingestd
 #
 # Developed for the LSST Data Management System.
 # This product includes software developed by the LSST Project
@@ -23,8 +23,6 @@ from confluent_kafka import Consumer
 import logging
 import socket
 import os
-from typing import Dict
-import yaml
 from lsst.ctrl.ingestd.config import Config
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
@@ -49,7 +47,6 @@ class IngestD:
         group_id = config.get_group_id()
         brokers = config.get_brokers()
         topics = config.get_topics()
-        butler_config = config.get_butler_config()
 
         self.num_messages = config.get_num_messages()
         self.timeout = config.get_timeout()

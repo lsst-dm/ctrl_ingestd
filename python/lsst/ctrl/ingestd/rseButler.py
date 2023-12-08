@@ -107,4 +107,4 @@ class RseButler:
                     self.butler.registry.registerRun(run)
             except Exception as e:
                 LOGGER.warning(e)
-                completed = true
+                completed = True
