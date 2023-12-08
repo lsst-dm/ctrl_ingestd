@@ -19,12 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import json
 import os.path
-import tempfile
 import lsst.utils.tests
 from lsst.ctrl.ingestd.message import Message
-from lsst.ctrl.ingestd.rseButler import RseButler
 
 
 class FakeKafkaMessage:

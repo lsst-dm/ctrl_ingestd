@@ -101,7 +101,8 @@ class IngestD:
                 message.get_dst_rse(), message.get_dst_url()
             )
 
-            # create an object that's ingestible by the butler, and add it to the list
+            # create an object that's ingestible by the butler
+            # and add it to the list
             try:
                 entry = self.butler.create_entry(file_to_ingest, sidecar)
             except Exception as e:

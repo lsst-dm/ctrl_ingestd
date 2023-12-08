@@ -20,7 +20,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-from typing import Dict
 import yaml
 
 LOGGER = logging.getLogger(__name__)
@@ -64,7 +63,7 @@ class Config:
             LOGGER.info(f"will batch as many as {self._num_messages} at a time")
 
     def get_num_messages(self) -> int:
-        """Getter method to retrieve number of Kafka messages to process at a time"""
+        """Getter method for number of Kafka messages to process at a time"""
         return self._num_messages
 
     def get_timeout(self) -> int:
