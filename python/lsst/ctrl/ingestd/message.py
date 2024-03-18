@@ -58,12 +58,11 @@ class Message:
 
     def get_rubin_sidecar_dict(self) -> dict:
         """Getter to retrieve the 'sidecar' metadata as a dict"""
-        d = self.payload.get(RUBIN_SIDECAR, None)
+        s = self.get_rubin_sidecar_str()
+        d = json.loads(s)
         return d
 
     def get_rubin_sidecar_str(self) -> str:
         """Getter to retrieve the 'sidecar' metadata as a dict"""
-        d = self.get_rubin_sidecar_dict()
-        if d is None:
-            return None
-        return json.dumps(d)
+        s = self.payload.get(RUBIN_SIDECAR, None)
+        return s

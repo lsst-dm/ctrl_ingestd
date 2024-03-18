@@ -39,11 +39,11 @@ class IngestD:
 
     def __init__(self):
         if CTRL_INGESTD_CONFIG in os.environ:
-            config_file = os.environ[CTRL_INGESTD_CONFIG]
+            self.config_file = os.environ[CTRL_INGESTD_CONFIG]
         else:
             raise FileNotFoundError("CTRL_INGESTD_CONFIG is not set")
 
-        config = Config(config_file)
+        config = Config(self.config_file)
         rse_dict = config.get_rses()
         group_id = config.get_group_id()
         brokers = config.get_brokers()
@@ -86,9 +86,14 @@ class IngestD:
         # and put the into a list
         entries = []
         for msg in msgs:
-            message = Message(msg)
+            try:
+                message = Message(msg)
+            except Exception as e:
+                logging.info(msg.value())
+                logging.info(e)
+                continue
             rubin_butler = message.get_rubin_butler()
-            sidecar = message.get_rubin_sidecar_dict()
+            sidecar = message.get_rubin_sidecar_str()
             logging.debug(f"{message=} {rubin_butler=} {sidecar=}")
 
             if rubin_butler is None:
@@ -96,7 +101,12 @@ class IngestD:
                 continue
 
             # Rewrite the Rucio URL to actual file location
-            file_to_ingest = self.mapper.rewrite(message.get_dst_rse(), message.get_dst_url())
+            dst_url = message.get_dst_url()
+            file_to_ingest = self.mapper.rewrite(message.get_dst_rse(), dst_url)
+
+            if file_to_ingest == dst_url:
+                logging.warn(f"failed to map {file_to_ingest}; check {self.config_file} for incorrect mapping")
+                continue
 
             # create an object that's ingestible by the butler
             # and add it to the list

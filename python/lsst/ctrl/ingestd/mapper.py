@@ -49,6 +49,5 @@ class Mapper:
         mapping_dict = self._rse_dict[rse]
         rucio_prefix = mapping_dict["rucio_prefix"]
         fs_prefix = mapping_dict["fs_prefix"]
-        LOGGER.debug(f"{rse=} {url=} --- {rucio_prefix=} {fs_prefix=}")
         ret = url.replace(rucio_prefix, fs_prefix)
         return ret
