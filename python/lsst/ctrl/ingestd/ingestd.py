@@ -93,7 +93,7 @@ class IngestD:
                 logging.info(e)
                 continue
             rubin_butler = message.get_rubin_butler()
-            sidecar = message.get_rubin_sidecar_str()
+            sidecar = message.get_rubin_sidecar_dict()
             logging.debug(f"{message=} {rubin_butler=} {sidecar=}")
 
             if rubin_butler is None:
