@@ -105,7 +105,9 @@ class IngestD:
             file_to_ingest = self.mapper.rewrite(message.get_dst_rse(), dst_url)
 
             if file_to_ingest == dst_url:
-                logging.warn(f"failed to map {file_to_ingest}; check {self.config_file} for incorrect mapping")
+                logging.warn(
+                    f"failed to map {file_to_ingest}; check {self.config_file} for incorrect mapping"
+                )
                 continue
 
             # create an object that's ingestible by the butler
