@@ -1,0 +1,23 @@
+brokers: kafka:9092
+
+group_id: "my_test_group"
+num_messages: 50
+    
+butler:
+    instrument: lsst.obs.subaru.HyperSuprimeCam
+
+rses:
+    XRD1:
+        rucio_prefix: root://xrd1:1094//rucio
+        fs_prefix: file:///rucio/disks/xrd1/rucio
+    XRD2:
+        rucio_prefix: root://xrd2:1095//rucio
+        fs_prefix: file:///rucio/disks/xrd2/rucio
+    XRD3:
+        rucio_prefix: root://xrd3:1096//rucio/test
+        fs_prefix: file:///rucio/disks/xrd3/rucio
+    XRD4:
+        rucio_prefix: root://xrd4:1097//rucio/test
+        fs_prefix: file:///rucio/disks/xrd4/rucio
+
+
