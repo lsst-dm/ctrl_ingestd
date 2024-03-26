@@ -21,7 +21,7 @@ jobs:
     - name: Build ingest image
       working-directory: docker
       run: |
-        docker-compose -f "docker-compose.yml" --env-file ingestd.env build ingestd
+        docker-compose -f "docker-compose.yml" --env-file versions.env build ingestd
 
     - name: Log in to GitHub Container Registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
