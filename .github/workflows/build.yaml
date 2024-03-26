@@ -30,7 +30,7 @@ jobs:
       run: |
         INGESTD_ID=ghcr.io/${{ github.repository_owner }}/$INGESTD_NAME
 
-        VERSION=$(cat docker/versions.env | grep RUCIO_DAEMONS_HERMESK_VERSION | sed 's/=/ /g' |cut -d " " -f2)
+        VERSION=$(cat docker/versions.env | grep CTRL_INGESTD_VERSION | sed 's/=/ /g' |cut -d " " -f2)
         echo INGESTD_ID=$INGESTD_ID
         echo VERSION=$VERSION
         docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
