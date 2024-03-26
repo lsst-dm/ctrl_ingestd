@@ -1,2 +1,44 @@
 # ctrl_ingestd
-Butler/Rucio ingest daemon
+# Butler/Rucio ingest daemon
+
+This daemon listens to Kafka messages from the Rucio Hermes daemons and performs butler ingests.
+This can be run stand-alone or via a container.  It is configured with a YAML file, pointed to by
+the enviroment variable CTRL_INGESTD_CONFIG.
+
+The daemon listens on Kafka RSE topics that are named in the 
+CTRL_INGESTD_CONFIG YAML file.  For example, in the example YAML file below, the
+ingestd daemon will listen on topics XRD1 and XRD2.
+
+## Example YAML file:
+```
+brokers: kafka:9092
+
+group_id: "my_test_group"
+
+num_messages: 50
+
+butler:
+    instrument: lsst.obs.subaru.HyperSuprimeCam
+    repo: /tmp/repo
+
+rses:
+    XRD1:
+        rucio_prefix: root://xrd1:1094//rucio
+        fs_prefix: file:///rucio/disks/xrd1/rucio
+    XRD2:
+        rucio_prefix: root://xrd2:1095//rucio
+        fs_prefix: file:///rucio/disks/xrd2/rucio
+```
+
+## Explanation of configuration file:
+
+"brokers" is set to the host Kafka "kafka", listening to port 9092.
+
+"group_id" - Kafka group id, which can be set to what you wish, but should be unique if there are any other Kafka clients running.  In this case, "my_test_group".
+
+"butler" section is set to the butler configuration.  It contains the instrument and location of the Butler repository.
+
+The "rses" section is set to the RSEs from which this ingestd daemon will ingest files.  It contains the
+RSEs which it's paying attention to and a mapping between logical file names and physical file names.
+
+The ingestd daemon listens to the topics XRD1 and XRD2 for messages coming from the rucio-daemons-hermesk daemon.

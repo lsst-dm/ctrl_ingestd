@@ -30,12 +30,7 @@ jobs:
       run: |
         INGESTD_ID=ghcr.io/${{ github.repository_owner }}/$INGESTD_NAME
 
-        # Strip git ref prefix from version
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        # Strip "v" prefix from tag name
-        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-        # Use Docker `latest` tag convention
-        [ "$VERSION" == "main" ] && VERSION=latest
+        VERSION=$(cat docker/versions.env | grep RUCIO_DAEMONS_HERMESK_VERSION | sed 's/=/ /g' |cut -d " " -f2)
         echo INGESTD_ID=$INGESTD_ID
         echo VERSION=$VERSION
         docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
