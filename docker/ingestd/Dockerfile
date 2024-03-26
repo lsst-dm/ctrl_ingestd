@@ -21,4 +21,4 @@ RUN source /opt/lsst/software/stack/loadLSST.bash && \
 
 COPY run.sh /home/lsst/run.sh
 
-ENTRYPOINT [ /home/lsst/run.sh" ]
+ENTRYPOINT [ "/home/lsst/run.sh" ]
