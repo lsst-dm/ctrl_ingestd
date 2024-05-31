@@ -34,7 +34,9 @@ rses:
 
 "brokers" is set to the host Kafka "kafka", listening to port 9092.
 
-"group_id" - Kafka group id, which can be set to what you wish, but should be unique if there are any other Kafka clients running.  In this case, "my_test_group".
+"group_id" is the Kafka group id, which can be set to what you wish. It should be unique if you want a single client to handle all the messages, but should be set to the same value if multiple clients are handling requests in parallel for the same repos.  In this case, the values has been set to "my_test_group".
+
+"num_messages" is the maximum message batch size of messages that are processed at one time.  In this case, it has been set to 50.
 
 "butler" section is set to the butler configuration.  It contains the instrument and location of the Butler repository.
 
