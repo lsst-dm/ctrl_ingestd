@@ -20,21 +20,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import argparse
-import asyncio
 import logging
-import os
-import sys
 
 import lsst.log as lsstlog
+from lsst.ctrl.ingestd.ingestd import IngestD
 
 lsstlog.usePythonLogging()
 
 F = "%(levelname) -10s %(asctime)s.%(msecs)03dZ %(name) -30s %(funcName) -35s %(lineno) -5d: %(message)s"
 logging.basicConfig(level=logging.INFO, format=(F), datefmt="%Y-%m-%d %H:%M:%S")
 
-
-from lsst.ctrl.ingestd.ingestd import IngestD
 
 if __name__ == "__main__":
     ingestd = IngestD()

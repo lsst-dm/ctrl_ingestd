@@ -2,7 +2,6 @@ ARG LSST_STACK_VERSION
 FROM lsstsqre/centos:${LSST_STACK_VERSION}
 
 USER root
-RUN yum install -y nc
 
 WORKDIR /home/lsst
 
