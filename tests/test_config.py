@@ -26,63 +26,73 @@ from lsst.ctrl.ingestd.config import Config
 
 
 class ConfigTestCase(lsst.utils.tests.TestCase):
-    def createConfig(self, config_name):
+    def createConfig(self, config_name) -> Config:
         testdir = os.path.abspath(os.path.dirname(__file__))
         config_file = os.path.join(testdir, "data", config_name)
-        self.config = Config(config_file)
+        return Config(config_file)
 
-    def testNoRses(self):
-        with self.assertRaises(Exception) as execinfo:
-            self.createConfig("norse.yml")
-        self.assertTrue("Can't find 'rses'" in str(execinfo.exception))
+    def testBrokers(self):
+        for file in (
+            "config_brokers_absent.yaml",
+            "config_brokers_empty.yaml",
+        ):
+            with self.assertRaises(Exception) as execinfo:
+                self.createConfig(file)
+            self.assertTrue("'kafka_brokers'" in str(execinfo.exception))
 
-    def testNoBrokers(self):
-        with self.assertRaises(Exception) as execinfo:
-            self.createConfig("nobrokers.yml")
-        self.assertTrue("Can't find 'brokers'" in str(execinfo.exception))
+    def testButlers(self):
+        for file in (
+            "config_butlers_absent.yaml",
+            "config_butlers_empty.yaml",
+            "config_butlers_invalid.yaml",
+        ):
+            with self.assertRaises(Exception) as execinfo:
+                self.createConfig(file)
+            self.assertTrue("'butlers'" in str(execinfo.exception))
 
-    def testNoGroupID(self):
-        with self.assertRaises(Exception) as execinfo:
-            self.createConfig("nogroupid.yml")
-        self.assertTrue("Can't find 'group_id'" in str(execinfo.exception))
+    def testTopic(self):
+        for file in (
+            "config_topic_absent.yaml",
+            "config_topic_empty.yaml",
+        ):
+            with self.assertRaises(Exception) as execinfo:
+                self.createConfig(file)
+            self.assertTrue("'kafka_topic'" in str(execinfo.exception))
 
-    def testNoRepo(self):
-        with self.assertRaises(Exception) as execinfo:
-            self.createConfig("norepo.yml")
-        self.assertTrue("Can't find 'repo' in 'butler' section" in str(execinfo.exception))
+    def testNumMessages(self):
+        for file in (
+            "config_num_messages_absent.yaml",
+            "config_num_messages_invalid.yaml",
+            "config_num_messages_nan.yaml",
+        ):
+            config = self.createConfig(file)
+            self.assertEqual(config.get_num_messages(), Config.DEFAULT_KAFKA_NUM_MESSAGES)
 
-    def testNoInstrument(self):
-        with self.assertRaises(Exception) as execinfo:
-            self.createConfig("noinstrument.yml")
-        self.assertTrue("Can't find 'instrument' in 'butler' section" in str(execinfo.exception))
+    def testTimeout(self):
+        for file in (
+            "config_timeout_absent.yaml",
+            "config_timeout_invalid.yaml",
+            "config_timeout_nan.yaml",
+        ):
+            config = self.createConfig(file)
+            self.assertAlmostEqual(config.get_timeout(), Config.DEFAULT_KAFKA_CLIENT_TIMEOUT)
 
     def testAttributes(self):
-        self.createConfig("ingestd.yml")
+        config = self.createConfig("config_gold.yaml")
+        self.assertEqual(config.get_num_messages(), 50)
+        self.assertAlmostEqual(config.get_timeout(), 1.0)
+        self.assertEqual(config.get_topic(), "DF_BUTLER_DISK")
 
-        self.assertEqual(self.config.get_num_messages(), 50)
-        self.assertEqual(self.config.get_timeout(), 1)
+        brokers = config.get_brokers()
+        self.assertEqual(
+            brokers, "broker1.example.org:1234,broker2.example.org:1234,broker3.example.org:1234"
+        )
 
-        rses = self.config.get_rses()
-        self.assertTrue("XRD1" in rses)
-        self.assertTrue("XRD2" in rses)
-        self.assertTrue("XRD3" in rses)
-        self.assertTrue("XRD4" in rses)
-
-        topics = self.config.get_topics()
-        self.assertTrue("XRD1" in topics)
-        self.assertTrue("XRD2" in topics)
-        self.assertTrue("XRD3" in topics)
-        self.assertTrue("XRD4" in topics)
-
-        self.assertEqual(self.config.get_brokers(), "kafka:9092")
-        self.assertEqual(self.config.get_group_id(), "my_test_group")
-
-        butler_config = self.config.get_butler_config()
-        self.assertEqual(butler_config["instrument"], "lsst.obs.subaru.HyperSuprimeCam")
-        self.assertEqual(butler_config["repo"], "/tmp/repo")
-
-        self.assertEqual(self.config.get_repo(), "/tmp/repo")
-        self.assertEqual(self.config.get_instrument(), "lsst.obs.subaru.HyperSuprimeCam")
+        butlers = config.get_butlers()
+        self.assertTrue("repo_1" in butlers)
+        self.assertTrue("repo_2" in butlers)
+        self.assertEqual(butlers["repo_1"], "https://host.example.org/path/to/rse/repo_1/butler.yaml")
+        self.assertEqual(butlers["repo_2"], "https://host.example.org/path/to/rse/repo_2/butler.yaml")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
