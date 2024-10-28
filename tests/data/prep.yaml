@@ -1,0 +1,1322 @@
+description: Butler Data Repository Export
+version: 1.0.2
+universe_version: 3
+universe_namespace: daf_butler
+data:
+- type: dimension
+  element: instrument
+  records:
+  - name: HSC
+    visit_max: 21474800
+    visit_system: 0
+    exposure_max: 21474800
+    detector_max: 200
+    class_name: lsst.obs.subaru.HyperSuprimeCam
+- type: dimension
+  element: detector
+  records:
+  - instrument: HSC
+    id: 0
+    full_name: '1_53'
+    name_in_raft: '53'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 1
+    full_name: '1_54'
+    name_in_raft: '54'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 2
+    full_name: '1_55'
+    name_in_raft: '55'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 3
+    full_name: '1_56'
+    name_in_raft: '56'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 4
+    full_name: '1_42'
+    name_in_raft: '42'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 5
+    full_name: '1_43'
+    name_in_raft: '43'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 6
+    full_name: '1_44'
+    name_in_raft: '44'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 7
+    full_name: '1_45'
+    name_in_raft: '45'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 8
+    full_name: '1_46'
+    name_in_raft: '46'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 9
+    full_name: '1_47'
+    name_in_raft: '47'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 10
+    full_name: '1_36'
+    name_in_raft: '36'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 11
+    full_name: '1_37'
+    name_in_raft: '37'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 12
+    full_name: '1_38'
+    name_in_raft: '38'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 13
+    full_name: '1_39'
+    name_in_raft: '39'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 14
+    full_name: '1_40'
+    name_in_raft: '40'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 15
+    full_name: '1_41'
+    name_in_raft: '41'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 16
+    full_name: '0_30'
+    name_in_raft: '30'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 17
+    full_name: 0_29
+    name_in_raft: '29'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 18
+    full_name: 0_28
+    name_in_raft: '28'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 19
+    full_name: '1_32'
+    name_in_raft: '32'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 20
+    full_name: '1_33'
+    name_in_raft: '33'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 21
+    full_name: '1_34'
+    name_in_raft: '34'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 22
+    full_name: '0_27'
+    name_in_raft: '27'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 23
+    full_name: '0_26'
+    name_in_raft: '26'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 24
+    full_name: '0_25'
+    name_in_raft: '25'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 25
+    full_name: '0_24'
+    name_in_raft: '24'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 26
+    full_name: '1_00'
+    name_in_raft: '00'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 27
+    full_name: '1_01'
+    name_in_raft: '01'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 28
+    full_name: '1_02'
+    name_in_raft: '02'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 29
+    full_name: '1_03'
+    name_in_raft: '03'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 30
+    full_name: '0_23'
+    name_in_raft: '23'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 31
+    full_name: '0_22'
+    name_in_raft: '22'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 32
+    full_name: '0_21'
+    name_in_raft: '21'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 33
+    full_name: '0_20'
+    name_in_raft: '20'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 34
+    full_name: '1_04'
+    name_in_raft: '04'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 35
+    full_name: '1_05'
+    name_in_raft: '05'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 36
+    full_name: '1_06'
+    name_in_raft: '06'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 37
+    full_name: '1_07'
+    name_in_raft: '07'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 38
+    full_name: 0_19
+    name_in_raft: '19'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 39
+    full_name: 0_18
+    name_in_raft: '18'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 40
+    full_name: '0_17'
+    name_in_raft: '17'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 41
+    full_name: '0_16'
+    name_in_raft: '16'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 42
+    full_name: '1_08'
+    name_in_raft: 08
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 43
+    full_name: '1_09'
+    name_in_raft: 09
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 44
+    full_name: '1_10'
+    name_in_raft: '10'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 45
+    full_name: '1_11'
+    name_in_raft: '11'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 46
+    full_name: '0_15'
+    name_in_raft: '15'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 47
+    full_name: '0_14'
+    name_in_raft: '14'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 48
+    full_name: '0_13'
+    name_in_raft: '13'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 49
+    full_name: '0_12'
+    name_in_raft: '12'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 50
+    full_name: '1_12'
+    name_in_raft: '12'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 51
+    full_name: '1_13'
+    name_in_raft: '13'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 52
+    full_name: '1_14'
+    name_in_raft: '14'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 53
+    full_name: '1_15'
+    name_in_raft: '15'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 54
+    full_name: '0_11'
+    name_in_raft: '11'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 55
+    full_name: '0_10'
+    name_in_raft: '10'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 56
+    full_name: 0_09
+    name_in_raft: 09
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 57
+    full_name: 0_08
+    name_in_raft: 08
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 58
+    full_name: '1_16'
+    name_in_raft: '16'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 59
+    full_name: '1_17'
+    name_in_raft: '17'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 60
+    full_name: '1_18'
+    name_in_raft: '18'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 61
+    full_name: '1_19'
+    name_in_raft: '19'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 62
+    full_name: '0_07'
+    name_in_raft: '07'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 63
+    full_name: '0_06'
+    name_in_raft: '06'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 64
+    full_name: '0_05'
+    name_in_raft: '05'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 65
+    full_name: '0_04'
+    name_in_raft: '04'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 66
+    full_name: '1_20'
+    name_in_raft: '20'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 67
+    full_name: '1_21'
+    name_in_raft: '21'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 68
+    full_name: '1_22'
+    name_in_raft: '22'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 69
+    full_name: '1_23'
+    name_in_raft: '23'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 70
+    full_name: '0_03'
+    name_in_raft: '03'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 71
+    full_name: '0_02'
+    name_in_raft: '02'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 72
+    full_name: '0_01'
+    name_in_raft: '01'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 73
+    full_name: '0_00'
+    name_in_raft: '00'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 74
+    full_name: '1_24'
+    name_in_raft: '24'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 75
+    full_name: '1_25'
+    name_in_raft: '25'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 76
+    full_name: '1_26'
+    name_in_raft: '26'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 77
+    full_name: '1_27'
+    name_in_raft: '27'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 78
+    full_name: '0_34'
+    name_in_raft: '34'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 79
+    full_name: '0_33'
+    name_in_raft: '33'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 80
+    full_name: '0_32'
+    name_in_raft: '32'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 81
+    full_name: '1_28'
+    name_in_raft: '28'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 82
+    full_name: '1_29'
+    name_in_raft: '29'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 83
+    full_name: '1_30'
+    name_in_raft: '30'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 84
+    full_name: '0_41'
+    name_in_raft: '41'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 85
+    full_name: '0_40'
+    name_in_raft: '40'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 86
+    full_name: 0_39
+    name_in_raft: '39'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 87
+    full_name: 0_38
+    name_in_raft: '38'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 88
+    full_name: '0_37'
+    name_in_raft: '37'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 89
+    full_name: '0_36'
+    name_in_raft: '36'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 90
+    full_name: '0_47'
+    name_in_raft: '47'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 91
+    full_name: '0_46'
+    name_in_raft: '46'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 92
+    full_name: '0_45'
+    name_in_raft: '45'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 93
+    full_name: '0_44'
+    name_in_raft: '44'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 94
+    full_name: '0_43'
+    name_in_raft: '43'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 95
+    full_name: '0_42'
+    name_in_raft: '42'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 96
+    full_name: '0_56'
+    name_in_raft: '56'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 97
+    full_name: '0_55'
+    name_in_raft: '55'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 98
+    full_name: '0_54'
+    name_in_raft: '54'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 99
+    full_name: '0_53'
+    name_in_raft: '53'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 100
+    full_name: '0_31'
+    name_in_raft: '31'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 101
+    full_name: '1_35'
+    name_in_raft: '35'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 102
+    full_name: '0_35'
+    name_in_raft: '35'
+    raft: '0'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 103
+    full_name: '1_31'
+    name_in_raft: '31'
+    raft: '1'
+    purpose: SCIENCE
+  - instrument: HSC
+    id: 104
+    full_name: '1_48'
+    name_in_raft: '48'
+    raft: '1'
+    purpose: FOCUS
+  - instrument: HSC
+    id: 105
+    full_name: '1_51'
+    name_in_raft: '51'
+    raft: '1'
+    purpose: FOCUS
+  - instrument: HSC
+    id: 106
+    full_name: '1_52'
+    name_in_raft: '52'
+    raft: '1'
+    purpose: FOCUS
+  - instrument: HSC
+    id: 107
+    full_name: '1_57'
+    name_in_raft: '57'
+    raft: '1'
+    purpose: FOCUS
+  - instrument: HSC
+    id: 108
+    full_name: '0_57'
+    name_in_raft: '57'
+    raft: '0'
+    purpose: FOCUS
+  - instrument: HSC
+    id: 109
+    full_name: '0_52'
+    name_in_raft: '52'
+    raft: '0'
+    purpose: FOCUS
+  - instrument: HSC
+    id: 110
+    full_name: '0_51'
+    name_in_raft: '51'
+    raft: '0'
+    purpose: FOCUS
+  - instrument: HSC
+    id: 111
+    full_name: 0_48
+    name_in_raft: '48'
+    raft: '0'
+    purpose: FOCUS
+- type: dimension
+  element: physical_filter
+  records:
+  - instrument: HSC
+    name: HSC-Y
+    band: y
+- type: dimension
+  element: visit_system
+  records:
+  - instrument: HSC
+    id: 0
+    name: one-to-one
+- type: dimension
+  element: exposure
+  records:
+  - instrument: HSC
+    id: 330
+    physical_filter: HSC-Y
+    obs_id: HSCA00033000
+    exposure_time: 240.0
+    dark_time: 240.0
+    observation_type: science
+    observation_reason: science
+    day_obs: 20140325
+    seq_num: 330
+    seq_start: 330
+    seq_end: 330
+    group_name: '330'
+    group_id: 330
+    target_name: SSP-UDeep-COSMOS
+    science_program: o14406
+    tracking_ra: 150.1938125
+    tracking_dec: 2.230830555555556
+    sky_angle: 270.0
+    azimuth: null
+    zenith_angle: 32.34225766
+    has_simulated: false
+    datetime_begin: !butler_time/tai/iso '2014-03-25 10:03:47.628000000'
+    datetime_end: !butler_time/tai/iso '2014-03-25 10:07:49.604000000'
+- type: dimension
+  element: visit
+  records:
+  - instrument: HSC
+    id: 330
+    physical_filter: HSC-Y
+    name: HSCA00033000
+    day_obs: 20140325
+    seq_num: 330
+    exposure_time: 240.0
+    target_name: SSP-UDeep-COSMOS
+    observation_reason: science
+    science_program: o14406
+    azimuth: null
+    zenith_angle: 32.34225766
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70e563e64521a5ebbf4402389ce418e03fcfa088bd036a993fb123e794e3b3ebbfb5645433fdfedf3fe2b6cecc8647993fc72614e249cfebbf369005a15c9fdf3fcc450c7a7545993f8a8caa1ec0ddebbfa3d29c2f2d6cdf3fd9eaf9d92565993fd5791fac26ebebbf9f73a4dc003bdf3f1db562df091f9b3f2e13d468e4f1ebbfe4fcaf4cd91fdf3fa61437132a5f9e3f3ef9beded5f7ebbfd52b47ddf406df3ffced1c2067e2a03ff9dffa03a9f7ebbfd0a58c59b905df3f6462a33b58b8a13f5910b5ed9cf7ebbffe30c7cd8005df3fae623cbff5e3a13ff88858ee63f7ebbf6b9b93acb704df3f9dbf98c1f990a23f2e64ef8253f7ebbff44416aa8a04df3fe580424b4fbca23f429feb6007f7ebbf3c2dfe01f003df3fad20089cc86aa33fa93c678ef1f6ebbfd5f16f21d103df3f906e35025a96a33f5efcd05894f6ebbf52871f8d6003df3fe7b0b44ef244a43f767bb9a079f6ebbf082c5f4a4e03df3f20900bd59b70a43f9b7f32ec09f6ebbf2938ab470f03df3fb5e254966f1ea53f5bb80ddaebf5ebbfbf494ed10303df3f5d774c74474aa53f04ea453c6af5ebbfed2a1fa0f202df3f3a6a1bfefdf7a53ff9a6a2c948f5ebbf48f4facff202df3f1e89d9805522a63f4b5bc3ad8cf4ebbfa67551282703df3f3858c89581f9a63fa825ef9ac7ecebbf53ab485ce819df3f89071d21d5aba83f576bf6b749e4ebbf7d3c00a40633df3f2be70b3e884baa3fbd7ee7e8f4d5ebbf6aa059002063df3f954b9c921f28ab3f7cf2091467c7ebbf1b0070645096df3fd009b318b038ab3fc24d35b5feabebbfc67264a2fbf5df3fd6056bc02538ab3fce90baa54e9debbf297d335c6e14e03ffee0579c5727ab3f5e395c20d88febbf1b581115e52ce03fad195a6ed149aa3f0a7de6fd1589ebbf32b64e62f13ae03f0afa110771a9a83fdc0f79713583ebbf1fb680076147e03fe761a7c459f7a63f2b3c2d157c83ebbf4fbd9b121248e03f9ad222325421a63fc9f42d548c83ebbf4fdfcdc73048e03f7fdf7b1260f6a53f15ab70f9d383ebbf76a7723b9d48e03ff23902718e49a53f85867b82e783ebbffae8f707b548e03f1b434018ed1da53f5b4c4a613b84ebbf72fe14e00449e03fdd101f614770a43f501475605084ebbf4874c7df1749e03f377a58e2b044a43f305ee263af84ebbfbdc9096b4c49e03ff497a7788d96a33fa813238bc884ebbfae5b302d5649e03fbd171f8de96aa33fd42dc3a43085ebbfefbf1ae67149e03fa1b1eaef15bda23f005313ab4c85ebbf8d24f1487449e03f9922c321a891a23f3089d4f8bf85ebbf74337df37249e03f3b930ee4c9e4a13f9f2d2b55de85ebbfc5e0abd06e49e03f453a07d5a6b9a13fdd414fab7d86ebbf8062a3c24449e03ffd6c1371d5e3a03f41bbff16348eebbf44af04b4e13de03f161b56fd30639e3f7698de0bbb96ebbf606e7498d230e03f17bd4ddc21249b3f
+    datetime_begin: !butler_time/tai/iso '2014-03-25 10:03:47.628000000'
+    datetime_end: !butler_time/tai/iso '2014-03-25 10:07:49.604000000'
+- type: dimension
+  element: visit_definition
+  records:
+  - instrument: HSC
+    exposure: 330
+    visit: 330
+- type: dimension
+  element: visit_detector_region
+  records:
+  - instrument: HSC
+    detector: 0
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7023fd16745acfebbfa794c9c11f9cdf3f921be5ffb7ca9c3fe0d5c45c97cfebbf18d291e6009ddf3f7c2a9c0e46d79a3f1c414b4e35deebbf1bf1a24a4269df3f9d09efed9ff29a3f63d0c0c921deebbfa98d36ccd067df3f63331c5959e09c3f
+  - instrument: HSC
+    detector: 1
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70595d960ae2c0ebbfece8c4f2dbcedf3f47113b7262c49c3fd4e7059442c1ebbfbc73fcc440cfdf3fc18a41414ecf9a3f135fbabf37d0ebbf069f3dd4cb9adf3fbe886d32f7d79a3fddc28947fccfebbfb42bb2ade599df3f1e90933140cb9c3f
+  - instrument: HSC
+    detector: 2
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 704b4e80d055b2ebbf8fab1ae2b200e03f93d1f4d8cdcb9c3ff252b0f9d8b2ebbf5680e7c5a800e03f68a0e083c1d89a3fd09a0a21e8c1ebbf4e741000ffccdf3f7135593f26cf9a3f6a4e688d89c1ebbf53f8145993ccdf3f8b22665c3ac49c3f
+  - instrument: HSC
+    detector: 3
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70e97472dfe7a3ebbf8602a8888819e03fb0ea14dba4e19c3f131fc14392a4ebbfa6d480c53919e03f76f3eb7d81f49a3f026da0947cb3ebbf717bafa71bffdf3fac71172a12d89a3f0e6a1869fab2ebbff2b98d5f2cffdf3f219062c64bcb9c3f
+  - instrument: HSC
+    detector: 4
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70210d169c5bddebbf5698fe480069df3f2aecdac325879e3fe93d971687ddebbf4752d003436adf3f01eb1353db8b9c3fb1e8ce4ab1ebebbf76065b1fa737df3fd44e3249ecb39c3f4e1d6d33aeebebbfe9017d5dd835df3fc63a4bb04aa69e3f
+  - instrument: HSC
+    detector: 5
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 703be77df118cfebbf77c92a77759bdf3f7529900e5d769e3ff3cd1c0265cfebbf66ecd719479cdf3fb070a5a242769c3fc3e2792c26deebbf37a638460d68df3f00c4b5462d8d9c3ff1bf5153fbddebbfd78eaa72c866df3f386bdbec28889e3f
+  - instrument: HSC
+    detector: 6
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7007a3d7d78ac0ebbf293246397dcedf3fb0be6e2b22719e3f7107aa11f4c0ebbfe87fa849e9cedf3f82e4aca6936f9c3fd13deba708d0ebbfab4b7147069adf3f0f912b692c779c3f8d6a9598bdcfebbf1b6060243199df3f6140549924779e3f
+  - instrument: HSC
+    detector: 7
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 700da9547ee8b1ebbf1ee1d54faa00e03f6a2a7d210d779e3fdf2cfcfa6bb2ebbf1782715bb200e03f9d7a948135779c3fee0205449ac1ebbf9a48d8c7a5ccdf3fffde3418da6e9c3f677b08d434c1ebbff36b0e8e2cccdf3f7be7c45864709e3f
+  - instrument: HSC
+    detector: 8
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7015ed006f5ea3ebbf8f17b45fb119e03f9d7501ad97889e3f64df570a04a4ebbf12efff837d19e03fb2f83998e88d9c3fa6a2c46110b3ebbfd7a639cc2bffdf3f46b3e298e8769c3f2c8b5bd28bb2ebbf5fcc26531fffdf3fc53adeaae9769e3f
+  - instrument: HSC
+    detector: 9
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 708228beee3795ebbf1e3c2cd2d431e03faa4bc48782a79e3fde63f7e90396ebbf70682c7c5d31e03feb7120aaabb59c3fc8718ea1a7a4ebbf9b4afbef6418e03f276f04d7278d9c3ff81951ee02a4ebbf2224a9249718e03f32eb9d4c2c889e3f
+  - instrument: HSC
+    detector: 10
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70b431549324ddebbf92db53281468df3f6dc494048a1ba03f882546f863ddebbffeb9c38b3569df3ffcd2db485a319e3fbc98f78eb0ebebbf3d5f562e2236df3f91e092dc14529e3f5b80075291ebebbfabf555b79234df3f18fd5575ca27a03f
+  - instrument: HSC
+    detector: 11
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 703a21014fd0ceebbfcbf6de55c59adf3fb041dee71315a03f788d514427cfebbf25109fb0959bdf3f7a084cb225209e3fb60944cc04deebbf3dee325dfa66df3f03cdd2cac2319e3f6154f73ac8ddebbfa1877023cf65df3fecb697bd9a1ba03f
+  - instrument: HSC
+    detector: 12
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70eb08e9b629c0ebbfc53e497322cedf3f7bcb318ff412a03fc30c4daf9ac0ebbfcb8f6d4398cedf3f05f4b534a21a9e3ffebb01f1c8cfebbf425200d25b99df3f2b6375fdf8209e3f695bfc4670cfebbfe54cea829198df3f33e406166e15a03f
+  - instrument: HSC
+    detector: 13
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 708f136f1075b1ebbffc5f77dd9c00e03f497ffcc16c15a03fccdd77fbfcb1ebbf20739b8baf00e03fbef8cdd713219e3fa7605d9944c1ebbf4c023a8c46ccdf3f6fef86d9401b9e3f0afa13e6d4c0ebbf3d4add3fcccbdf3f5291cfc14513a03f
+  - instrument: HSC
+    detector: 14
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ba9036fadba2ebbf8dafdffebe19e03f26dc9b18221ca03f39fa31e57aa3ebbf296b57d5a819e03ff565762516339e3f54fd1d9ea3b2ebbfaf53f6941fffdf3f3b176b849d1f9e3f414723081fb2ebbf761775b4eefedf3fa37f9ff6be14a03f
+  - instrument: HSC
+    detector: 15
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70904b31c69a94ebbf50ad91db1132e03fac7272c25028a03fff743be05995ebbf32871184c231e03f7ae3c58c92539e3f1e9037261fa4ebbfe75d452a8f18e03f4ad2be0557329e3ff1c53da27fa3ebbf01f8ad42a618e03fabbaa62de81ba03f
+  - instrument: HSC
+    detector: 16
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 701f89b46feeeaebbf51e351f03237df3f90c12584c5f89f3fb0ccf735b4eaebbf1babab1ddf35df3f3d68f807bbffa03f6b4000f22adcebbf7229516abc69df3f2d6af884aff6a03f00bda0d27ddcebbff42ca84dbd6adf3fb42df5fd57df9f3f
+  - instrument: HSC
+    detector: 17
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7075430b731cddebbff7d198888968df3f7c69da724de09f3fa802415fcadcebbffff496f28567df3fc5579db80cf7a03fcf46b5acbccdebbfbcb15bc8c19cdf3fa116dcd0e3f1a03f85392e2c23ceebbf4fc1bbc07f9ddf3f69353d5e05d29f3f
+  - instrument: HSC
+    detector: 18
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 701de5d055caceebbfcdb41025339bdf3f06e6030572d29f3fd97abe0865ceebbf41460007719adf3fdf8f2a900cf2a03f78347b760cbfebbfc6eb6f053ad0df3f9633921875f0a03f0b5b47d684bfebbf135c1f03bad0df3ffd87f0ee1fce9f3f
+  - instrument: HSC
+    detector: 19
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 704490772d04b1ebbfa0acca597c00e03f2efb3ef237f2a03faf64c3db8cb1ebbf5d21b4959f00e03f50f020bd07d39f3f165a7f40e9c0ebbf735d4771decbdf3fbbca1fbbcbcd9f3fc552df8773c0ebbfa6b9883555cbdf3fac956ed84bf0a03f
+  - instrument: HSC
+    detector: 20
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7081f455de57a2ebbf76577b68c019e03fe15d762b82f7a03f669a79a2f4a2ebbf125be5b9bf19e03f98e7b1fac0e19f3f1e3a8ba733b2ebbfa64841dbfdfedf3fd7f2f882edd29f3f84e91afeaab1ebbf34ecf638b7fedf3fbee664a63af2a03f
+  - instrument: HSC
+    detector: 21
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7097f712960994ebbf236931ea2b32e03fd89641606000a13fb99560ffba94ebbf08ee95800532e03f74987324f2fa9f3f163ef2ab9ba3ebbf68af3013a218e03fd04d1d6d7edf9f3f65a8c16502a3ebbfe882f9bd9c18e03f84686b207df6a03f
+  - instrument: HSC
+    detector: 22
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 703ef9beded5f7ebbfd52b47ddf406df3ffced1c2067e2a03f5910b5ed9cf7ebbffe30c7cd8005df3fae623cbff5e3a13fbdbea816d0e9ebbfac6c5be72637df3f25571e2862daa13feb7a22c621eaebbf5b066f8b4a38df3f93fd84239fd3a03f
+  - instrument: HSC
+    detector: 23
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7008e3d2a1bdeaebbf176774f31c36df3fa2bd06e5a6d3a03f8c2117ce6deaebbf5f262a08f334df3fcefb75d039daa13ffb9bb9a2d5dbebbf1df367110069df3f9d02732553d4a13f9d5ba4be37dcebbfd4020047ee69df3f234e2dc55acaa03f
+  - instrument: HSC
+    detector: 24
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7089615394d9dcebbf8a0076f2af67df3f099f1f6068caa03f8308367d78dcebbf797f6e55be66df3ff8746e1844d4a13ffd0342705ecdebbfb520b470229cdf3ff8a3247115d1a13f29551db2cecdebbfb8ac095be19cdf3ff60a64af5dc5a03f
+  - instrument: HSC
+    detector: 25
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70aaf91d4c74ceebbfbd74828f9a9adf3f9271599a68c5a03f1b00cf3704ceebbf2a889a1cdb99df3fe2510d2c13d1a13ffc25bc0fa0beebbfe556795dcbcfdf3fb7f73caa31d0a13fbdd11d5b1ebfebbf9b91ded559d0df3f66a06fa8fbc3a03f
+  - instrument: HSC
+    detector: 26
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70de6966518fb0ebbf8bc06a4b5400e03f32fef9bc42d1a13f8ed5866b1bb1ebbf2ce04b068300e03f1ca0d737b5c5a03f6c6b45ee87c0ebbfc5766a266ccbdf3f54368073e1c3a03f89f99ad209c0ebbfe718b608ddcadf3f1b1cc69518d0a13f
+  - instrument: HSC
+    detector: 27
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70170b290ad9a1ebbfeb178cdfaa19e03fa966613dddd4a13f47ddaff171a2ebbfaa847d0ec219e03f8ec171a53fcba03f48c6d54cc2b1ebbfffccd2f8c4fedf3f5a57f2ea6ac5a03fabe283d437b1ebbfb763bfcc61fedf3fc589300d06d1a13f
+  - instrument: HSC
+    detector: 28
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 707c0304997b93ebbf0c42f27e3232e03f8d9f4f8deedaa13f67e7bec32394ebbf474ae8e52c32e03f95636bb2c1d4a03faf781dfb18a3ebbfc0a0af3aa418e03fa0b12c9b5dcaa03f72702ae481a2ebbfce1e81e28918e03f7a7aa3fb16d4a13f
+  - instrument: HSC
+    detector: 29
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 703089d4f8bf85ebbf74337df37249e03f3b930ee4c9e4a13fdd414fab7d86ebbf8062a3c24449e03ffd6c1371d5e3a03f7a955ec4c394ebbfd9b968a21c31e03f94d7826287d4a03f26589c6c1a94ebbf5d16c10e2431e03faae63afde6daa13f
+  - instrument: HSC
+    detector: 30
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70f9dffa03a9f7ebbfd0a58c59b905df3f6462a33b58b8a13f2e64ef8253f7ebbff44416aa8a04df3fe580424b4fbca23f52eaa52479e9ebbfd8ee06ce5836df3fa26a0c6d13b7a23f5ab2a89adfe9ebbffc13e22e5437df3f4988f81d1eaea13f
+  - instrument: HSC
+    detector: 31
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70873fd1d77deaebbf0b3753b41c35df3fc0f6b88dbaaea13fd363d16516eaebbfdb6b68262534df3f113d86f682b7a23f987d3f7074dbebbfd6e923e15068df3f4cf0827cdfb3a23f428d4f67e8dbebbf4d3b64e72169df3fbad2ac77e1a7a13f
+  - instrument: HSC
+    detector: 32
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 707619e1168adcebbf62e8326ee366df3f81ff333237a8a13f0c5c24cb17dcebbf1f0fafa80c66df3fa32d4c041bb4a23f90b17ea8f5ccebbfb66ccbef8a9bdf3f1906fe2b39b2a23fa267fd3772cdebbf5d96b3c9409cdf3f3e75ec148aa4a13f
+  - instrument: HSC
+    detector: 33
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7046464f7b18ceebbfb0dcb4e1f899df3f9654b73307a4a13f28a7952b9dcdebbf59432ed13e99df3f3b3651a9a8b1a23f4033b97631beebbf69f4a97c48cfdf3f9dcc142152b1a23f8c587145b6beebbfd5ce4646e2cfdf3f4c994b9926a3a13f
+  - instrument: HSC
+    detector: 34
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70c1cb498c18b0ebbf060acc5c2100e03f6c21b8a508b2a23f6211581fa7b0ebbfb3f852b15c00e03f69bc433881a4a13f2b5c76b51fc0ebbf199097b6f4cadf3f72a59ba236a3a13f2051bf4f9abfebbf8ec285f65ccadf3f462b508e63b1a23f
+  - instrument: HSC
+    detector: 35
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70866d1ad65aa1ebbf77a0631d8619e03ffabcdf5c27b4a23ff54ab777f2a1ebbffc97c325b019e03fa29b73687ba8a13f665af8274fb1ebbfaa34287973fedf3f01ed28079ea4a13f57823b9dc0b0ebbfdb157291fcfddf3f8d0f72b733b2a23f
+  - instrument: HSC
+    detector: 36
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70e8522338f592ebbfc8e1e3381e32e03f331a545987b7a23fad9ad63f9693ebbf4f31ca353532e03fbea1100519afa13f11382c029aa2ebbf5ad358f99018e03fdf289a3818a8a13fde7f047403a2ebbfb54a4d016518e03fe02b3f17e0b3a23f
+  - instrument: HSC
+    detector: 37
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70d42dc3a43085ebbfefbf1ae67149e03fa1b1eaef15bda23f9f2d2b55de85ebbfc5e0abd06e49e03f453a07d5a6b9a13f7741a5003694ebbfdd3f3a5d2531e03f293c06a2e8aea13f563825169593ebbf498b34010e31e03f6058f7f684b7a23f
+  - instrument: HSC
+    detector: 38
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70f88858ee63f7ebbf6b9b93acb704df3f9dbf98c1f990a23fa93c678ef1f6ebbfd5f16f21d103df3f906e35025a96a33ff7ec21c80fe9ebbf26d9a61db135df3fdae0aca0fb94a33f45beccd18be9ebbf39a3b4cf7f36df3f640e08c6c08aa23f
+  - instrument: HSC
+    detector: 39
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7034abd63f28eaebbf223704c94e34df3fd882a09f548ba23fa6056198abe9ebbfdee5a89d8233df3fd996a1086595a33fb13b782204dbebbf31f4d521bc67df3fa1ce24c25394a33f5af5bfdd87dbebbf90c836f87568df3fbd1d34b72787a23f
+  - instrument: HSC
+    detector: 40
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70b1f0e0612bdcebbf930c84983166df3febfb4de53687a23fcc890d92a8dbebbf548e30bb7465df3f961f2eb24894a33f3098593d82ccebbfef43dbdffe9adf3fc0101e6cb993a33f6f648c9c0acdebbfcc574ff9ab9bdf3f040af268e384a23f
+  - instrument: HSC
+    detector: 41
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70d12ae13fb0cdebbf32d390446599df3f14d0eee9d284a23fe374dfbb28cdebbf2fb8c047b598df3f914ea2579c93a33f5d357574b9bdebbf75a0a1d5cacedf3fe5c328138993a33fa7b51bcb45beebbff3f2ad196bcfdf3f95b06cb93584a23f
+  - instrument: HSC
+    detector: 42
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7026748802a0afebbfa541ed91c8ffdf3fcf4cb8448193a33fd01f130c30b0ebbfd62512482d00e03fb486bf1ad184a23f551bb4c7b0bfebbfdd17811b79cadf3f2e815f49da83a23f9219e12b25bfebbfe7884955d6c9df3f2550f8852e93a33f
+  - instrument: HSC
+    detector: 43
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70fad84cd0dfa0ebbf25dd2ccb4e19e03f2166bef14194a33f077fca4d73a1ebbf20c58fe18f19e03f3a9d1b8a6487a23fa8304930d8b0ebbfca8fe2b514fedf3fe0a19708be84a23fed3389bb48b0ebbf42ff159780fddf3fca896eda7b93a33f
+  - instrument: HSC
+    detector: 44
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70a0afcbf47492ebbf4b548da8f231e03f5b2df92c0e95a33f8ac8c1200d93ebbf4250cd5d2832e03fec6e90f8528ba23f9a5ac71e1aa2ebbf9bf87ef77118e03fc676d6220587a23f33e5cc4486a1ebbf35cb71663118e03fe7d53fc6fd93a33f
+  - instrument: HSC
+    detector: 45
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70305ee263af84ebbfbdc9096b4c49e03ff497a7788d96a33f005313ab4c85ebbf8d24f1487449e03f9922c321a891a23f111449bbaf93ebbfc982c5bd1331e03f361242cf178ba23fd0ba53951793ebbf127ba8cedd30e03f08636083ff94a33f
+  - instrument: HSC
+    detector: 46
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70429feb6007f7ebbf3c2dfe01f003df3fad20089cc86aa33f767bb9a079f6ebbf082c5f4a4e03df3f20900bd59b70a43f945b483f96e8ebbf5ca3c6cb2935df3f942abc763173a43f25ab27b026e9ebbf5cf95d2ece35df3f64bea6588e68a33f
+  - instrument: HSC
+    detector: 47
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70abc693f6c2e9ebbff8dd88879e33df3fea5dd855c568a33f5ff1561833e9ebbfbb6b4d7ff832df3f59668b413e73a43fb638dd758adaebbf54c6a2de2e67df3f55cd00b30875a43f85c240211cdbebbffd259355d667df3fa6fd20397b67a33f
+  - instrument: HSC
+    detector: 48
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 709f081c76c0dbebbfb3c506bb8f65df3f9ed2bcd84367a33ff2bc647b2edbebbf0dcbd2a8e964df3f0a14393db774a43f4db777bc07ccebbffeed1069719adf3f1d2a0c8eab75a43fe3fbc3aa9accebbf7e33f293189bdf3fa43638987566a33f
+  - instrument: HSC
+    detector: 49
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70f937249241cdebbf6c9c3b7ecd98df3fc9e5d24e5d66a33fa9d46b12afccebbf0cf8fff12498df3fec7ca6b08675a43fa281700940bdebbf8dfc058d38cedf3f13adae15e575a43f9de05cbad2bdebbf1234f2c8e1cedf3f34b8b9933166a33f
+  - instrument: HSC
+    detector: 50
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70891a89f624afebbf6dcf89653cffdf3f5a46c828b275a43fbebdedb0b5afebbf66b69bdaeaffdf3fffe7826aa166a33fa2b758ac3abfebbf8af6e950fac9df3f2d5e2febe365a33f90dbf7a6a9beebbf88a28c474bc9df3f425100909875a43f
+  - instrument: HSC
+    detector: 51
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ce972cd867a0ebbf2d1f5ec90519e03fde75f4378d74a43f6d966199f7a0ebbf0b1f55675c19e03f23fc83064d67a33fc834546060b0ebbff8a6bb9b9dfddf3f3dc107e5fa65a33f837198b4cfafebbfbf7022e6eefcdf3f576586731975a43f
+  - instrument: HSC
+    detector: 52
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70143716f8fb91ebbf86edc086ae31e03fcf41dc3ad772a43f86ffa4b68c92ebbf45a2bd9bff31e03ff86201c5b268a33f6a3bd4a29da1ebbf2389bb563f18e03f2bed29e35a67a33f46e0ca2f0ba1ebbf8c27c035ed17e03f99c904feb574a43f
+  - instrument: HSC
+    detector: 53
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 705b4c4a613b84ebbf72fe14e00449e03fdd101f614770a43fa813238bc884ebbfae5b302d5649e03fbd171f8de96aa33f6897bb8d3093ebbf8c9d02dae830e03fa8ca37a88168a33f5d8891b3a092ebbfc4a7520b9630e03f89785692d272a43f
+  - instrument: HSC
+    detector: 54
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 705efcd05894f6ebbf52871f8d6003df3fe7b0b44ef244a43f5bb80ddaebf5ebbfbf494ed10303df3f5d774c74474aa53f14e414890ce8ebbf4c84a332c534df3fa0db04e7cf50a53f1f5359f9b0e8ebbf757a638a3e35df3fccdd72359d46a43f
+  - instrument: HSC
+    detector: 55
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ccfed7c54ce9ebbf14f48d741033df3f67addb19df46a43f06c1adc1a7e8ebbf59fc779e9932df3fc5786808e750a53f11d19c8f02daebbf7cc3a105bd66df3f9104d6edf654a53f94f21f32a4daebbff3ed57e24867df3fbb2fff8dd047a43f
+  - instrument: HSC
+    detector: 56
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70bcd51dcf46dbebbfcd2cc63f0865df3fb3a3133fa847a43f4fbb463aa6daebbf1203a8f57864df3f353a0168b454a53fd33d29d082cbebbf6a5afd85f099df3fdb16160c2c57a53f4ee444c81fccebbfc1177fa4919adf3f95717e725b48a43f
+  - instrument: HSC
+    detector: 57
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7028ab15a5c9ccebbfed94bb453b98df3f729a1a459b48a43f32ff7f282bccebbfaff00d9a9f97df3fa23ae6f85e57a53f5624de5ec0bcebbff7678101a4cddf3f2197ae23d357a53f9f5dbd7a5abdebbfc54f6a8d50cedf3f4dadb2688548a43f
+  - instrument: HSC
+    detector: 58
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 707121c050a9aeebbf69c191dd9bfedf3f7c571dd0ea56a53fd9d3af573dafebbfbba750c35bffdf3f8f879f3b3f48a43f1ce08e41c2beebbf67d0a22269c9df3f152a208c7048a43f5623153d29beebbf813854c7b8c8df3f2dac3884bf57a53f
+  - instrument: HSC
+    detector: 59
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70378bc6d3ee9febbf2ed87002b318e03f50dcea3b5954a53f55432c707da0ebbfcb09fbb81919e03f92c4c2198147a43f924ee292e5afebbf67c2b88115fddf3febd38ae83748a43f88e4a20c51afebbf37bfd62f57fcdf3f88da8820f156a53f
+  - instrument: HSC
+    detector: 60
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ba5617868d91ebbfb6c32f884d31e03fb17cfabce34fa53fa14b538f1492ebbf770d9ccabc31e03fe7ea61ae3246a43f04f03bb124a1ebbfb8ba9cd2fa17e03fdbe389dc5a47a43fc443faf295a0ebbf7c4f7f329417e03f757ba0c94e54a53f
+  - instrument: HSC
+    detector: 61
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7015ab70f9d383ebbf76a7723b9d48e03ff23902718e49a53f501475605084ebbf4874c7df1749e03f377a58e2b044a43fd593d0bab692ebbf738d6760a830e03f302357a76a46a43fe948ab8b2f92ebbf7b69281e3930e03f343856454850a53f
+  - instrument: HSC
+    detector: 62
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 709b7f32ec09f6ebbf2938ab470f03df3fb5e254966f1ea53ff9a6a2c948f5ebbf48f4facff202df3f1e89d9805522a63f2ec39fca72e7ebbf1601796e8434df3faeb0d84d552da63f82599f2229e8ebbfdee2f99fd734df3fe1c451c07124a53f
+  - instrument: HSC
+    detector: 63
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70b22eeae4c5e8ebbfbc3c3ec9a632df3ff555b2c57124a53f8dc24b8d0ee8ebbf4c1f65b15732df3f02daf6d2282da63f88b0ab0271d9ebbf261d1e705666df3f9dc8a46e2e34a63f844905911fdaebbf8ee59324cf66df3f5fd46df03d28a53f
+  - instrument: HSC
+    detector: 64
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70f38381d3c1daebbfe7a6f4ad8f64df3f769151ef1f28a53f2419976a12daebbfebe9c3551a64df3fb39f81e0f533a63f19df1f51f6caebbfa49c75937399df3f313c7f93ca37a63f97e312829dcbebbf8a059eb10b9adf3f0ed798a9282aa53f
+  - instrument: HSC
+    detector: 65
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7091fc827945ccebbfa7568bd9bc97df3f84f8a3b7142aa53fddf9f3189ecbebbfac97138c2597df3f4b8863f1a937a63f146315f93abcebbfe7bac40f0dcddf3ff84a6c56c738a63f53691870d9bcebbf5472224dc5cddf3f69685636a82aa53f
+  - instrument: HSC
+    detector: 66
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70d3e6fb422caeebbffbbf9eb0e9fddf3f293b55194f37a63fcaa64378c1aeebbfe9cc7416c0fedf3f9756e4e6d129a53f91600c9842beebbfb7c48d10d9c8df3f74888f0c952aa53f1943d9b5a3bdebbf7eeef64722c8df3f0bda7e76b538a63f
+  - instrument: HSC
+    detector: 67
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 705e5ead927a9febbff40461364d18e03f4d334d652e33a63f037d1f9005a0ebbf2c97c71bc718e03f324eb2f28c27a53f4aa8a92569afebbf7e964c7f7bfcdf3f34eaece9e229a53f4712a726d3aeebbf6d1feda8a7fbdf3fa0d320b26d37a63f
+  - instrument: HSC
+    detector: 68
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70080b5f342791ebbf70da81e0d330e03f16f12d4e382ca63f4dce2d16a491ebbfd5060dd66031e03fb4d2e6aadb23a53f53c0675daea0ebbfc717bd33a517e03feb9f6ea6ab27a53f8232ce7d23a0ebbf87514dee2a17e03f313d23076a33a63f
+  - instrument: HSC
+    detector: 69
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 702b3c2d157c83ebbf4fbd9b121248e03f9ad222325421a63f85867b82e783ebbffae8f707b548e03f1b434018ed1da53fa63703764592ebbfc0ce0ac44d30e03fc1c6fa0d1224a53fb77ec9c2c691ebbf8f81d8a0c32fe03fce56f43e9c2ca63f
+  - instrument: HSC
+    detector: 70
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7004ea453c6af5ebbfed2a1fa0f202df3f3a6a1bfefdf7a53f4b5bc3ad8cf4ebbfa67551282703df3f3858c89581f9a63f4613bb30c6e6ebbfffdb0bad7334df3f68a4404d2c08a73f1ea38b6192e7ebbf55085c8b8f34df3ff2712bde8101a63f
+  - instrument: HSC
+    detector: 71
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70a62e098c2ee8ebbf3e90930b6232df3f4499a0c91501a63ffc309fd663e7ebbfd009ae8a4132df3f8c309ded8f07a73fe23decdbd2d8ebbfb9c5fe740966df3fdca13acf7111a73f03ead80d8fd9ebbfe8e7648d6966df3f152b0fd19007a63f
+  - instrument: HSC
+    detector: 72
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ca45a0ad31daebbfa192f3a72964df3f6d1beb162707a63f3292100075d9ebbf0b32a8adcb63df3f286fd586ec10a73f0f6b2d1464caebbf0497038af798df3f96fc01757516a73f15559dba13cbebbf112ad00f8a99df3fa4535b78d30aa63f
+  - instrument: HSC
+    detector: 73
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70a112991ebccbebbf7f98d9183997df3fc949fea9fa0aa63f1a2baa2d0ccbebbf711e48c0a796df3f12c361d98e16a73fc151449bb4bbebbf6f240abe64ccdf3fa28959614d18a73f2063e70c57bcebbf23e2004927cddf3fcd9d32832d0ca63f
+  - instrument: HSC
+    detector: 74
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ae9acf07afadebbfa6546c6f24fddf3f280c8ecefc15a73fa0d8d95444aeebbf90248d5b12fedf3f266f8f59800aa63fc1aaf0d2bdbdebbffa77166644c8df3f4efb016cbb0ba63f0c9f87131abdebbf689e496f86c7df3f777d0dafdd17a73f
+  - instrument: HSC
+    detector: 75
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7036c0d4b60b9febbf86c7477bd417e03ffa728e965610a73fbaaa0885919febbfb8575fd56218e03f80df6aafc706a63f36a0436becaeebbfaa6c4f34ccfbdf3fdfa21f2d9d0aa63f5089083d56aeebbfb5873623e1fadf3f23fdee8f2716a73f
+  - instrument: HSC
+    detector: 76
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70fd1baa78c690ebbfcd52a4104830e03ffc9576686006a73f990d53483991ebbf5f490c09f130e03f73b5a0214800a63f61687c3b38a0ebbfe1a5351a4417e03f579d60733007a63f80ea0ba9b09febbf238e1e94b816e03f5160b11bdc10a73f
+  - instrument: HSC
+    detector: 77
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70dc0f79713583ebbf1fb680076147e03fe761a7c459f7a63fc9f42d548c83ebbf4fdfcdc73048e03f7fdf7b1260f6a53f1a20e906db91ebbf05f61b32dd2fe03f382e5d249400a63f42254d276891ebbfaac5c301342fe03f6648d0b1de06a73f
+  - instrument: HSC
+    detector: 78
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70c91695a388e7ebbf9495f3273f32df3fe8e573c09ddba63f4713a574abe6ebbf0e7b41d94d32df3f27162f3adcdea73f3132d31c2cd8ebbff20e8e62ca65df3fbaac7f4323eca73fcc611d83f4d8ebbf270e52791366df3fb84522da3ee5a63f
+  - instrument: HSC
+    detector: 79
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 704bebd96c94d9ebbf9fc5ef75dd63df3f74c7bb56c4e4a63f1f1b2a80cad8ebbf4d12723a9a63df3f2353952f8ceba73f29bced13c9c9ebbf3a2e288b8898df3fcfd3e8d6e3f2a73f705046c780caebbf8d0b41a61399df3f92adc7fa20eaa63f
+  - instrument: HSC
+    detector: 80
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70a577f65c28cbebbfb201347ac696df3f578c9683f3e9a63f571f27f06ecaebbff96ccfa34196df3fe420482da9f2a73fa6b03c0e27bbebbf0fc3c731c6cbdf3f93368defbcf4a73ffd893f33cebbebbfa444a73a8dccdf3f5b00f54176eba63f
+  - instrument: HSC
+    detector: 81
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7058b76bb430adebbf0730329e51fcdf3fcaec26135bf2a73f10cc64d5c5adebbf60d50eb654fddf3fe494684dc2e9a63f5ca048a333bdebbf8846f35badc7df3f42a460e69aeba63f51d00f058bbcebbf7a248e6febc6df3fe326f46ee2f4a73f
+  - instrument: HSC
+    detector: 82
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70a83c145da39eebbf15e7db6e4817e03f9e193fadf8eaa73f08107e74229febbf63c01b25ec17e03faf6cc6bc6de4a63fbe18a04370aeebbfb61385b906fbdf3f748f7006c4e9a63fb69b71f4daadebbf5ac5c90b04fadf3fa9f7d79d6cf2a73f
+  - instrument: HSC
+    detector: 83
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 707f7555ac7590ebbf647f68ad992fe03fe36c7b67c5dda73f46309e34da90ebbf4ce265026430e03f0bce7561f1daa63fab9bbda4c89febbf00e796b6ce16e03f9698810d88e4a63f0eba8919489febbf050651462d16e03fcac8aea033eba73f
+  - instrument: HSC
+    detector: 84
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70450507e2cee6ebbff0072ab75132df3f403ad08c09b4a73ffd3a2517dde5ebbf9707cb9a9b32df3f0f500043f8b2a83f3b240c2675d7ebbf5fc82456b765df3f6c51d9948cc3a83fc1a923654bd8ebbfda4a5470df65df3f3e48e7eda9c0a73f
+  - instrument: HSC
+    detector: 85
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 705dd8acb8edd8ebbfbcaad147a163df3f324c43a513c0a73f0a935b7315d8ebbf30a4fde18063df3fa6a9d5b1d6c2a83f1f14238d28c9ebbfbc1f387f1f98df3ffabf019cf2cba83fed89b9dce8c9ebbf16a95f4a9d98df3f14976c7d02c7a73f
+  - instrument: HSC
+    detector: 86
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70aa1bef518dcaebbfbeb1abfd5a96df3f2c90f435e3c6a73f886a3f88cbc9ebbf6d72119ee295df3fbe54d096c4cba83f4d07bba797baebbfea1612da1ecbdf3f5db3734f64cea83f5bf4d1ef41bbebbfbfb98e0aeccbdf3fad194dd9e7c8a73f
+  - instrument: HSC
+    detector: 87
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70db0f4ebeedbbebbf08348f5193c9df3fee239a0a52c9a73fc931961b41bbebbfd0b4414ccec8df3ff31e83b7cdcea83f4f7be6cbfcabebbff59ceadce6fddf3f39b5924c07cba83f5e51244990acebbf8650e2f4fffedf3f0cb53f285fc6a73f
+  - instrument: HSC
+    detector: 88
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70e71f73eb35adebbf604592fac1fcdf3f87b7f8d1a6c6a73fb9ea4db2a1acebbf4aaacc27abfbdf3f84b033d15fcba83f1c8f5272869debbfccfd0d5ded17e03f32cd1f563ec1a83f142daaa6fd9debbfc2c4e306a618e03f10ee8de6eebea73f
+  - instrument: HSC
+    detector: 89
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70c36e0fb6a29eebbf51a7d5218a17e03f71f492555ebfa73ff80825962a9eebbf0c1509c5d216e03fea312e6cd2c1a83ff0fd705d7e8febbf07cd84fd0230e03f281ece4553b0a83f669c3f30d28febbf61aeb62af030e03f6fddfc861cb2a73f
+  - instrument: HSC
+    detector: 90
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70bc808fdd04e6ebbfe8f002989132df3f2bb8dcb41089a83f9f599a1cfde4ebbf59049dc72033df3f0991b9007b82a93faf68f5a7b2d6ebbfafd6b6f9c465df3f594fe6b15f96a93f1762e7e697d7ebbfc4884cddc265df3f7a60cc5aad98a83f
+  - instrument: HSC
+    detector: 91
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ef9efcf139d8ebbf7fcbbee08563df3faba28c861298a83fcb36ca5b54d7ebbf7e02d7d48963df3f24a356db9e95a93f22bfad1581c8ebbfdf8cd391c497df3f9c971821fba0a93f38f3a96148c9ebbf4f3f31f83598df3fdc19aefcf9a0a83f
+  - instrument: HSC
+    detector: 92
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7062463d50edc9ebbf0c502012f395df3f866dcad585a0a83fca4cc99823c9ebbfac0621768a95df3f17f7a74c78a0a93fc78320a208baebbf7b1c07e96ccadf3f3f84de78b0a3a93f76988b08b5baebbf2c5ed21f3fcbdf3ff7b1e74010a3a83f
+  - instrument: HSC
+    detector: 93
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 700993f09e5dbbebbf00ad7fd9f1c8df3fb5896edf64a3a83fe7a50df2aebaebbfc769688927c8df3fb19d2b9e04a4a93ffd260b4085abebbfa30066b2e6fcdf3f1bf22764869fa93f1d4f0c8d14acebbf498c110d1afedf3f526f0a23db9fa83f
+  - instrument: HSC
+    detector: 94
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 706de7ad77b9acebbf2e7ea7fbdefbdf3f3b9a09e5fa9fa83fe5134c7d29acebbf7c6ba6a8adfadf3f630bd4ecba9fa93f5ef215022d9debbf0ee72f103e17e03fca9e76847b93a93f8884b0b2989debbfd44f8ba80f18e03f541578487196a83f
+  - instrument: HSC
+    detector: 95
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70ece9f4bf3d9eebbfb3813e8af316e03f9bf2649d0097a83f538de854d09debbf15f286962416e03f955c6f153394a93f349a34b1498febbf1a313d471c2fe03f1d2e7386ff7ea93f71e4adc48a8febbf5d4bc8c02d30e03fb2cd4a0b4d86a83f
+  - instrument: HSC
+    detector: 96
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70775fc68f7bd7ebbfd19d40178663df3fee72e757f96ba93f46302f7987d6ebbf8ae1823ab963df3f39dbb229d062aa3fd4cf7ea3d3c7ebbf9f67ff397b97df3fda2f31f65270aa3f75f551e8a2c8ebbf8a437f8bd697df3f4f2bf96ea376a93f
+  - instrument: HSC
+    detector: 97
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70b196b1bb45c9ebbfdbe4e1959a95df3f437cd9ad5a76a93f8b2a39f374c8ebbf45216ded4495df3f390c458ef66faa3f7ce8c03a78b9ebbfceed2162bac9df3fa96ae0d6e073aa3f8b747d5f25baebbfd389937590cadf3f5977ad4c7479a93f
+  - instrument: HSC
+    detector: 98
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 703ae2281dccbaebbf189e54a449c8df3ff858ffe0c479a93f553563d01bbaebbf4494a78c7ec7df3fc49d5c923074aa3f0d9c39a812abebbf8d000f12d1fbdf3fccd93fc3a36eaa3ff5840fb79cabebbfcd210f531cfddf3f0786bfef4f75a93f
+  - instrument: HSC
+    detector: 99
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7000528d0041acebbf6c85ecb2e1fadf3fbbc303b4f775a93fd3c6ac2ab5abebbf953322389cf9df3f4687ce075f6faa3f55802f3fde9cebbf3906b1957a16e03feb941d034960aa3f5a422a043e9debbf91ac63c76217e03ff2b22935e369a93f
+  - instrument: HSC
+    detector: 100
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7071adcbdab1f1ebbf034279b7c81cdf3f2981e8c38102a13f5ed0216216eaebbf34b869c91c38df3f3e9c71ad8efba03f8dcb51d46beaebbf4b04a4a5b63adf3f8e8129a8cf469e3f2e13d468e4f1ebbfe4fcaf4cd91fdf3fa61437132a5f9e3f
+  - instrument: HSC
+    detector: 101
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70e6950ac6a894ebbf6367d5102131e03f6c85ae6d51fca03f5eaab49ac28cebbfaa11618c863ee03f1fe9c7397f03a13f41bbff16348eebbf44af04b4e13de03f161b56fd30639e3f5f67e373fa95ebbf2bd86274b530e03f2043e06df9499e3f
+  - instrument: HSC
+    detector: 102
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70b9cc96bbe7e6ebbf61b0376a7134df3ff9fcba2e2be0a63fc5b256328beeebbfbd8711172519df3f09646605e6d8a63fa825ef9ac7ecebbf53ab485ce819df3f89071d21d5aba83fc291b7a53fe5ebbf4d6a0d43be34df3fcf166e0426b8a83f
+  - instrument: HSC
+    detector: 103
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70018833ff9a89ebbf27a6857fb93ce03f2e0ea97580d7a63f5a51a1627991ebbfb2ce0b7a4f2fe03ff32b2bcfcbdea63fe34ff077cd90ebbfef95e592bf2de03ff1dfed3f01b6a83f0a7de6fd1589ebbf32b64e62f13ae03f0afa110771a9a83f
+  - instrument: HSC
+    detector: 104
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70b214229d1acfebbff467323b729edf3f358bc341c3289b3fc72614e249cfebbf369005a15c9fdf3fcc450c7a7545993f8a8caa1ec0ddebbfa3d29c2f2d6cdf3fd9eaf9d92565993f553aa0f8c3ddebbfc4c83b758f6adf3f651250ed95429b3f
+  - instrument: HSC
+    detector: 105
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70a83a58aa70a4ebbf645782625119e03fff83bcd071459b3fe563e64521a5ebbf4402389ce418e03fcfa088bd036a993fb123e794e3b3ebbfb5645433fdfedf3fe2b6cecc8647993fb4df003a62b3ebbf4751c6cc31ffdf3f1e6b77e8f7299b3f
+  - instrument: HSC
+    detector: 106
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 7088aa9c3c09ddebbf211e4b4cb66bdf3f70cb773c24de9c3fa597b64720ddebbf06e5047a1b6ddf3f2531c0c3d7ef9a3fd5791fac26ebebbf9f73a4dc003bdf3f1db562df091f9b3fd17b223c41ebebbf53d69fcced38df3f483af18529049d3f
+  - instrument: HSC
+    detector: 107
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70a78f565ae495ebbf6be7699c6e31e03f71db7208e0079d3f7698de0bbb96ebbf606e7498d230e03f17bd4ddc21249b3f052163e637a5ebbf5a097e051e18e03f1bb744beccf29a3f971149a68fa4ebbf5663c00b6918e03fa34b9ee94ae09c3f
+  - instrument: HSC
+    detector: 108
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70f70a03c265e5ebbff8b3e6343132df3f84128e742a59a93f576bf6b749e4ebbf7d3c00a40633df3f2be70b3e884baa3f3f9bbfe924d6ebbfac03cfec1465df3fb4aba5cd6063aa3fb0eedd0718d7ebbf97184aaee564df3f4802523c706ca93f
+  - instrument: HSC
+    detector: 109
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70480e17249e9eebbf465c45c60315e03f1fcb2437776ba93f16de30893b9eebbff5d4fda71f14e03f64a3776b3a62aa3f5e395c20d88febbf1b581115e52ce03fad195a6ed149aa3f91ec905f0790ebbfaaf97d31172ee03ff35c99a68a57a93f
+  - instrument: HSC
+    detector: 110
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 70f9a80edaf4d6ebbfc9ecf77abd62df3fa7dbbb32283aaa3fbd7ee7e8f4d5ebbf6aa059002063df3f954b9c921f28ab3f7cf2091467c7ebbf1b0070645096df3fd009b318b038ab3fe340f2643cc8ebbf1b504f8b9396df3f2ccdc4825447aa3f
+  - instrument: HSC
+    detector: 111
+    visit: 330
+    region: !<lsst.sphgeom.ConvexPolygon>
+      encoded: 706745271a84acebbfc6dbf8cd55f7df3f9c8e3abcb846aa3fc24d35b5feabebbfc67264a2fbf5df3fd6056bc02538ab3fce90baa54e9debbf297d335c6e14e03ffee0579c5727ab3fc03f46f1a09debbf20a9be9b6c15e03f2223eed5fb38aa3f
+- type: dimension
+  element: visit_system_membership
+  records:
+  - instrument: HSC
+    visit_system: 0
+    visit: 330
