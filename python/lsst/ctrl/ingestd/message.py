@@ -22,11 +22,9 @@
 import json
 import logging
 
+from confluent_kafka import Message as KafkaMessage
+
 LOGGER = logging.getLogger(__name__)
-RSE_KEY = "dst-rse"
-URL_KEY = "dst-url"
-RUBIN_BUTLER = "rubin_butler"
-RUBIN_SIDECAR = "rubin_sidecar"
 
 
 class Message:
@@ -38,33 +36,74 @@ class Message:
         kafka message
     """
 
-    def __init__(self, kafka_message):
-        self._message = kafka_message
-        value = self._message.value()
-        self.msg = json.loads(value)
-        self.payload = self.msg["payload"]
+    # Dictionary keys of some fields of interest in the payload of a Kafka
+    # message.
+    RSE_KEY = "dst-rse"
+    URL_KEY = "dst-url"
+    SCOPE_KEY = "scope"
+    NAME_KEY = "name"
+    RUBIN_BUTLER_KEY = "rubin_butler"
+    RUBIN_SIDECAR_KEY = "rubin_sidecar"
 
-    def get_dst_rse(self) -> str:
+    def __init__(self, kafka_message: KafkaMessage) -> None:
+        #
+        # The payload of the Kafka message is of the form:
+        #
+        # {
+        #   "event_type": "transfer-done",
+        #   "payload": {
+        #     ...
+        #     "bytes": 98559,
+        #     "guid": null,
+        #     "previous-request-id": null,
+        #     "protocol": "davs",
+        #     "scope": "hsc_pdr2_multisite",
+        #     "name": "relative/path/to/file",
+        #     ...
+        #     "rubin_butler": 1,
+        #     "rubin_sidecar": "..."
+        #   },
+        #   "created_at": "2024-10-27 23:02:59.797585"
+        # }
+        self._message: dict = json.loads(kafka_message.value())
+        self._payload: dict = self._message["payload"]
+
+    def __str__(self):
+        return json.dumps(self._message)
+
+    @property
+    def dst_rse(self) -> str | None:
         """Getter to retrieve the destination RSE"""
-        return self.payload.get(RSE_KEY, None)
+        return self._payload.get(self.RSE_KEY, None)
 
-    def get_dst_url(self) -> str:
+    @property
+    def dst_url(self) -> str | None:
         """Getter to retrieve the destination URL"""
-        return self.payload.get(URL_KEY, None)
+        return self._payload.get(self.URL_KEY, None)
 
-    def get_rubin_butler(self) -> int:
+    @property
+    def rubin_butler(self) -> int | None:
         """Getter to retrieve the flag indicating this is a Butler file"""
-        return self.payload.get(RUBIN_BUTLER, None)
+        return self._payload.get(self.RUBIN_BUTLER_KEY, None)
 
-    def get_rubin_sidecar_str(self) -> str:
-        """Getter to retrieve the 'sidecar' metadata as a dict"""
-        d = self.get_rubin_sidecar_dict()
-        if d is None:
-            return None
-        s = json.dumps(d)
-        return s
+    @property
+    def rubin_sidecar_str(self) -> str:
+        """Getter to retrieve the 'sidecar' metadata as a string"""
+        if (d := self.rubin_sidecar_dict) is not None:
+            return json.dumps(d)
+        return None
 
-    def get_rubin_sidecar_dict(self) -> dict:
+    @property
+    def rubin_sidecar_dict(self) -> dict:
         """Getter to retrieve the 'sidecar' metadata as a dict"""
-        d = self.payload.get(RUBIN_SIDECAR, None)
-        return d
+        return self._payload.get(self.RUBIN_SIDECAR_KEY, None)
+
+    @property
+    def file_scope(self) -> str:
+        """Getter to retrieve the 'scope' of the file"""
+        return self._payload.get(self.SCOPE_KEY, None)
+
+    @property
+    def file_name(self) -> str:
+        """Getter to retrieve the 'name' of the file"""
+        return self._payload.get(self.NAME_KEY, None)
