@@ -57,7 +57,9 @@ class Config:
         #   repo_2: "https://host.example.org/path/to/rse/repo_2/butler.yaml"
         #
         # The entries 'kafka_num_messages' and 'kafka_client_timeout' are
-        # optional. There must be at least one item in 'kafka_brokers'
+        # optional.
+        #
+        # There must be at least one item in 'kafka_brokers'
         # and one item in 'butlers'.
         with open(filename) as file:
             config = yaml.load(file, Loader=yaml.FullLoader)
@@ -95,7 +97,7 @@ class Config:
                 if math.isnan(self._timeout):
                     self._timeout = self.DEFAULT_KAFKA_CLIENT_TIMEOUT
 
-            LOGGER.info(f'using configuration file: "{filename}"')
+            LOGGER.info(f'loaded configuration file: "{filename}"')
             LOGGER.info(f"kafka brokers: {self._brokers}")
             LOGGER.info(f'listening for messages in topic: "{self._topic}"')
             LOGGER.info(f"number of kafka messages in one batch: {self._num_messages}")
@@ -104,22 +106,32 @@ class Config:
             for butler_alias, butler_configuration in self._butlers.items():
                 LOGGER.info(f'   "{butler_alias}": {butler_configuration}')
 
-    def get_brokers(self) -> str:
-        """Getter method for Kafka brokers"""
+    @property
+    def brokers(self) -> str:
+        """Return a comma-separeted list of Kafka brokers to listen to.
+
+        The value returned is of the form:
+
+           broker1.example.org:1234,broker2.example.org:1234,broker3.example.org:1234
+        """
         return self._brokers
 
-    def get_topic(self) -> str:
-        """Getter method for Kafka topic"""
+    @property
+    def topic(self) -> str:
+        """Return the Kakfa topic to listen to."""
         return self._topic
 
-    def get_num_messages(self) -> int:
-        """Getter method for number of Kafka messages to process at a time"""
+    @property
+    def num_messages(self) -> int:
+        """Return the number of Kafka messages to process at a time."""
         return self._num_messages
 
-    def get_timeout(self) -> float:
-        """Getter method for length of time to wait for Kafka messages"""
+    @property
+    def timeout(self) -> float:
+        """Return the length of time to wait for Kafka messages."""
         return self._timeout
 
-    def get_butlers(self) -> dict[str, str]:
-        """Getter method for butler repos"""
+    @property
+    def butlers(self) -> dict[str, str]:
+        """Return the configuration files for Butler repos to ingest to."""
         return self._butlers

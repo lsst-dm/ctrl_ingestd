@@ -1,0 +1,9 @@
+kafka_brokers:
+- broker1.example.org:1234
+- broker2.example.org:1234
+kafka_topic: "DF_BUTLER_DISK"
+kafka_num_messages: 50
+kafka_client_timeout: 1.0
+butlers:
+- repo_1
+- repo_2

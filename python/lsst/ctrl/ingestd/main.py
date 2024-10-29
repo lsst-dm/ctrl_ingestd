@@ -22,6 +22,7 @@
 import argparse
 import logging
 import os
+import time
 
 import lsst.log as lsstlog
 from lsst.ctrl.ingestd.ingestd import IngestD
@@ -33,7 +34,9 @@ CTRL_INGESTD_CONFIG = "CTRL_INGESTD_CONFIG"
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
-        description="Listens to Kafka events on successfully replicated files and ingest them into a local butler."
+        description=(
+            "Listens to Kafka events on successfully replicated files and ingest them into a local Butler."
+        )
     )
     parser.add_argument(
         "-c",
@@ -42,9 +45,11 @@ def parse_arguments():
         type=str,
         dest="config",
         required=False,
-        help=f"Configuration file for this daemon in YAML format. Default: value of the environment variable {CTRL_INGESTD_CONFIG}.",
+        help=(
+            "Configuration file for this daemon in YAML format."
+            f" Default: value of the environment variable {CTRL_INGESTD_CONFIG}."
+        ),
     )
-
     parser.add_argument("-D", "--debug", action="store_true", help="Set log level to DEBUG. Default: INFO.")
     return parser.parse_args()
 
@@ -53,17 +58,23 @@ def main():
     args = parse_arguments()
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO,
-        format="%(levelname) -10s %(asctime)s.%(msecs)03dZ %(name) -30s %(funcName) -35s %(lineno) -5d: %(message)s",
+        format=(
+            "%(levelname) -10s %(asctime)s.%(msecs)03dZ %(name) -30s %(funcName) -35s %(lineno) -5d:"
+            "  %(message)s"
+        ),
         datefmt="%Y-%m-%d %H:%M:%S",
     )
+    logging.Formatter.converter = time.gmtime
 
     config_filename = args.config or os.environ.get(CTRL_INGESTD_CONFIG)
     if config_filename is None:
         raise FileNotFoundError(
-            f'environment variable "{CTRL_INGESTD_CONFIG}" is not set and command line option "--config" was not specified'
+            f'environment variable "{CTRL_INGESTD_CONFIG}" is not set and command line option "--config"'
+            " was not specified"
         )
 
-    IngestD(config_filename)
+    ingestd: IngestD = IngestD(config_filename)
+    ingestd.run()
 
 
 if __name__ == "__main__":

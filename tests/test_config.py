@@ -66,7 +66,7 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
             "config_num_messages_nan.yaml",
         ):
             config = self.createConfig(file)
-            self.assertEqual(config.get_num_messages(), Config.DEFAULT_KAFKA_NUM_MESSAGES)
+            self.assertEqual(config.num_messages, Config.DEFAULT_KAFKA_NUM_MESSAGES)
 
     def testTimeout(self):
         for file in (
@@ -75,20 +75,19 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
             "config_timeout_nan.yaml",
         ):
             config = self.createConfig(file)
-            self.assertAlmostEqual(config.get_timeout(), Config.DEFAULT_KAFKA_CLIENT_TIMEOUT)
+            self.assertAlmostEqual(config.timeout, Config.DEFAULT_KAFKA_CLIENT_TIMEOUT)
 
     def testAttributes(self):
         config = self.createConfig("config_gold.yaml")
-        self.assertEqual(config.get_num_messages(), 50)
-        self.assertAlmostEqual(config.get_timeout(), 1.0)
-        self.assertEqual(config.get_topic(), "DF_BUTLER_DISK")
+        self.assertEqual(config.num_messages, 50)
+        self.assertAlmostEqual(config.timeout, 1.0)
+        self.assertEqual(config.topic, "DF_BUTLER_DISK")
 
-        brokers = config.get_brokers()
         self.assertEqual(
-            brokers, "broker1.example.org:1234,broker2.example.org:1234,broker3.example.org:1234"
+            config.brokers, "broker1.example.org:1234,broker2.example.org:1234,broker3.example.org:1234"
         )
 
-        butlers = config.get_butlers()
+        butlers = config.butlers
         self.assertTrue("repo_1" in butlers)
         self.assertTrue("repo_2" in butlers)
         self.assertEqual(butlers["repo_1"], "https://host.example.org/path/to/rse/repo_1/butler.yaml")
