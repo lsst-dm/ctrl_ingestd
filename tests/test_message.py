@@ -46,17 +46,17 @@ class MessageTestCase(lsst.utils.tests.TestCase):
 
     def testAttributes(self):
         self.configure("message.json")
-        self.assertEqual(self.msg.get_dst_rse(), "XRD2")
+        self.assertEqual(self.msg.dst_rse, "XRD2")
         self.assertEqual(
-            self.msg.get_dst_url(),
+            self.msg.dst_url,
             (
                 "root://xrd2:1095//rucio/test/srp/data/"
                 "calexp_HSC_y_HSC-Y_330_1_54_HSC_runs_RC2_w_2023_32_"
                 "DM-40356_20230812T080035Z.fits"
             ),
         )
-        self.assertEqual(self.msg.get_rubin_butler(), 1)
-        sidecar_str = self.msg.get_rubin_sidecar_str()
+        self.assertEqual(self.msg.rubin_butler, 1)
+        sidecar_str = self.msg.rubin_sidecar_str
         self.assertEqual(
             sidecar_str,
             (
@@ -72,8 +72,8 @@ class MessageTestCase(lsst.utils.tests.TestCase):
 
     def testNoSidecar(self):
         self.configure("nosidecar.json")
-        self.assertIsNone(self.msg.get_rubin_sidecar_dict())
-        self.assertIsNone(self.msg.get_rubin_sidecar_str())
+        self.assertIsNone(self.msg.rubin_sidecar_dict)
+        self.assertIsNone(self.msg.rubin_sidecar_str)
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

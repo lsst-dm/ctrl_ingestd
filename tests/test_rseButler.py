@@ -59,7 +59,7 @@ class MessageTestCase(lsst.utils.tests.TestCase):
         # butler object is recreated here to test the existing
         # repo path in RseButler
         butler = RseButler(self.repo_dir, "lsst.obs.subaru.HyperSuprimeCam")
-        sidecar_str = self.msg.get_rubin_sidecar_str()
+        sidecar_str = self.msg.rubin_sidecar_str
         fds = butler.create_entry(self.temp_file.name, sidecar_str)
         butler.ingest([fds])
 

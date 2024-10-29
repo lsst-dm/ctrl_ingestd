@@ -21,7 +21,7 @@
 
 import logging
 
-from lsst.daf.butler import Butler, DatasetRef, FileDataset
+from lsst.daf.butler import Butler, DatasetRef, DatasetType, FileDataset
 from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
 from lsst.pipe.base import Instrument
 
@@ -33,79 +33,117 @@ class RseButler:
 
     Parameters
     ----------
-    repo : `str`
-        Butler repo location
-    instrument : `str`
-        instrument registered for this Butler
+    configuration : `str`
+        Butler configuration
     """
 
-    def __init__(self, repo: str, instrument: str):
-        try:
-            self.butlerConfig = Butler.makeRepo(repo)
-        except FileExistsError:
-            self.butlerConfig = repo
+    def __init__(self, configuration: str) -> None:
+        LOGGER.info(f"creating Butler object from configuration: {configuration}")
+        self._butler_config: str = configuration
+        self._butler: Butler = Butler(self._butler_config, writeable=True)
 
-        self.butler = self.createButler(instrument)
-
-    def createButler(self, instrument: str) -> Butler:
-        """Create a Butler for an instrument
+    def register_instrument(self, instrument: str) -> None:
+        """Register an instrument into an existing Butler repo.
 
         Parameters
         ----------
         instrument : `str`
-            instrument to register
+            Fully-qualified class name of an instrument to register
+            (e.g. "lsst.obs.subaru.HyperSuprimeCam")
         """
-        opts = dict(writeable=True)
-        butler = Butler(self.butlerConfig, **opts)
-        instr = Instrument.from_string(instrument)
-        instr.register(butler.registry)
+        Instrument.from_string(instrument).register(self._butler.registry)
 
-        return butler
-
-    def create_entry(self, butler_file: str, sidecar: dict) -> FileDataset:
-        """Create a FileDatset with sidecar information
+    def create_entry(self, file_name: str, sidecar: dict) -> FileDataset:
+        """Create a FileDataset with sidecar information.
 
         Parameters
         ----------
-        butler_file: `str`
-            full uri to butler file location
+        file_name: `str`
+            name of the existing file to ingest into the Butler repo.
         sidecar: `dict`
             dictionary of the 'sidecar' metadata
         """
-        ref = DatasetRef.from_json(sidecar, registry=self.butler.registry)
-        fds = FileDataset(butler_file, ref)
-        return fds
+        ref = DatasetRef.from_json(sidecar, registry=self._butler.registry)
+        return FileDataset(file_name, ref)
 
-    def ingest(self, datasets: list):
-        """Ingest a list of Datasets
+    def ingest(self, datasets: list[FileDataset]) -> None:
+        """Ingest a list of FileDataset objects into this Butler.
 
         Parameters
         ----------
         datasets : `list`
-            List of Datasets
+            List of FileDataset to ingest.
         """
+        dataset_count = len(datasets)
+        if dataset_count == 0:
+            return
+
+        LOGGER.info(
+            f'starting ingestion of {dataset_count} datasets into butler "{self._butler_config}"'
+        )
+        remaining_retries = dataset_count + 2
         completed = False
         while not completed:
             try:
-                self.butler.ingest(*datasets, transfer="auto")
-                LOGGER.debug("ingest succeeded")
-                for dataset in datasets:
-                    LOGGER.info(f"ingested: {dataset.path}")
+                # Attempt ingesting all remaining datasets at once.
+                remaining_retries -= 1
+                self._butler.ingest(*datasets, transfer="auto")
                 completed = True
+                LOGGER.info(f"successfully ingested {dataset_count} datasets")
+                for dataset in datasets:
+                    LOGGER.info(f"ingested file: {dataset.path}")
+
             except DatasetTypeError:
-                dst_set = set()
+                # The dataset type of at least one dataset is unknown to the
+                # Butler. Register all the dataset types first and try again
+                # ingesting the remaining datasets.
+                dataset_types: set[DatasetType] = set()
                 for dataset in datasets:
-                    for dst in {ref.datasetType for ref in dataset.refs}:
-                        dst_set.add(dst)
-                for dst in dst_set:
-                    self.butler.registry.registerDatasetType(dst)
+                    dataset_types = dataset_types.union({ref.datasetType for ref in dataset.refs})
+                for dataset_type in dataset_types:
+                    LOGGER.info(f'registering dataset type "{dataset_type.name}"')
+                    self._butler.registry.registerDatasetType(dataset_type)
+
             except MissingCollectionError:
-                run_set = set()
+                # The collection for at least one dataset does not exist in
+                # the target Butler repo. Create all the necessary collections
+                # first and try again ingesting the remaining datasets.
+                runs: set[str] = set()
                 for dataset in datasets:
-                    for run in {ref.run for ref in dataset.refs}:
-                        run_set.add(run)
-                for run in run_set:
-                    self.butler.registry.registerRun(run)
+                    runs = runs.union({ref.run for ref in dataset.refs})
+                for run in runs:
+                    LOGGER.info(f'registering run "{run}"')
+                    self._butler.registry.registerRun(run)
+
             except Exception as e:
                 LOGGER.warning(e)
-                completed = True
+
+            if not completed:
+                # Not all datasets were successfully ingested.
+                # Identify which datasets are not already in the Butler repo
+                # and try ingesting again only those, since ingesting an
+                # existing dataset with the same dataset id raises an
+                # exception.
+                datasets_to_ingest: list[FileDataset] = []
+                for dataset in datasets:
+                    for dataset_id in {ref.id for ref in dataset.refs}:
+                        if self._butler.get_dataset(dataset_id) is None:
+                            datasets_to_ingest.append(dataset)
+                        else:
+                            LOGGER.info(f'file "{dataset.path}" is already ingested')
+
+                if len(datasets_to_ingest) == 0:
+                    LOGGER.info(f"{dataset_count} remaining datasets were ingested")
+                    completed = True
+                elif remaining_retries == 0:
+                    LOGGER.warning(
+                        f"exhausted maximum number of retries but {len(datasets)} out of {dataset_count}"
+                        " datasets were not ingested"
+                    )
+                    completed = True
+                else:
+                    datasets = datasets_to_ingest
+                    LOGGER.info(
+                        "remaining datasets to ingest after recovering from error:"
+                        f" {len(datasets)} out of {dataset_count}"
+                    )
