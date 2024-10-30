@@ -87,23 +87,23 @@ class Message:
         return self._payload.get(self.RUBIN_BUTLER_KEY, None)
 
     @property
-    def rubin_sidecar_str(self) -> str:
+    def rubin_sidecar_str(self) -> str | None:
         """Getter to retrieve the 'sidecar' metadata as a string"""
         if (d := self.rubin_sidecar_dict) is not None:
             return json.dumps(d)
         return None
 
     @property
-    def rubin_sidecar_dict(self) -> dict:
+    def rubin_sidecar_dict(self) -> dict | None:
         """Getter to retrieve the 'sidecar' metadata as a dict"""
         return self._payload.get(self.RUBIN_SIDECAR_KEY, None)
 
     @property
-    def file_scope(self) -> str:
+    def file_scope(self) -> str | None:
         """Getter to retrieve the 'scope' of the file"""
         return self._payload.get(self.SCOPE_KEY, None)
 
     @property
-    def file_name(self) -> str:
+    def file_name(self) -> str | None:
         """Getter to retrieve the 'name' of the file"""
         return self._payload.get(self.NAME_KEY, None)
