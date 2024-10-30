@@ -78,9 +78,7 @@ class RseButler:
         if dataset_count == 0:
             return
 
-        LOGGER.info(
-            f'starting ingestion of {dataset_count} datasets into butler "{self._butler_config}"'
-        )
+        LOGGER.info(f'starting ingestion of {dataset_count} datasets into butler "{self._butler_config}"')
         remaining_retries = dataset_count + 2
         completed = False
         while not completed:
