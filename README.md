@@ -60,11 +60,12 @@ To run stand-alone do:
 
 ```bash
 # Set up a release of the LSST Science Pipelines
-source /cvmfs/sw.lsst.eu/linux-x86_64/lsst_distrib/w_2024_40/loadLSST.sh && setup lsst_distrib
+source /cvmfs/sw.lsst.eu/linux-x86_64/lsst_distrib/w_2024_40/loadLSST.sh
+setup lsst_distrib
 
 # Clone this repo and run scons
-git clone https://github.com/lsst-dm/ctrl_rucio_ingest.git
-cd ctrl_rucio_ingest
+git clone https://github.com/lsst-dm/ctrl_ingestd.git
+cd ctrl_ingestd
 export PYTHONPATH=${PWD}/python:${PYTHONPATH}
 scons
 
