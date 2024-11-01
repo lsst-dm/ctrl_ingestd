@@ -4,5 +4,4 @@ group_id: "my_test_group"
 num_messages: 50
     
 butler:
-    instrument: lsst.obs.subaru.HyperSuprimeCam
     repo: /tmp/repo

@@ -18,7 +18,6 @@ group_id: "my_test_group"
 num_messages: 50
 
 butler:
-    instrument: lsst.obs.subaru.HyperSuprimeCam
     repo: /tmp/repo
 
 rses:
@@ -38,7 +37,7 @@ rses:
 
 "num_messages" is the maximum message batch size of messages that are processed at one time.  In this case, it has been set to 50.
 
-"butler" section is set to the butler configuration.  It contains the instrument and location of the Butler repository.
+"butler" section is set to the butler configuration.  It contains the location of the Butler repository.
 
 The "rses" section is set to the RSEs from which this ingestd daemon will ingest files.  It contains the
 RSEs which it's paying attention to and a mapping between logical file names and physical file names.
