@@ -40,10 +40,7 @@ class RseButler:
     """
 
     def __init__(self, repo: str, instrument: str):
-        try:
-            self.butlerConfig = Butler.makeRepo(repo)
-        except FileExistsError:
-            self.butlerConfig = repo
+        self.butlerConfig = repo
 
         self.butler = self.createButler(instrument)
 
