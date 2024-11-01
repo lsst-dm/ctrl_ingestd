@@ -23,7 +23,6 @@ import logging
 
 from lsst.daf.butler import Butler, DatasetRef, FileDataset
 from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
-from lsst.pipe.base import Instrument
 
 LOGGER = logging.getLogger(__name__)
 
@@ -35,29 +34,11 @@ class RseButler:
     ----------
     repo : `str`
         Butler repo location
-    instrument : `str`
-        instrument registered for this Butler
     """
 
-    def __init__(self, repo: str, instrument: str):
-        self.butlerConfig = repo
+    def __init__(self, repo: str):
 
-        self.butler = self.createButler(instrument)
-
-    def createButler(self, instrument: str) -> Butler:
-        """Create a Butler for an instrument
-
-        Parameters
-        ----------
-        instrument : `str`
-            instrument to register
-        """
-        opts = dict(writeable=True)
-        butler = Butler(self.butlerConfig, **opts)
-        instr = Instrument.from_string(instrument)
-        instr.register(butler.registry)
-
-        return butler
+        self.butler = Butler(repo, writeable=True)
 
     def create_entry(self, butler_file: str, sidecar: dict) -> FileDataset:
         """Create a FileDatset with sidecar information

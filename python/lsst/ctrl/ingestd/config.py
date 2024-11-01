@@ -54,11 +54,8 @@ class Config:
             if "repo" not in self._butler_config:
                 raise Exception("Can't find 'repo' in 'butler' section")
             self._repo = self._butler_config.get("repo")
-            if "instrument" not in self._butler_config:
-                raise Exception("Can't find 'instrument' in 'butler' section")
-            self._instrument = self._butler_config.get("instrument")
+
             LOGGER.info(f"butler location: {self._repo}")
-            LOGGER.info(f"butler instrument: {self._instrument}")
             LOGGER.info(f"brokers: {self._brokers}")
             LOGGER.info(f"rse topics: {self._rse_dict.keys()}")
             LOGGER.info(f"will batch as many as {self._num_messages} at a time")
@@ -94,7 +91,3 @@ class Config:
     def get_repo(self) -> str:
         """Getter method for Butler repo location"""
         return self._repo
-
-    def get_instrument(self) -> str:
-        """Getter method for Butler instrument to use"""
-        return self._instrument

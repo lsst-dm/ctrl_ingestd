@@ -65,7 +65,7 @@ class IngestD:
         self.consumer = Consumer(conf)
         self.consumer.subscribe(topics)
 
-        self.butler = RseButler(config.get_repo(), config.get_instrument())
+        self.butler = RseButler(config.get_repo())
 
     def run(self):
         """continually process messages"""

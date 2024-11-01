@@ -26,6 +26,7 @@ import lsst.utils.tests
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
 from lsst.daf.butler import Butler
+from lsst.pipe.base import Instrument
 
 
 class FakeKafkaMessage:
@@ -36,8 +37,8 @@ class FakeKafkaMessage:
         return self.val
 
 
-class MessageTestCase(lsst.utils.tests.TestCase):
-    def setUp(self):
+class RseButlerTestCase(lsst.utils.tests.TestCase):
+    def testRseButler(self):
         json_name = "message.json"
         testdir = os.path.abspath(os.path.dirname(__file__))
         json_file = os.path.join(testdir, "data", json_name)
@@ -54,14 +55,14 @@ class MessageTestCase(lsst.utils.tests.TestCase):
         self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
 
-        butler = RseButler(self.repo_dir, "lsst.obs.subaru.HyperSuprimeCam")
+        butler = RseButler(self.repo_dir)
+        instr = Instrument.from_string("lsst.obs.subaru.HyperSuprimeCam")
+
+        instr.register(butler.butler.registry)
         butler.butler.import_(filename=prep_file)
 
-    def testRseButler(self):
         self.temp_file = tempfile.NamedTemporaryFile()
-        # butler object is recreated here to test the existing
-        # repo path in RseButler
-        butler = RseButler(self.repo_dir, "lsst.obs.subaru.HyperSuprimeCam")
+
         sidecar_str = self.msg.get_rubin_sidecar_str()
         fds = butler.create_entry(self.temp_file.name, sidecar_str)
         butler.ingest([fds])
