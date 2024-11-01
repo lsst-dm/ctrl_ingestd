@@ -23,6 +23,7 @@ import os.path
 import tempfile
 
 import lsst.utils.tests
+from lsst.daf.butler import Butler
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
 
@@ -51,6 +52,8 @@ class MessageTestCase(lsst.utils.tests.TestCase):
         prep_file = os.path.join(testdir, "data", "prep.yaml")
 
         self.repo_dir = tempfile.mkdtemp()
+        Butler.makeRepo(self.repo_dir)
+
         butler = RseButler(self.repo_dir, "lsst.obs.subaru.HyperSuprimeCam")
         butler.butler.import_(filename=prep_file)
 
