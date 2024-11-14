@@ -23,7 +23,6 @@ import logging
 
 from lsst.daf.butler import Butler, DatasetRef, DatasetType, FileDataset
 from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
-from lsst.pipe.base import Instrument
 
 LOGGER = logging.getLogger(__name__)
 
@@ -38,20 +37,9 @@ class RseButler:
     """
 
     def __init__(self, configuration: str) -> None:
-        LOGGER.info(f"creating Butler object from configuration: {configuration}")
+        LOGGER.info(f"instantiating Butler from configuration: {configuration}")
         self._butler_config: str = configuration
         self._butler: Butler = Butler(self._butler_config, writeable=True)
-
-    def register_instrument(self, instrument: str) -> None:
-        """Register an instrument into an existing Butler repo.
-
-        Parameters
-        ----------
-        instrument : `str`
-            Fully-qualified class name of an instrument to register
-            (e.g. "lsst.obs.subaru.HyperSuprimeCam")
-        """
-        Instrument.from_string(instrument).register(self._butler.registry)
 
     def create_entry(self, file_name: str, sidecar: dict) -> FileDataset:
         """Create a FileDataset with sidecar information.
@@ -74,11 +62,12 @@ class RseButler:
         datasets : `list`
             List of FileDataset to ingest.
         """
-        dataset_count = len(datasets)
-        if dataset_count == 0:
+        if not datasets:
             return
 
+        dataset_count = len(datasets)
         LOGGER.info(f'starting ingestion of {dataset_count} datasets into butler "{self._butler_config}"')
+
         remaining_retries = dataset_count + 2
         completed = False
         while not completed:
@@ -86,10 +75,12 @@ class RseButler:
                 # Attempt ingesting all remaining datasets at once.
                 remaining_retries -= 1
                 self._butler.ingest(*datasets, transfer="auto")
-                completed = True
+
                 LOGGER.info(f"successfully ingested {dataset_count} datasets")
                 for dataset in datasets:
                     LOGGER.info(f"ingested file: {dataset.path}")
+
+                completed = True
 
             except DatasetTypeError:
                 # The dataset type of at least one dataset is unknown to the
@@ -98,6 +89,7 @@ class RseButler:
                 dataset_types: set[DatasetType] = set()
                 for dataset in datasets:
                     dataset_types = dataset_types.union({ref.datasetType for ref in dataset.refs})
+
                 for dataset_type in dataset_types:
                     LOGGER.info(f'registering dataset type "{dataset_type.name}"')
                     self._butler.registry.registerDatasetType(dataset_type)
@@ -109,38 +101,40 @@ class RseButler:
                 runs: set[str] = set()
                 for dataset in datasets:
                     runs = runs.union({ref.run for ref in dataset.refs})
+
                 for run in runs:
                     LOGGER.info(f'registering run "{run}"')
                     self._butler.registry.registerRun(run)
 
             except Exception as e:
+                # Attempting to ingest a Butler dataset which already exists
+                # in the repo raises.
                 LOGGER.warning(e)
 
             if not completed:
-                # Not all datasets were successfully ingested.
+                # Not all datasets of this batch were successfully ingested.
                 # Identify which datasets are not already in the Butler repo
                 # and try ingesting again only those, since ingesting an
-                # existing dataset with the same dataset id raises an
-                # exception.
-                datasets_to_ingest: list[FileDataset] = []
+                # existing dataset with the same dataset id raises.
+                pending_datasets: list[FileDataset] = []
                 for dataset in datasets:
                     for dataset_id in {ref.id for ref in dataset.refs}:
                         if self._butler.get_dataset(dataset_id) is None:
-                            datasets_to_ingest.append(dataset)
+                            pending_datasets.append(dataset)
                         else:
                             LOGGER.info(f'file "{dataset.path}" is already ingested')
 
-                if len(datasets_to_ingest) == 0:
+                if not pending_datasets:
                     LOGGER.info(f"{dataset_count} remaining datasets were ingested")
                     completed = True
                 elif remaining_retries == 0:
+                    completed = True
                     LOGGER.warning(
                         f"exhausted maximum number of retries but {len(datasets)} out of {dataset_count}"
                         " datasets were not ingested"
                     )
-                    completed = True
                 else:
-                    datasets = datasets_to_ingest
+                    datasets = pending_datasets
                     LOGGER.info(
                         "remaining datasets to ingest after recovering from error:"
                         f" {len(datasets)} out of {dataset_count}"

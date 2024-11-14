@@ -42,6 +42,7 @@ class Message:
     URL_KEY = "dst-url"
     SCOPE_KEY = "scope"
     NAME_KEY = "name"
+    EVENT_TYPE_KEY = "event_type"
     RUBIN_BUTLER_KEY = "rubin_butler"
     RUBIN_SIDECAR_KEY = "rubin_sidecar"
 
@@ -74,17 +75,17 @@ class Message:
     @property
     def dst_rse(self) -> str | None:
         """Getter to retrieve the destination RSE"""
-        return self._payload.get(self.RSE_KEY, None)
+        return self._payload.get(self.RSE_KEY)
 
     @property
     def dst_url(self) -> str | None:
         """Getter to retrieve the destination URL"""
-        return self._payload.get(self.URL_KEY, None)
+        return self._payload.get(self.URL_KEY)
 
     @property
     def rubin_butler(self) -> int | None:
         """Getter to retrieve the flag indicating this is a Butler file"""
-        return self._payload.get(self.RUBIN_BUTLER_KEY, None)
+        return self._payload.get(self.RUBIN_BUTLER_KEY)
 
     @property
     def rubin_sidecar_str(self) -> str | None:
@@ -96,14 +97,19 @@ class Message:
     @property
     def rubin_sidecar_dict(self) -> dict | None:
         """Getter to retrieve the 'sidecar' metadata as a dict"""
-        return self._payload.get(self.RUBIN_SIDECAR_KEY, None)
+        return self._payload.get(self.RUBIN_SIDECAR_KEY)
 
     @property
     def file_scope(self) -> str | None:
         """Getter to retrieve the 'scope' of the file"""
-        return self._payload.get(self.SCOPE_KEY, None)
+        return self._payload.get(self.SCOPE_KEY)
 
     @property
     def file_name(self) -> str | None:
         """Getter to retrieve the 'name' of the file"""
-        return self._payload.get(self.NAME_KEY, None)
+        return self._payload.get(self.NAME_KEY)
+
+    @property
+    def event_type(self) -> str | None:
+        """Getter to retrieve the 'event_type' of message"""
+        return self._message.get(self.EVENT_TYPE_KEY)

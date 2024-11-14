@@ -51,14 +51,14 @@ class MessageTestCase(lsst.utils.tests.TestCase):
         prep_file = os.path.join(testdir, "data", "prep.yaml")
 
         self.repo_dir = tempfile.mkdtemp()
-        butler = RseButler(self.repo_dir, "lsst.obs.subaru.HyperSuprimeCam")
+        butler = RseButler(self.repo_dir)
         butler.butler.import_(filename=prep_file)
 
     def testRseButler(self):
         self.temp_file = tempfile.NamedTemporaryFile()
         # butler object is recreated here to test the existing
         # repo path in RseButler
-        butler = RseButler(self.repo_dir, "lsst.obs.subaru.HyperSuprimeCam")
+        butler = RseButler(self.repo_dir)
         sidecar_str = self.msg.rubin_sidecar_str
         fds = butler.create_entry(self.temp_file.name, sidecar_str)
         butler.ingest([fds])

@@ -40,6 +40,8 @@ class IngestD:
         config = Config(config_file)
         self._num_messages: int = config.num_messages
         self._timeout: float = config.timeout
+        self._scope: str = config.scope
+        self._butler: RseButler = RseButler(config.butler)
 
         # Prepare the Kafka consumer. The documentation of the consumer
         # is available online at
@@ -52,25 +54,13 @@ class IngestD:
             # Kafka client id, so that we can run several ingestd instances
             # on the same host.
             "client.id": f"{socket.gethostname()}-{str(uuid.uuid4())}",
-            # All instances of ingestd listening to the same topic will belong
-            # to the same consumer group. Since the topic is typically the
-            # name of the destination RSE, it is possible to have several
-            # ingestd instances processing messages for a single RSE.
-            "group.id": config.topic,
+            # We may have several instances of ingestd for ingesting into
+            # the same butler repo. All those instances must belong to the
+            # same Kafka group.
+            "group.id": f"{config.topic}-{config.scope}",
         }
         self._consumer: Consumer = Consumer(consumer_config)
         self._consumer.subscribe([config.topic])
-
-        # Create a RseButler object for each Butler repo in the configuration.
-        # The key of the dictionary is the Butler alias and the value is
-        # a RseButler object.
-        #
-        # Note that the butler alias is identical to the Rucio scope of the
-        # files we are going to process, so we can use that scope to retrieve
-        # the target Butler repo to ingest the file into.
-        self._butlers: dict[str, RseButler] = {}
-        for scope, butler_config in config.butlers.items():
-            self._butlers[scope] = RseButler(butler_config)
 
     def run(self) -> None:
         """Continually process messages."""
@@ -88,7 +78,7 @@ class IngestD:
 
         # Cycle through all the messages, create a Butler Dataset for each
         # file to ingest and ingest them into the target Butler repo.
-        entries: dict[str, list[FileDataset]] = {scope: [] for scope in self._butlers}
+        entries: list[FileDataset] = []
         for msg in msgs:
             if msg.error() is not None:
                 LOGGER.warning("could not retrieve Kafka message: %s" % msg.error().str())
@@ -103,47 +93,42 @@ class IngestD:
 
             LOGGER.debug(f"processing message {str(message)}")
 
-            rubin_butler = message.rubin_butler
-            if rubin_butler is None or rubin_butler != 1:
+            if message.event_type != "transfer-done":
+                # This message is not about a finished transfer. Ignore.
+                LOGGER.debug(f"ignoring message with unexpected event type {message.event_type}")
+                continue
+
+            if message.file_scope != self._scope:
+                # This message is intended for a different butler repo. Ignore.
+                LOGGER.debug(f"ignoring file with scope {message.file_scope} which is not configured")
+                continue
+
+            if message.rubin_butler != 1:
                 LOGGER.warning("shouldn't have gotten this message: %s" % str(message))
                 continue
 
             sidecar = message.rubin_sidecar_dict
             if not sidecar:
                 LOGGER.warning("got empty sidecar in Kafka message: %s" % str(message))
+                continue
 
             # Retrieve the name of the file to ingest. Since the RSE uses
             # identity LFN-to-PFN algorithm, the name of the file
             # is relative to the Butler repo's datastore root directory.
-            file_to_ingest = message.file_name
-            if file_to_ingest is None:
+            if message.file_name is None:
                 LOGGER.warning("failed to retrieve file name from message: %s" % str(message))
                 continue
 
-            # Retrieve the target Butler repo this file is intended for
-            # ingestion into.
-            scope = message.file_scope
-            if scope not in self._butlers:
-                # We got a message for a target butler repo which is not
-                # configured.
-                url = message.dst_url
-                LOGGER.warning(
-                    f'ignoring file "{url}" targeted for ingestion into butler'
-                    f' "{scope}" which is not configured'
-                )
-                continue
-
-            # Create an object that's ingestible by the target Butler repo
-            # and add it to the list of pending files to ingest
+            # Create an object ingestible by the target Butler repo and add
+            # it to the list of pending files to ingest.
             try:
-                LOGGER.debug(f'creating entry for ingesting file "{file_to_ingest}" into butler "{scope}"')
-                entry = self._butlers[scope].create_entry(file_to_ingest, sidecar)
-                entries[scope].append(entry)
+                LOGGER.debug(f'creating entry for ingesting file "{message.file_name}"')
+                entry = self._butler.create_entry(message.file_name, sidecar)
+                entries.append(entry)
             except Exception as e:
                 LOGGER.info(e)
                 continue
 
-        # If we've got files to ingest in the list, try and ingest them.
-        for scope in entries:
-            if len(entries[scope]) > 0:
-                self._butlers[scope].ingest(entries[scope])
+        # If we've got files to ingest, try to ingest them.
+        if entries:
+            self._butler.ingest(entries)

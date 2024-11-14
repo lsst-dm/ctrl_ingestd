@@ -40,15 +40,14 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
                 self.createConfig(file)
             self.assertTrue("'kafka_brokers'" in str(execinfo.exception))
 
-    def testButlers(self):
+    def testButler(self):
         for file in (
-            "config_butlers_absent.yaml",
-            "config_butlers_empty.yaml",
-            "config_butlers_invalid.yaml",
+            "config_butler_absent.yaml",
+            "config_butler_empty.yaml",
         ):
             with self.assertRaises(Exception) as execinfo:
                 self.createConfig(file)
-            self.assertTrue("'butlers'" in str(execinfo.exception))
+            self.assertTrue("'butler'" in str(execinfo.exception))
 
     def testTopic(self):
         for file in (
@@ -58,6 +57,15 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
             with self.assertRaises(Exception) as execinfo:
                 self.createConfig(file)
             self.assertTrue("'kafka_topic'" in str(execinfo.exception))
+
+    def testScope(self):
+        for file in (
+            "config_scope_absent.yaml",
+            "config_scope_empty.yaml",
+        ):
+            with self.assertRaises(Exception) as execinfo:
+                self.createConfig(file)
+            self.assertTrue("'rucio_scope'" in str(execinfo.exception))
 
     def testNumMessages(self):
         for file in (
@@ -79,19 +87,19 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
 
     def testAttributes(self):
         config = self.createConfig("config_gold.yaml")
-        self.assertEqual(config.num_messages, 50)
-        self.assertAlmostEqual(config.timeout, 1.0)
+        self.assertEqual(config.num_messages, 100)
+        self.assertAlmostEqual(config.timeout, 5.0)
         self.assertEqual(config.topic, "DF_BUTLER_DISK")
 
         self.assertEqual(
             config.brokers, "broker1.example.org:1234,broker2.example.org:1234,broker3.example.org:1234"
         )
 
-        butlers = config.butlers
-        self.assertTrue("repo_1" in butlers)
-        self.assertTrue("repo_2" in butlers)
-        self.assertEqual(butlers["repo_1"], "https://host.example.org/path/to/rse/repo_1/butler.yaml")
-        self.assertEqual(butlers["repo_2"], "https://host.example.org/path/to/rse/repo_2/butler.yaml")
+        self.assertEqual(config.scope, "butler_datastore_dir")
+
+        self.assertEqual(
+            config.butler, "https://host.example.org/path/to/rse/butler_datastore_dir/butler.yaml"
+        )
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

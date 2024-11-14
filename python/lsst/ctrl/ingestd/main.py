@@ -35,7 +35,7 @@ CTRL_INGESTD_CONFIG = "CTRL_INGESTD_CONFIG"
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description=(
-            "Listens to Kafka events on successfully replicated files and ingest them into a local Butler."
+            "Listens to Kafka messages on successfully replicated files and ingest them into a local Butler."
         )
     )
     parser.add_argument(
