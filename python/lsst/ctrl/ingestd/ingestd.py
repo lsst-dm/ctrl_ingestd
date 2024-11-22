@@ -41,6 +41,7 @@ class IngestD:
         self._num_messages: int = config.num_messages
         self._timeout: float = config.timeout
         self._scope: str = config.scope
+        self._transfer: str = "direct" if self._scope == "raw" else "auto"
         self._butler: RseButler = RseButler(config.butler)
 
         # Prepare the Kafka consumer. The documentation of the consumer
@@ -119,11 +120,19 @@ class IngestD:
                 LOGGER.warning("failed to retrieve file name from message: %s" % str(message))
                 continue
 
+            if message.dst_url is None:
+                LOGGER.warning("failed to retrieve destination URL from message: %s" % str(message))
+                continue
+
             # Create an object ingestible by the target Butler repo and add
             # it to the list of pending files to ingest.
             try:
-                LOGGER.debug(f'creating entry for ingesting file "{message.file_name}"')
-                entry = self._butler.create_entry(message.file_name, sidecar)
+                # If we are ingesting a raw dataset, use its absolute URL
+                # so to ingest with transfer mode "direct".
+                LOGGER.debug(f'creating entry for ingesting file "{message.file_scope}:{message.file_name}"')
+                entry = self._butler.create_entry(
+                    file_name=message.file_name if self._scope != "raw" else message.dst_url, sidecar=sidecar
+                )
                 entries.append(entry)
             except Exception as e:
                 LOGGER.info(e)
@@ -131,4 +140,4 @@ class IngestD:
 
         # If we've got files to ingest, try to ingest them.
         if entries:
-            self._butler.ingest(entries)
+            self._butler.ingest(entries, transfer=self._transfer)
