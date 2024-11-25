@@ -21,8 +21,10 @@
 
 import logging
 
+from lsst.ctrl.ingestd.entries.dataType import DataType
 from lsst.daf.butler import Butler, DatasetRef, FileDataset
 from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
+from lsst.obs.base.ingest import RawIngestConfig, RawIngestTask
 
 LOGGER = logging.getLogger(__name__)
 
@@ -39,22 +41,101 @@ class RseButler:
     def __init__(self, repo: str):
 
         self.butler = Butler(repo, writeable=True)
+        cfg = RawIngestConfig()
+        cfg.transfer = "direct"
+        self.task = RawIngestTask(
+            config=cfg,
+            butler=self.butler,
+            on_success=self.on_success,
+            on_ingest_failure=self.on_ingest_failure,
+            on_metadata_failure=self.on_metadata_failure,
+        )
 
-    def create_entry(self, butler_file: str, sidecar: dict) -> FileDataset:
-        """Create a FileDatset with sidecar information
+    def ingest(self, entries: list):
+        #
+        # group entries by data type, so they can be run in batches
+        #
+        data_type_dict = {}
+        for entry in entries:
+            data_type = entry.get_data_type()
+            if data_type not in data_type_dict:
+                data_type_dict[data_type] = []
+            data_type_dict[data_type].append(entry.get_data())
+
+        if DataType.RAW_FILE in data_type_dict:
+            self.ingest_raw(data_type_dict[DataType.RAW_FILE])
+        if DataType.DATA_PRODUCT in data_type_dict:
+            self.ingest_data_product(data_type_dict[DataType.DATA_PRODUCT])
+
+    def ingest_raw(self, entries: list):
+        self.task.run(entries)
+
+    def on_success(self, datasets):
+        """Callback used on successful ingest. Used to transmit
+        successful data ingestion status
 
         Parameters
         ----------
-        butler_file: `str`
-            full uri to butler file location
-        sidecar: `dict`
-            dictionary of the 'sidecar' metadata
+        datasets: `list`
+            list of DatasetRefs
         """
-        ref = DatasetRef.from_json(sidecar, registry=self.butler.registry)
-        fds = FileDataset(butler_file, ref)
-        return fds
+        self.definer_run(datasets)
+        for dataset in datasets:
+            LOGGER.info("file %s successfully ingested", dataset.path)
 
-    def ingest(self, datasets: list):
+    def on_ingest_failure(self, exposures, exc):
+        """Callback used on ingest failure. Used to transmit
+        unsuccessful data ingestion status
+
+        Parameters
+        ----------
+        exposures: `RawExposureData`
+            exposures that failed in ingest
+        exc: `Exception`
+            Exception which explains what happened
+
+        """
+        for f in exposures.files:
+            filename = f.filename
+            cause = self.extract_cause(exc)
+            LOGGER.info(f"{filename}: ingest failure: {cause}")
+
+    def on_metadata_failure(self, filename, exc):
+        """Callback used on metadata extraction failure. Used to transmit
+        unsuccessful data ingestion status
+
+        Parameters
+        ----------
+        filename: `ButlerURI`
+            ButlerURI that failed in ingest
+        exc: `Exception`
+            Exception which explains what happened
+        """
+        cause = self.extract_cause(exc)
+        LOGGER.info(f"{filename}: metadata failure: {cause}")
+
+    def extract_cause(self, e):
+        """extract the cause of an exception
+
+        Parameters
+        ----------
+        e : `BaseException`
+            exception to extract cause from
+
+        Returns
+        -------
+        s : `str`
+            A string containing the cause of an exception
+        """
+        if e.__cause__ is None:
+            return f"{e}"
+        cause = self.extract_cause(e.__cause__)
+        if cause is None:
+            return f"{str(e.__cause__)}"
+        else:
+            return f"{str(e.__cause__)};  {cause}"
+
+    def ingest_data_product(self, datasets: list):
         """Ingest a list of Datasets
 
         Parameters

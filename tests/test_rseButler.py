@@ -23,6 +23,9 @@ import os.path
 import tempfile
 
 import lsst.utils.tests
+from lsst.ctrl.ingestd.config import Config
+from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
+from lsst.ctrl.ingestd.mapper import Mapper
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
 from lsst.daf.butler import Butler
@@ -63,9 +66,13 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         self.temp_file = tempfile.NamedTemporaryFile()
 
-        sidecar_str = self.msg.get_rubin_sidecar_str()
-        fds = butler.create_entry(self.temp_file.name, sidecar_str)
-        butler.ingest([fds])
+        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config = Config(config_file)
+        mapper = Mapper(config.get_rses())
+
+        event_factory = EntryFactory(butler, mapper)
+        entry = event_factory.create_entry(self.msg)
+        butler.ingest([entry])
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
