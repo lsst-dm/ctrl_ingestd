@@ -22,6 +22,7 @@
 import os.path
 
 import lsst.utils.tests
+from lsst.ctrl.ingestd.entries.dataType import DataType
 from lsst.ctrl.ingestd.message import Message
 
 
@@ -55,7 +56,7 @@ class MessageTestCase(lsst.utils.tests.TestCase):
                 "DM-40356_20230812T080035Z.fits"
             ),
         )
-        self.assertEqual(self.msg.get_rubin_butler(), 1)
+        self.assertEqual(self.msg.get_rubin_butler(), DataType.DATA_PRODUCT)
         sidecar_str = self.msg.get_rubin_sidecar_str()
         self.assertEqual(
             sidecar_str,

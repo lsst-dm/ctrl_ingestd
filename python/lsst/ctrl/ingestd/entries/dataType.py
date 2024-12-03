@@ -20,5 +20,5 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class DataType:
-    DATA_PRODUCT = 1
-    RAW_FILE = 2
+    DATA_PRODUCT = "data_product"
+    RAW_FILE = "raw_file"

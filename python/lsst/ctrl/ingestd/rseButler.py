@@ -22,7 +22,7 @@
 import logging
 
 from lsst.ctrl.ingestd.entries.dataType import DataType
-from lsst.daf.butler import Butler, DatasetRef, FileDataset
+from lsst.daf.butler import Butler
 from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
 from lsst.obs.base.ingest import RawIngestConfig, RawIngestTask
 
