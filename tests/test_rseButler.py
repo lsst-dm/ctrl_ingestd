@@ -61,11 +61,10 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
         butler.butler.import_(filename=prep_file)
 
-        self.temp_file = tempfile.NamedTemporaryFile()
-
-        sidecar_str = self.msg.get_rubin_sidecar_str()
-        fds = butler.create_entry(self.temp_file.name, sidecar_str)
-        butler.ingest([fds])
+        with tempfile.NamedTemporaryFile() as temp_file:
+            sidecar_str = self.msg.get_rubin_sidecar_str()
+            fds = butler.create_entry(temp_file.name, sidecar_str)
+            butler.ingest([fds])
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
