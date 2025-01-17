@@ -40,7 +40,7 @@ class RseButler:
 
         self.butler = Butler(repo, writeable=True)
 
-    def create_entry(self, butler_file: str, sidecar: dict) -> FileDataset:
+    def create_entry(self, butler_file: str, sidecar: str) -> FileDataset:
         """Create a FileDatset with sidecar information
 
         Parameters
