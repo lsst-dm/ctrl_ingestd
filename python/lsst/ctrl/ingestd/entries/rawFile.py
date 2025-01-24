@@ -19,7 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
 from lsst.ctrl.ingestd.entries.entry import Entry
+from lsst.daf.butler import DatasetRef, FileDataset
+
+LOGGER = logging.getLogger(__name__)
 
 
 class RawFile(Entry):
@@ -27,12 +31,33 @@ class RawFile(Entry):
 
     Parameters
     ----------
-    file_to_ingest: `str`
-        uri of the file to ingest
     """
 
     def __init__(self, butler, message, mapper):
         super().__init__(butler, message, mapper)
+        self._populate()
+
+    def _populate(self):
+        # create an object that's ingestible by the butler
+        self.fds = None
+        try:
+            self.fds = self._create_file_dataset(self.file_to_ingest, self.sidecar)
+        except Exception as e:
+            LOGGER.info(e)
+
+    def _create_file_dataset(self, butler_file: str, sidecar: dict) -> FileDataset:
+        """Create a FileDatset with sidecar information
+
+        Parameters
+        ----------
+        butler_file: `str`
+            full uri to butler file location
+        sidecar: `dict`
+            dictionary of the 'sidecar' metadata
+        """
+        ref = DatasetRef.from_json(sidecar, registry=self.butler.registry)
+        fds = FileDataset(butler_file, ref)
+        return fds
 
     def get_data(self):
-        return self.file_to_ingest
+        return self.fds

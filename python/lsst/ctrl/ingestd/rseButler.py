@@ -56,19 +56,67 @@ class RseButler:
         # group entries by data type, so they can be run in batches
         #
         data_type_dict = {}
+        LOGGER.info(f"{entries=}")
         for entry in entries:
             data_type = entry.get_data_type()
             if data_type not in data_type_dict:
                 data_type_dict[data_type] = []
-            data_type_dict[data_type].append(entry.get_data())
+            LOGGER.info(f"adding {data_type=}, {entry=}")
+            data_type_dict[data_type].append(entry)
 
         if DataType.RAW_FILE in data_type_dict:
+            LOGGER.info(f"{data_type_dict[DataType.RAW_FILE]=}")
             self.ingest_raw(data_type_dict[DataType.RAW_FILE])
         if DataType.DATA_PRODUCT in data_type_dict:
             self.ingest_data_product(data_type_dict[DataType.DATA_PRODUCT])
 
+    def _ingest_raw(self, entries: list):
+        LOGGER.info(f"{entries=}")
+
+	files = [e.file_to_ingest for e in entries]
+        LOGGER.info(f"{files=}")
+        self.task.run(files)
+
     def ingest_raw(self, entries: list):
-        self.task.run(entries)
+        """Ingest
+
+        Parameters
+        ----------
+        datasets : `list`
+            List of Datasets
+        """
+        LOGGER.info(f"{entries=}")
+        completed = False
+
+	datasets = [e.get_data() for e in entries]
+
+        while not completed:
+            try:
+                self.butler.ingest(*datasets, transfer="direct")
+                LOGGER.debug("ingest succeeded")
+                for dataset in datasets:
+                    LOGGER.info(f"ingested: {dataset.path}")
+                completed = True
+            except DatasetTypeError:
+                LOGGER.info("DatasetTypeError")
+                dst_set = set()
+                for dataset in datasets:
+                    for dst in {ref.datasetType for ref in dataset.refs}:
+                        dst_set.add(dst)
+                for dst in dst_set:
+                    self.butler.registry.registerDatasetType(dst)
+            except MissingCollectionError:
+                LOGGER.info("MissingCollectionError")
+                run_set = set()
+                for dataset in datasets:
+                    for run in {ref.run for ref in dataset.refs}:
+                        run_set.add(run)
+                for run in run_set:
+                    self.butler.registry.registerRun(run)
+            except Exception as e:
+                LOGGER.warning(e)
+                self._ingest_raw(entries)
+                completed = True
 
     def on_success(self, datasets):
         """Callback used on successful ingest. Used to transmit
@@ -79,7 +127,6 @@ class RseButler:
         datasets: `list`
             list of DatasetRefs
         """
-        self.definer_run(datasets)
         for dataset in datasets:
             LOGGER.info("file %s successfully ingested", dataset.path)
 
