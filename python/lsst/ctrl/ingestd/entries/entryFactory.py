@@ -27,6 +27,13 @@ from lsst.ctrl.ingestd.entries.rawFile import RawFile
 
 class EntryFactory:
     """Generic representation of data to put into the Butler
+
+    Parameters
+    ----------
+    rse_butler: RseButler
+        Object representing a Butler for an RSE
+    mapper: Mapper
+        mapper between rse and prefix associated with it
     """
     def __init__(self, rse_butler, mapper):
         self.rse_butler = rse_butler
@@ -34,12 +41,24 @@ class EntryFactory:
         self.mapper = mapper
 
     def create_entry(self, message) -> Entry:
+        """Create an Entry object
+
+        Parameters
+        ----------
+        message: Message
+            Object representing a Kafka message
+
+        Returns
+        -------
+        entry: Entry
+            An object presented by base class Entry
+        """
         data_type = message.get_rubin_butler()
 
-        # XXX - make this a match-case when we switch to python 3.10
-        if data_type == DataType.DATA_PRODUCT:
-            return DataProduct(self.butler, message, self.mapper)
-        elif data_type == DataType.RAW_FILE:
-            return RawFile(self.butler, message, self.mapper)
-        else:
-            raise ValueError(f"Unknown rubin_butler type: {data_type}")
+        match data_type:
+            case DataType.DATA_PRODUCT:
+                return DataProduct(self.butler, message, self.mapper)
+            case DataType.RAW_FILE:
+                return RawFile(self.butler, message, self.mapper)
+            case _:
+                raise ValueError(f"Unknown rubin_butler type: {data_type}")

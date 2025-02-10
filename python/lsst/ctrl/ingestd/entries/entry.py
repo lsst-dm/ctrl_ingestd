@@ -25,6 +25,15 @@ LOGGER = logging.getLogger(__name__)
 
 class Entry:
     """Generic representation of data to put into the Butler
+
+    Parameters
+    ----------
+    butler: Butler
+        Butler associated with this entry
+    message: Message
+        Message representing data to ingest
+    mapper: Mapper
+        Mapping of RSE entry to Butler repo location
     """
 
     def __init__(self, butler, message, mapper=None):
