@@ -64,18 +64,18 @@ class RseButler:
         # group entries by data type, so they can be run in batches
         #
         data_type_dict = {}
-        LOGGER.debug(f"{entries=}")
+        LOGGER.info(f"{entries=}")
         for entry in entries:
             data_type = entry.get_data_type()
             if data_type not in data_type_dict:
                 data_type_dict[data_type] = []
-            LOGGER.debug(f"adding {data_type=}, {entry=}")
+            LOGGER.info(f"adding {data_type=}, {entry=}")
             data_type_dict[data_type].append(entry)
 
         if DataType.RAW_FILE in data_type_dict:
-            self.ingest_raw(data_type_dict[DataType.RAW_FILE])
+            self._ingest(data_type_dict[DataType.RAW_FILE], "direct", True)
         if DataType.DATA_PRODUCT in data_type_dict:
-            self.ingest_data_product(data_type_dict[DataType.DATA_PRODUCT])
+            self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
 
     def _ingest_raw(self, entries: list):
         try:
@@ -85,13 +85,17 @@ class RseButler:
         except Exception as e:
             LOGGER.warning(e)
 
-    def ingest_raw(self, entries: list):
+    def _ingest(self, entries: list, transfer, retry_as_raw):
         """Ingest
 
         Parameters
         ----------
-        datasets : `list`
-            List of Datasets
+        entries : `list`
+            List of Entry
+        transfer: `str`
+            Butler transfer type
+        retry_as_raw: `bool`
+            on ingest failure, retry using RawIngestTask
         """
         LOGGER.debug(f"{entries=}")
         completed = False
@@ -100,7 +104,7 @@ class RseButler:
 
         while not completed:
             try:
-                self.butler.ingest(*datasets, transfer="direct")
+                self.butler.ingest(*datasets, transfer=transfer)
                 LOGGER.debug("ingest succeeded")
                 for dataset in datasets:
                     LOGGER.debug(f"ingested: {dataset.path}")
@@ -122,8 +126,9 @@ class RseButler:
                 for run in run_set:
                     self.butler.registry.registerRun(run)
             except Exception as e:
-                LOGGER.warning(f"{e} - defaulting to raw ingest task")
-                self._ingest_raw(entries)
+                if retry_as_raw:
+                    LOGGER.warning(f"{e} - defaulting to raw ingest task")
+                    self._ingest_raw(entries)
                 completed = True
 
     def on_success(self, datasets):
@@ -189,39 +194,3 @@ class RseButler:
             return f"{str(e.__cause__)}"
         else:
             return f"{str(e.__cause__)};  {cause}"
-
-    def ingest_data_product(self, entries: list):
-        """Ingest a list of Datasets
-
-        Parameters
-        ----------
-        entries : `list`
-            List of Entry
-        """
-        completed = False
-        datasets = [e.get_data() for e in entries]
-
-        while not completed:
-            try:
-                self.butler.ingest(*datasets, transfer="auto")
-                LOGGER.debug("ingest succeeded")
-                for dataset in datasets:
-                    LOGGER.info(f"ingested: {dataset.path}")
-                completed = True
-            except DatasetTypeError:
-                dst_set = set()
-                for dataset in datasets:
-                    for dst in {ref.datasetType for ref in dataset.refs}:
-                        dst_set.add(dst)
-                for dst in dst_set:
-                    self.butler.registry.registerDatasetType(dst)
-            except MissingCollectionError:
-                run_set = set()
-                for dataset in datasets:
-                    for run in {ref.run for ref in dataset.refs}:
-                        run_set.add(run)
-                for run in run_set:
-                    self.butler.registry.registerRun(run)
-            except Exception as e:
-                LOGGER.warning(e)
-                completed = True
