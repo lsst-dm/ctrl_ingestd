@@ -190,15 +190,17 @@ class RseButler:
         else:
             return f"{str(e.__cause__)};  {cause}"
 
-    def ingest_data_product(self, datasets: list):
+    def ingest_data_product(self, entries: list):
         """Ingest a list of Datasets
 
         Parameters
         ----------
-        datasets : `list`
-            List of Datasets
+        entries : `list`
+            List of Entry
         """
         completed = False
+        datasets = [e.get_data() for e in entries]
+
         while not completed:
             try:
                 self.butler.ingest(*datasets, transfer="auto")
