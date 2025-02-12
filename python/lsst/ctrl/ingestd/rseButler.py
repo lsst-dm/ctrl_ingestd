@@ -64,12 +64,12 @@ class RseButler:
         # group entries by data type, so they can be run in batches
         #
         data_type_dict = {}
-        LOGGER.info(f"{entries=}")
+        LOGGER.debug(f"{entries=}")
         for entry in entries:
             data_type = entry.get_data_type()
             if data_type not in data_type_dict:
                 data_type_dict[data_type] = []
-            LOGGER.info(f"adding {data_type=}, {entry=}")
+            LOGGER.debug(f"adding {data_type=}, {entry=}")
             data_type_dict[data_type].append(entry)
 
         if DataType.RAW_FILE in data_type_dict:
@@ -78,6 +78,13 @@ class RseButler:
             self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
 
     def _ingest_raw(self, entries: list):
+        """ingest using raw Task
+
+        Parameters
+        ----------
+        entries : `list`
+            List of Entry
+        """
         try:
             files = [e.file_to_ingest for e in entries]
             LOGGER.debug(f"{files=}")
@@ -86,7 +93,8 @@ class RseButler:
             LOGGER.warning(e)
 
     def _ingest(self, entries: list, transfer, retry_as_raw):
-        """Ingest
+        """ingest data with dataset refs, optionally 
+        retrying using RawIngestTask
 
         Parameters
         ----------
