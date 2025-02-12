@@ -47,27 +47,31 @@ class MessageTestCase(lsst.utils.tests.TestCase):
 
     def testAttributes(self):
         self.configure("message.json")
-        self.assertEqual(self.msg.get_dst_rse(), "XRD2")
+        self.assertEqual(self.msg.get_dst_rse(), "XRD3")
         self.assertEqual(
             self.msg.get_dst_url(),
             (
-                "root://xrd2:1095//rucio/test/srp/data/"
-                "calexp_HSC_y_HSC-Y_330_1_54_HSC_runs_RC2_w_2023_32_"
-                "DM-40356_20230812T080035Z.fits"
+                "root://xrd3:1096//rucio/test/something/"
+                "visitSummary_HSC_y_HSC-Y_328_HSC_runs_"
+                "RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
             ),
         )
         self.assertEqual(self.msg.get_rubin_butler(), DataType.DATA_PRODUCT)
         sidecar_str = self.msg.get_rubin_sidecar_str()
+        print(f"{sidecar_str=}")
         self.assertEqual(
             sidecar_str,
             (
-                '{"id": "00a86e99-7661-4f14-ae0d-93d3d4162e26",'
-                ' "datasetType": {"name": "calexp", "storageClass": "ExposureF",'
-                ' "dimensions": {"names": ["band", "instrument", "detector",'
-                ' "physical_filter", "visit"]}}, "dataId": {"dataId":'
-                ' {"band": "y", "instrument": "HSC", "detector": 1,'
-                ' "physical_filter": "HSC-Y", "visit": 330}}, "run":'
-                ' "HSC/runs/RC2/w_2023_32/DM-40356/20230812T080035Z"}'
+                '{"id": "0ef08762-b0dd-4a02-8b1c-e09b1544992d",'
+                ' "datasetType": {"name": "visitSummary",'
+                ' "storageClass": "ExposureCatalog",'
+                ' "dimensions": ["instrument",'
+                ' "visit"]},'
+                ' "dataId": {"dataId": {"instrument": "HSC",'
+                ' "visit": 328,'
+                ' "band": "y",'
+                ' "physical_filter": "HSC-Y"}}, "run":'
+                ' "HSC/runs/RC2/w_2023_32/DM-40356/20230814T170253Z"}'
             ),
         )
 

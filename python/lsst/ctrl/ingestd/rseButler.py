@@ -56,8 +56,8 @@ class RseButler:
 
         Parameters
         ----------
-        datasets : `list`
-            List of Datasets
+        entries : `list`
+            List of Entry
         """
 
         #
