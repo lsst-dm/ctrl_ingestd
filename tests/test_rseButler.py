@@ -23,6 +23,9 @@ import os.path
 import tempfile
 
 import lsst.utils.tests
+from lsst.ctrl.ingestd.config import Config
+from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
+from lsst.ctrl.ingestd.mapper import Mapper
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
 from lsst.daf.butler import Butler
@@ -38,6 +41,7 @@ class FakeKafkaMessage:
 
 
 class RseButlerTestCase(lsst.utils.tests.TestCase):
+
     def testRseButler(self):
         json_name = "message.json"
         testdir = os.path.abspath(os.path.dirname(__file__))
@@ -61,10 +65,41 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
         butler.butler.import_(filename=prep_file)
 
-        with tempfile.NamedTemporaryFile() as temp_file:
-            sidecar_str = self.msg.get_rubin_sidecar_str()
-            fds = butler.create_entry(temp_file.name, sidecar_str)
-            butler.ingest([fds])
+        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config = Config(config_file)
+        mapper = Mapper(config.get_rses())
+
+        event_factory = EntryFactory(butler, mapper)
+        entry = event_factory.create_entry(self.msg)
+        butler.ingest([entry])
+
+    def testRseButler2(self):
+
+        json_name = "raw_message.json"
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        json_file = os.path.join(testdir, "data", json_name)
+
+        with open(json_file) as f:
+            fake_data = f.read()
+
+        fake_msg = FakeKafkaMessage(fake_data)
+        self.msg = Message(fake_msg)
+
+        self.repo_dir = tempfile.mkdtemp()
+        Butler.makeRepo(self.repo_dir)
+
+        butler = RseButler(self.repo_dir)
+        instr = Instrument.from_string("lsst.obs.lsst.Latiss")
+
+        instr.register(butler.butler.registry)
+
+        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config = Config(config_file)
+        mapper = Mapper(config.get_rses())
+
+        event_factory = EntryFactory(butler, mapper)
+        entry = event_factory.create_entry(self.msg)
+        butler.ingest([entry])
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
