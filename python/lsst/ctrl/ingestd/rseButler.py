@@ -72,10 +72,14 @@ class RseButler:
             LOGGER.debug(f"adding {data_type=}, {entry=}")
             data_type_dict[data_type].append(entry)
 
+        LOGGER.debug(f"{data_type_dict=}")
         if DataType.RAW_FILE in data_type_dict:
+            LOGGER.debug(f"ingesting - {DataType.RAW_FILE}")
             self._ingest(data_type_dict[DataType.RAW_FILE], "direct", True)
         if DataType.DATA_PRODUCT in data_type_dict:
+            LOGGER.debug(f"ingesting - {DataType.DATA_PRODUCT}")
             self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
+        LOGGER.debug("done processing")
 
     def _ingest_raw(self, entries: list):
         """ingest using raw Task
@@ -113,9 +117,8 @@ class RseButler:
         while not completed:
             try:
                 self.butler.ingest(*datasets, transfer=transfer)
-                LOGGER.debug("ingest succeeded")
                 for dataset in datasets:
-                    LOGGER.debug(f"ingested: {dataset.path}")
+                    LOGGER.info(f"ingested: {dataset.path}")
                 completed = True
             except DatasetTypeError:
                 LOGGER.debug("DatasetTypeError")
@@ -135,8 +138,9 @@ class RseButler:
                     self.butler.registry.registerRun(run)
             except Exception as e:
                 if retry_as_raw:
-                    LOGGER.warning(f"{e} - defaulting to raw ingest task")
                     self._ingest_raw(entries)
+                else:
+                    LOGGER.warning(e)
                 completed = True
 
     def on_success(self, datasets):
@@ -149,7 +153,7 @@ class RseButler:
             list of DatasetRefs
         """
         for dataset in datasets:
-            LOGGER.info("file %s successfully ingested", dataset.path)
+            LOGGER.info(f"ingested: {dataset.path}")
 
     def on_ingest_failure(self, exposures, exc):
         """Callback used on ingest failure. Used to transmit

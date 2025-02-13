@@ -80,7 +80,7 @@ class IngestD:
         # read up to self.num_messages, with a timeout of self.timeout
         msgs = self.consumer.consume(num_messages=self.num_messages, timeout=self.timeout)
         # just return if there are no messages
-        if msgs is None:
+        if not msgs:
             return
 
         # cycle through all the messages, rewriting the Rucio URL

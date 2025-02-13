@@ -49,7 +49,7 @@ class DataFile(Entry):
         try:
             self.fds = self._create_file_dataset(self.file_to_ingest, self.sidecar)
         except Exception as e:
-            LOGGER.info(e)
+            LOGGER.debug(e)
 
     def _create_file_dataset(self, butler_file: str, sidecar: dict) -> FileDataset:
         """Create a FileDatset with sidecar information
