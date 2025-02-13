@@ -35,6 +35,7 @@ class EntryFactory:
     mapper: Mapper
         mapper between rse and prefix associated with it
     """
+
     def __init__(self, rse_butler, mapper):
         self.rse_butler = rse_butler
         self.butler = self.rse_butler.butler
