@@ -25,10 +25,10 @@ import socket
 
 from confluent_kafka import Consumer
 from lsst.ctrl.ingestd.config import Config
+from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
 from lsst.ctrl.ingestd.mapper import Mapper
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
-from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
 
 LOGGER = logging.getLogger(__name__)
 

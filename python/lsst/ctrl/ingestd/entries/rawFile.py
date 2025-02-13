@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+
 from lsst.ctrl.ingestd.entries.dataFile import DataFile
 
 LOGGER = logging.getLogger(__name__)

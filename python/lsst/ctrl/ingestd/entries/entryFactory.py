@@ -19,9 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from lsst.ctrl.ingestd.entries.dataProduct import DataProduct
 from lsst.ctrl.ingestd.entries.dataType import DataType
 from lsst.ctrl.ingestd.entries.entry import Entry
-from lsst.ctrl.ingestd.entries.dataProduct import DataProduct
 from lsst.ctrl.ingestd.entries.rawFile import RawFile
 
 

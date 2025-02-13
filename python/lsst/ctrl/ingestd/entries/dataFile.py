@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+
 from lsst.ctrl.ingestd.entries.entry import Entry
 from lsst.daf.butler import DatasetRef, FileDataset
 
