@@ -41,7 +41,6 @@ class FakeKafkaMessage:
 
 
 class RseButlerTestCase(lsst.utils.tests.TestCase):
-
     def testRseButler(self):
         """Test data product ingest"""
 

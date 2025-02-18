@@ -39,7 +39,6 @@ class RseButler:
     """
 
     def __init__(self, repo: str):
-
         self.butler = Butler(repo, writeable=True)
         cfg = RawIngestConfig()
         cfg.transfer = "direct"
