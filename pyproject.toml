@@ -42,6 +42,7 @@ select = [
     "RUF022",  # sort __all__
     "B",  # bugbear
     "C4",  # comprehensions
+    "RUF010",  # using str() in f-string
 ]
 
 [tool.ruff.lint.isort]
