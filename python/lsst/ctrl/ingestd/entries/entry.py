@@ -29,15 +29,15 @@ class Entry:
 
     Parameters
     ----------
-    butler: Butler
+    butler : Butler
         Butler associated with this entry
-    message: Message
+    message : Message
         Message representing data to ingest
-    mapper: Mapper
+    mapper : Mapper
         Mapping of RSE entry to Butler repo location
     """
 
-    def __init__(self, butler, message, mapper=None):
+    def __init__(self, butler, message, mapper):
         self.butler = butler
         self.message = message
         self.mapper = mapper
@@ -46,7 +46,7 @@ class Entry:
         self.sidecar = message.get_rubin_sidecar_dict()
         LOGGER.debug(f"{message=} {self.data_type=} {self.sidecar=}")
         if self.data_type is None:
-            raise RuntimeError(f"shouldn't have gotten this: {message}")
+            raise RuntimeError(f"data_type not specified in: {message}")
 
         # Rewrite the Rucio URL to actual file location
         dst_url = self.message.get_dst_url()
