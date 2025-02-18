@@ -28,15 +28,17 @@ LOGGER = logging.getLogger(__name__)
 
 
 class DataFile(Entry):
-    """Entry representing a raw file to ingest via RawIngestTask
+    """Entry representing a data product.  Subclasses of this object
+    are used to differentiate between data types so ingest can be
+    handled differently.
 
     Parameters
     ----------
-    butler: Butler
+    butler : Butler
         Butler associated with this entry
-    message: Message
+    message : Message
         Message representing data to ingest
-    mapper: Mapper
+    mapper : Mapper
         Mapping of RSE entry to Butler repo location
     """
 
@@ -57,20 +59,27 @@ class DataFile(Entry):
 
         Parameters
         ----------
-        butler_file: `str`
+        butler_file : `str`
             full uri to butler file location
-        sidecar: `dict`
+        sidecar : `dict`
             dictionary of the 'sidecar' metadata
+
+        Returns
+        -------
+        fds :  FileDataset
+            FileDataset representing this DataProduct
         """
+
         ref = DatasetRef.from_json(sidecar, registry=self.butler.registry)
         fds = FileDataset(butler_file, ref)
         return fds
 
     def get_data(self):
         """Get data associated with this type of object
+
         Returns
         -------
-        fds:  FileDataset
+        fds :  FileDataset
             FileDataset representing this DataProduct
         """
         return self.fds

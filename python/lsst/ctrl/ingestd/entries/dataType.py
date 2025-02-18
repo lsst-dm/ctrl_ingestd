@@ -21,5 +21,7 @@
 
 
 class DataType:
+    """matches to data_type in rucio_register
+    """
     DATA_PRODUCT = "data_product"
     RAW_FILE = "raw_file"

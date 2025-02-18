@@ -31,11 +31,11 @@ class DataProduct(DataFile):
 
     Parameters
     ----------
-    butler: Butler
+    butler : Butler
         Butler associated with this entry
-    message: Message
+    message : Message
         Message representing data to ingest
-    mapper: Mapper
+    mapper : Mapper
         Mapping of RSE entry to Butler repo location
     """
 

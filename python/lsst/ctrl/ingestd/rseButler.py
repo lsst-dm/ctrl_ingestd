@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+from typing import List
 
 from lsst.ctrl.ingestd.entries.dataType import DataType
 from lsst.daf.butler import Butler
@@ -56,8 +57,8 @@ class RseButler:
 
         Parameters
         ----------
-        datasets : `list`
-            List of Datasets
+        entries : `list[Entry]`
+            List of Entry
         """
 
         #

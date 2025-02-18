@@ -30,9 +30,9 @@ class EntryFactory:
 
     Parameters
     ----------
-    rse_butler: RseButler
+    rse_butler : RseButler
         Object representing a Butler for an RSE
-    mapper: Mapper
+    mapper : Mapper
         mapper between rse and prefix associated with it
     """
 
@@ -46,7 +46,7 @@ class EntryFactory:
 
         Parameters
         ----------
-        message: Message
+        message : Message
             Object representing a Kafka message
 
         Returns
