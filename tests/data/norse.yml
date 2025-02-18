@@ -2,6 +2,6 @@ brokers: kafka:9092
 
 group_id: "my_test_group"
 num_messages: 50
-    
+
 butler:
     repo: /tmp/repo

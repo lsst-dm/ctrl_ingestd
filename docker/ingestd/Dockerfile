@@ -4,7 +4,7 @@ FROM lsstsqre/centos:${LSST_STACK_VERSION}
 WORKDIR /home/lsst
 
 ARG CTRL_INGESTD_GIT_VERSION
-RUN git clone https://github.com/lsst-dm/ctrl_ingestd && \ 
+RUN git clone https://github.com/lsst-dm/ctrl_ingestd && \
     cd ctrl_ingestd && \
     git checkout ${CTRL_INGESTD_GIT_VERSION}
 

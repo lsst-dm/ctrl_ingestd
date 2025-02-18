@@ -19,4 +19,3 @@ rses:
     XRD4:
         rucio_prefix: root://xrd4:1097//rucio
         fs_prefix: file:///rucio/disks/xrd4/rucio
-
