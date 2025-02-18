@@ -106,7 +106,7 @@ class RseButler:
         while not completed:
             try:
                 self.butler.ingest(*datasets, transfer=transfer)
-                LOGGER.info("ingest succeeded")
+                LOGGER.debug("ingest succeeded")
                 for dataset in datasets:
                     LOGGER.info(f"ingested: {dataset.path}")
                 completed = True
