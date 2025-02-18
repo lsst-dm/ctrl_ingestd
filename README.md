@@ -5,7 +5,7 @@ This daemon listens to Kafka messages from the Rucio Hermes daemons and performs
 This can be run stand-alone or via a container.  It is configured with a YAML file, pointed to by
 the enviroment variable CTRL_INGESTD_CONFIG.
 
-The daemon listens on Kafka RSE topics that are named in the 
+The daemon listens on Kafka RSE topics that are named in the
 CTRL_INGESTD_CONFIG YAML file.  For example, in the example YAML file below, the
 ingestd daemon will listen on topics XRD1 and XRD2.
 

@@ -1,6 +1,6 @@
 group_id: "my_test_group"
 num_messages: 50
-    
+
 butler:
     repo: /tmp/repo
 
@@ -17,5 +17,3 @@ rses:
     XRD4:
         rucio_prefix: root://xrd4:1097//rucio/test
         fs_prefix: file:///rucio/disks/xrd4/rucio
-
-
