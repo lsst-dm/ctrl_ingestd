@@ -25,6 +25,7 @@ import socket
 
 from confluent_kafka import Consumer
 from lsst.ctrl.ingestd.config import Config
+from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
 from lsst.ctrl.ingestd.mapper import Mapper
 from lsst.ctrl.ingestd.message import Message
 from lsst.ctrl.ingestd.rseButler import RseButler
@@ -65,7 +66,8 @@ class IngestD:
         self.consumer = Consumer(conf)
         self.consumer.subscribe(topics)
 
-        self.butler = RseButler(config.get_repo())
+        self.rse_butler = RseButler(config.get_repo())
+        self.entry_factory = EntryFactory(self.rse_butler, self.mapper)
 
     def run(self):
         """continually process messages"""
@@ -92,35 +94,11 @@ class IngestD:
                 logging.info(msg.value())
                 logging.info(e)
                 continue
-            rubin_butler = message.get_rubin_butler()
-            sidecar = message.get_rubin_sidecar_dict()
-            logging.debug(f"{message=} {rubin_butler=} {sidecar=}")
-
-            if rubin_butler is None:
-                logging.warning("shouldn't have gotten this message: %s" % message)
-                continue
-
-            # Rewrite the Rucio URL to actual file location
-            dst_url = message.get_dst_url()
-            file_to_ingest = self.mapper.rewrite(message.get_dst_rse(), dst_url)
-
-            if file_to_ingest == dst_url:
-                logging.warn(
-                    f"failed to map {file_to_ingest}; check {self.config_file} for incorrect mapping"
-                )
-                continue
-
-            # create an object that's ingestible by the butler
-            # and add it to the list
-            try:
-                entry = self.butler.create_entry(file_to_ingest, sidecar)
-            except Exception as e:
-                logging.info(e)
-                continue
+            entry = self.entry_factory.create_entry(message)
             entries.append(entry)
         # if we've got anything in the list, try and ingest it.
         if len(entries) > 0:
-            self.butler.ingest(entries)
+            self.rse_butler.ingest(entries)
 
 
 if __name__ == "__main__":
