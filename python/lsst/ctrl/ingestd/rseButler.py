@@ -71,10 +71,20 @@ class RseButler:
             LOGGER.debug(f"adding {data_type=}, {entry=}")
             data_type_dict[data_type].append(entry)
 
+        if DataType.ZIP_FILE in data_type_dict:
+            self._ingest_zip(data_type_dict[DataType.ZIP_FILE])
         if DataType.RAW_FILE in data_type_dict:
             self._ingest(data_type_dict[DataType.RAW_FILE], "direct", True)
         if DataType.DATA_PRODUCT in data_type_dict:
             self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
+
+    def _ingest_zip(self, entries: list):
+        zip_files = [e.file_to_ingest for e in entries]
+        LOGGER.info(f"{zip_files=}")
+        for zip_file in zip_files:
+            LOGGER.info(f"ingesting {zip_file}")
+            self.butler.ingest_zip(zip_file)
+        LOGGER.info("done ingesting zips")
 
     def _ingest_raw(self, entries: list):
         try:

@@ -19,10 +19,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
 
-class DataType:
-    """matches to data_type in rucio_register"""
+from lsst.ctrl.ingestd.entries.dataFile import DataFile
+from lsst.daf.butler import FileDataset
 
-    DATA_PRODUCT = "data_product"
-    RAW_FILE = "raw_file"
-    ZIP_FILE = "zip_file"
+LOGGER = logging.getLogger(__name__)
+
+
+class ZipFile(DataFile):
+    """Entry representing a zip file
+
+    Parameters
+    ----------
+    butler : Butler
+        Butler associated with this entry
+    message : Message
+        Message representing data to ingest
+    mapper : Mapper
+        Mapping of RSE entry to Butler repo location
+    """
+
+    def __init__(self, butler, message, mapper):
+        super().__init__(butler, message, mapper)
+
+    def _populate(self):
+        # create an object that's ingestible by the butler
+
+        try:
+            self.fds = FileDataset(self.file_to_ingest)
+        except Exception as e:
+            LOGGER.info(e)
