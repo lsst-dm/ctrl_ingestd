@@ -43,7 +43,8 @@ class Entry:
         self.mapper = mapper
 
         self.data_type = message.get_rubin_butler()
-        self.sidecar = message.get_rubin_sidecar_dict()
+        self.sidecar = message.get_rubin_sidecar_str()
+        self.sidecar_dict = message.get_rubin_sidecar_dict()
         LOGGER.debug(f"{message=} {self.data_type=} {self.sidecar=}")
         if self.data_type is None:
             raise RuntimeError(f"data_type not specified in: {message}")

@@ -44,7 +44,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
     def testRseButler(self):
         """Test data product ingest"""
 
-        json_name = "message.json"
+        json_name = "message2.json"
         testdir = os.path.abspath(os.path.dirname(__file__))
         json_file = os.path.join(testdir, "data", json_name)
 

@@ -22,7 +22,6 @@
 import logging
 
 from lsst.ctrl.ingestd.entries.dataFile import DataFile
-from lsst.daf.butler import FileDataset
 
 LOGGER = logging.getLogger(__name__)
 
@@ -44,9 +43,4 @@ class ZipFile(DataFile):
         super().__init__(butler, message, mapper)
 
     def _populate(self):
-        # create an object that's ingestible by the butler
-
-        try:
-            self.fds = FileDataset(self.file_to_ingest)
-        except Exception as e:
-            LOGGER.info(e)
+        self.data = self.file_to_ingest

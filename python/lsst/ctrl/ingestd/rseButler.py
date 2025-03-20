@@ -79,12 +79,14 @@ class RseButler:
             self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
 
     def _ingest_zip(self, entries: list):
-        zip_files = [e.file_to_ingest for e in entries]
-        LOGGER.info(f"{zip_files=}")
+        # zip_files = [e.file_to_ingest for e in entries]
+        zip_files = [e.get_data() for e in entries]
         for zip_file in zip_files:
-            LOGGER.info(f"ingesting {zip_file}")
-            self.butler.ingest_zip(zip_file)
-        LOGGER.info("done ingesting zips")
+            try:
+                self.butler.ingest_zip(zip_file)
+                LOGGER.info(f"ingested {zip_file}")
+            except Exception as e:
+                LOGGER.info(e)
 
     def _ingest_raw(self, entries: list):
         try:
@@ -136,7 +138,7 @@ class RseButler:
                     self.butler.registry.registerRun(run)
             except Exception as e:
                 if retry_as_raw:
-                    LOGGER.warning(f"{e} - defaulting to raw ingest task")
+                    LOGGER.debug(f"{e} - defaulting to raw ingest task")
                     self._ingest_raw(entries)
                 else:
                     LOGGER.warning(e)
