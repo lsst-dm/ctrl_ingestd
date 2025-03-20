@@ -58,7 +58,7 @@ class MessageTestCase(lsst.utils.tests.TestCase):
             ),
         )
         self.assertEqual(self.msg.get_rubin_butler(), DataType.DATA_PRODUCT)
-        sidecar = self.msg.get_rubin_sidecar_dict()
+        sidecar = self.msg.get_rubin_sidecar()
         self.assertEqual(
             sidecar,
             (
@@ -73,8 +73,7 @@ class MessageTestCase(lsst.utils.tests.TestCase):
 
     def testNoSidecar(self):
         self.configure("nosidecar.json")
-        self.assertIsNone(self.msg.get_rubin_sidecar_dict())
-        self.assertIsNone(self.msg.get_rubin_sidecar_str())
+        self.assertIsNone(self.msg.get_rubin_sidecar())
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

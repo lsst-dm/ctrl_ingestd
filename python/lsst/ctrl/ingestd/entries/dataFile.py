@@ -47,7 +47,7 @@ class DataFile(Entry):
         self._populate()
 
     def _populate(self):
-        self.data = self._create_file_dataset(self.file_to_ingest, self.sidecar_dict)
+        self.data = self._create_file_dataset(self.file_to_ingest, self.sidecar)
 
     def _create_file_dataset(self, butler_file: str, sidecar: dict) -> FileDataset:
         """Create a FileDatset with sidecar information
@@ -65,7 +65,6 @@ class DataFile(Entry):
             FileDataset representing this DataProduct
         """
 
-        print(f"{type(sidecar)}")
         ref = DatasetRef.from_json(sidecar, registry=self.butler.registry)
         fds = FileDataset(butler_file, ref)
         return fds
