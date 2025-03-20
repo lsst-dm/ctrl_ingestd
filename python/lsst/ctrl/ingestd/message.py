@@ -57,7 +57,7 @@ class Message:
         return self.payload.get(RUBIN_BUTLER, None)
 
     def get_rubin_sidecar_str(self) -> str:
-        """Getter to retrieve the 'sidecar' metadata as a dict"""
+        """Getter to retrieve the 'sidecar' metadata as a str"""
         d = self.get_rubin_sidecar_dict()
         if d is None:
             return None
