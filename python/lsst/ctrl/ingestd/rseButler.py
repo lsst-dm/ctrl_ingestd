@@ -83,7 +83,7 @@ class RseButler:
         for zip_file in zip_files:
             try:
                 self.butler.ingest_zip(zip_file)
-                LOGGER.info(f"ingested %s", zip_file)
+                LOGGER.info("ingested %s", zip_file)
             except Exception as e:
                 LOGGER.info(e)
 
