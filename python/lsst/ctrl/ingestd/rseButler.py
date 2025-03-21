@@ -79,12 +79,11 @@ class RseButler:
             self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
 
     def _ingest_zip(self, entries: list):
-        # zip_files = [e.file_to_ingest for e in entries]
         zip_files = [e.get_data() for e in entries]
         for zip_file in zip_files:
             try:
                 self.butler.ingest_zip(zip_file)
-                LOGGER.info(f"ingested {zip_file}")
+                LOGGER.info(f"ingested %s", zip_file)
             except Exception as e:
                 LOGGER.info(e)
 
