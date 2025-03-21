@@ -8,10 +8,6 @@ RUN git clone https://github.com/lsst-dm/ctrl_ingestd && \
     cd ctrl_ingestd && \
     git checkout ${CTRL_INGESTD_GIT_VERSION}
 
-ARG CONFLUENT_KAFKA_VERSION
-RUN source /opt/lsst/software/stack/loadLSST.bash && \
-    mamba install python-confluent-kafka=${CONFLUENT_KAFKA_VERSION}
-
 RUN source /opt/lsst/software/stack/loadLSST.bash && \
     setup sconsUtils && \
     setup utils && \

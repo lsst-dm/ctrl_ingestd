@@ -23,6 +23,7 @@ from lsst.ctrl.ingestd.entries.dataProduct import DataProduct
 from lsst.ctrl.ingestd.entries.dataType import DataType
 from lsst.ctrl.ingestd.entries.entry import Entry
 from lsst.ctrl.ingestd.entries.rawFile import RawFile
+from lsst.ctrl.ingestd.entries.zipFile import ZipFile
 
 
 class EntryFactory:
@@ -60,4 +61,6 @@ class EntryFactory:
             return DataProduct(self.butler, message, self.mapper)
         if data_type == DataType.RAW_FILE:
             return RawFile(self.butler, message, self.mapper)
+        if data_type == DataType.ZIP_FILE:
+            return ZipFile(self.butler, message, self.mapper)
         raise ValueError(f"Unknown rubin_butler type: {data_type}")
