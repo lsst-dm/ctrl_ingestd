@@ -25,7 +25,7 @@ from lsst.ctrl.ingestd.mapper import Mapper
 
 class MapperTestCase(lsst.utils.tests.TestCase):
     def testRewrite(self):
-        rses = {
+        topic_dict = {
             "XRD1": {
                 "rucio_prefix": "root://xrd1:1094//rucio",
                 "fs_prefix": "file:///rucio0",
@@ -35,7 +35,7 @@ class MapperTestCase(lsst.utils.tests.TestCase):
                 "fs_prefix": "file:///rucio1",
             },
         }
-        mapper = Mapper(rses)
+        mapper = Mapper(topic_dict)
         s = mapper.rewrite("XRD1", "root://xrd1:1094//rucio/test/28/27/test")
         self.assertEqual(s, "file:///rucio0/test/28/27/test")
         s = mapper.rewrite("XRD2", "root://xrd2:1095//rucio/test/48/47/test")

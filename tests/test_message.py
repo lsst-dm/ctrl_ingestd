@@ -70,6 +70,7 @@ class MessageTestCase(lsst.utils.tests.TestCase):
                 '"HSC/runs/RC2/w_2023_32/DM-40356/20230814T170253Z"}'
             ),
         )
+        self.assertEqual(self.msg.get_scope(), "test")
 
     def testNoSidecar(self):
         self.configure("nosidecar.json")

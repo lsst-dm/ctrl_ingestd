@@ -38,9 +38,9 @@ class Config:
         with open(filename) as file:
             config = yaml.load(file, Loader=yaml.FullLoader)
 
-            if "rses" not in config:
-                raise Exception("Can't find 'rses'")
-            self._rse_dict = config["rses"]
+            if "topics" not in config:
+                raise Exception("Can't find 'topics'")
+            self._topic_dict = config["topics"]
             if "brokers" not in config:
                 raise Exception("Can't find 'brokers'")
             self._brokers = config["brokers"]
@@ -55,10 +55,10 @@ class Config:
                 raise Exception("Can't find 'repo' in 'butler' section")
             self._repo = self._butler_config.get("repo")
 
-            LOGGER.info(f"butler location: {self._repo}")
-            LOGGER.info(f"brokers: {self._brokers}")
-            LOGGER.info(f"rse topics: {self._rse_dict.keys()}")
-            LOGGER.info(f"will batch as many as {self._num_messages} at a time")
+            LOGGER.info("butler location: %s", self._repo)
+            LOGGER.info("brokers: %s", self._brokers)
+            LOGGER.info("rse topics: %s", self._topic_dict.keys())
+            LOGGER.info("will batch as many as %d at a time", self._num_messages)
 
     def get_num_messages(self) -> int:
         """Getter method for number of Kafka messages to process at a time"""
@@ -68,13 +68,13 @@ class Config:
         """Getter method for length of time to wait for Kafka messages"""
         return self._timeout
 
-    def get_rses(self) -> dict:
-        """Getter method for RSE prefix to local prefix mapping"""
-        return self._rse_dict
+    def get_topic_dict(self) -> dict:
+        """Getter method for topic to local prefix mapping"""
+        return self._topic_dict
 
     def get_topics(self) -> list:
         """Getter method for Kafka topics"""
-        return list(self._rse_dict.keys())
+        return list(self._topic_dict.keys())
 
     def get_brokers(self) -> str:
         """Getter method for Kafka brokers"""

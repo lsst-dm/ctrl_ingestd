@@ -49,8 +49,12 @@ class Entry:
             raise RuntimeError(f"data_type not specified in: {message}")
 
         # Rewrite the Rucio URL to actual file location
+        dst_rse = self.message.get_dst_rse()
+        scope = self.message.get_scope()
         dst_url = self.message.get_dst_url()
-        self.file_to_ingest = self.mapper.rewrite(self.message.get_dst_rse(), dst_url)
+
+        topic = f"{dst_rse}-{scope}"
+        self.file_to_ingest = self.mapper.rewrite(topic, dst_url)
 
         if self.file_to_ingest == dst_url:
             # Avoid E501

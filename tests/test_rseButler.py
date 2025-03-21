@@ -68,7 +68,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
         config = Config(config_file)
-        mapper = Mapper(config.get_rses())
+        mapper = Mapper(config.get_topic_dict())
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
@@ -97,7 +97,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
         config = Config(config_file)
-        mapper = Mapper(config.get_rses())
+        mapper = Mapper(config.get_topic_dict())
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
