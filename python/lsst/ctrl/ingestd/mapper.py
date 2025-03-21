@@ -36,17 +36,17 @@ class Mapper:
     def __init__(self, rse_dict: dict):
         self._rse_dict = rse_dict
 
-    def rewrite(self, rse: str, url: str) -> str:
-        """Rewrite a Rucio URL for an RSE
+    def rewrite(self, topic: str, url: str) -> str:
+        """Rewrite a Rucio URL using topic mapping
 
         Parameters
         ----------
-        rse : `str`
-            Rucio RSE name
+        topic : `str`
+            Kakfa topic name
         url : `str`
             Rucio URL to translate
         """
-        mapping_dict = self._rse_dict[rse]
+        mapping_dict = self._rse_dict[topic]
         rucio_prefix = mapping_dict["rucio_prefix"]
         fs_prefix = mapping_dict["fs_prefix"]
         ret = url.replace(rucio_prefix, fs_prefix)

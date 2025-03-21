@@ -27,6 +27,7 @@ RSE_KEY = "dst-rse"
 URL_KEY = "dst-url"
 RUBIN_BUTLER = "rubin_butler"
 RUBIN_SIDECAR = "rubin_sidecar"
+SCOPE = "scope"
 
 
 class Message:
@@ -58,5 +59,8 @@ class Message:
 
     def get_rubin_sidecar(self) -> str:
         """Getter to retrieve the 'sidecar' metadata as a string"""
-        s = self.payload.get(RUBIN_SIDECAR, None)
-        return s
+        return self.payload.get(RUBIN_SIDECAR, None)
+
+    def get_scope(self) -> str:
+        """Getter to retrieve the 'sidecar' metadata as a string"""
+        return self.payload.get(SCOPE, None)
