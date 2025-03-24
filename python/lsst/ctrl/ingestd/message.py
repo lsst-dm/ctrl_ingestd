@@ -62,5 +62,5 @@ class Message:
         return self.payload.get(RUBIN_SIDECAR, None)
 
     def get_scope(self) -> str:
-        """Getter to retrieve the 'sidecar' metadata as a string"""
+        """Getter to retrieve the 'scope' metadata as a string"""
         return self.payload.get(SCOPE, None)

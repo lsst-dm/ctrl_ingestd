@@ -58,13 +58,15 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(self.config.get_timeout(), 1)
 
         topic_dict = self.config.get_topic_dict()
-        self.assertTrue("XRD1-test" in topic_dict)
+        self.assertTrue("XRD1-test1" in topic_dict)
+        self.assertTrue("XRD1-test2" in topic_dict)
         self.assertTrue("XRD2-test" in topic_dict)
         self.assertTrue("XRD3-test" in topic_dict)
         self.assertTrue("XRD4-test" in topic_dict)
 
         topics = self.config.get_topics()
-        self.assertTrue("XRD1-test" in topics)
+        self.assertTrue("XRD1-test1" in topics)
+        self.assertTrue("XRD1-test2" in topics)
         self.assertTrue("XRD2-test" in topics)
         self.assertTrue("XRD3-test" in topics)
         self.assertTrue("XRD4-test" in topics)
