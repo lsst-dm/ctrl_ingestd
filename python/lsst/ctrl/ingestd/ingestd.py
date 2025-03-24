@@ -46,7 +46,7 @@ class IngestD:
             raise FileNotFoundError("CTRL_INGESTD_CONFIG is not set")
 
         config = Config(self.config_file)
-        rse_dict = config.get_rses()
+        topic_dict = config.get_topic_dict()
         group_id = config.get_group_id()
         brokers = config.get_brokers()
         topics = config.get_topics()
@@ -54,7 +54,7 @@ class IngestD:
         self.num_messages = config.get_num_messages()
         self.timeout = config.get_timeout()
 
-        self.mapper = Mapper(rse_dict)
+        self.mapper = Mapper(topic_dict)
 
         conf = {
             "bootstrap.servers": brokers,

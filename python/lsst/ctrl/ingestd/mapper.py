@@ -29,24 +29,24 @@ class Mapper:
 
     Parameters
     ----------
-    rse_dict : `dict`
-        rse prefix to physical location prefix dictionary
+    topic_dict : `dict`
+        topic prefix to physical location prefix dictionary
     """
 
-    def __init__(self, rse_dict: dict):
-        self._rse_dict = rse_dict
+    def __init__(self, topic_dict: dict):
+        self._topic_dict = topic_dict
 
-    def rewrite(self, rse: str, url: str) -> str:
-        """Rewrite a Rucio URL for an RSE
+    def rewrite(self, topic: str, url: str) -> str:
+        """Rewrite a Rucio URL using topic mapping
 
         Parameters
         ----------
-        rse : `str`
-            Rucio RSE name
+        topic : `str`
+            Kakfa topic name
         url : `str`
             Rucio URL to translate
         """
-        mapping_dict = self._rse_dict[rse]
+        mapping_dict = self._topic_dict[topic]
         rucio_prefix = mapping_dict["rucio_prefix"]
         fs_prefix = mapping_dict["fs_prefix"]
         ret = url.replace(rucio_prefix, fs_prefix)

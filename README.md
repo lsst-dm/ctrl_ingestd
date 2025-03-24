@@ -20,11 +20,11 @@ num_messages: 50
 butler:
     repo: /tmp/repo
 
-rses:
-    XRD1:
+topics:
+    XRD1-test:
         rucio_prefix: root://xrd1:1094//rucio
         fs_prefix: file:///rucio/disks/xrd1/rucio
-    XRD2:
+    XRD2-test:
         rucio_prefix: root://xrd2:1095//rucio
         fs_prefix: file:///rucio/disks/xrd2/rucio
 ```
@@ -39,7 +39,7 @@ rses:
 
 "butler" section is set to the butler configuration.  It contains the location of the Butler repository.
 
-The "rses" section is set to the RSEs from which this ingestd daemon will ingest files.  It contains the
-RSEs which it's paying attention to and a mapping between logical file names and physical file names.
+The "topics" section is set to the Kafka topics from which this ingestd daemon will ingest files.  The topic
+name is a combination of the RSE name and the scope for that RSE.  Each has a prefix mapping between logical file names and physical file names.
 
 The ingestd daemon listens to the topics XRD1 and XRD2 for messages coming from the rucio-daemons-hermesk daemon.

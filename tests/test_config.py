@@ -33,8 +33,8 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
 
     def testNoRses(self):
         with self.assertRaises(Exception) as execinfo:
-            self.createConfig("norse.yml")
-        self.assertTrue("Can't find 'rses'" in str(execinfo.exception))
+            self.createConfig("notopics.yml")
+        self.assertTrue("Can't find 'topics'" in str(execinfo.exception))
 
     def testNoBrokers(self):
         with self.assertRaises(Exception) as execinfo:
@@ -57,17 +57,19 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(self.config.get_num_messages(), 50)
         self.assertEqual(self.config.get_timeout(), 1)
 
-        rses = self.config.get_rses()
-        self.assertTrue("XRD1" in rses)
-        self.assertTrue("XRD2" in rses)
-        self.assertTrue("XRD3" in rses)
-        self.assertTrue("XRD4" in rses)
+        topic_dict = self.config.get_topic_dict()
+        self.assertTrue("XRD1-test1" in topic_dict)
+        self.assertTrue("XRD1-test2" in topic_dict)
+        self.assertTrue("XRD2-test" in topic_dict)
+        self.assertTrue("XRD3-test" in topic_dict)
+        self.assertTrue("XRD4-test" in topic_dict)
 
         topics = self.config.get_topics()
-        self.assertTrue("XRD1" in topics)
-        self.assertTrue("XRD2" in topics)
-        self.assertTrue("XRD3" in topics)
-        self.assertTrue("XRD4" in topics)
+        self.assertTrue("XRD1-test1" in topics)
+        self.assertTrue("XRD1-test2" in topics)
+        self.assertTrue("XRD2-test" in topics)
+        self.assertTrue("XRD3-test" in topics)
+        self.assertTrue("XRD4-test" in topics)
 
         self.assertEqual(self.config.get_brokers(), "kafka:9092")
         self.assertEqual(self.config.get_group_id(), "my_test_group")
