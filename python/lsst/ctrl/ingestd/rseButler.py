@@ -77,6 +77,17 @@ class RseButler:
             self._ingest(data_type_dict[DataType.RAW_FILE], "direct", True)
         if DataType.DATA_PRODUCT in data_type_dict:
             self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
+        if DataType.DIM_FILE in data_type_dict:
+            self._ingest_dim(data_type_dict[DataType.DIM_FILE])
+
+    def _ingest_dim(self, entries: list):
+        dim_files = [e.get_data() for e in entries]
+        for dim_file in dim_files:
+            try:
+                self.butler.import_(filename=dim_file)
+                LOGGER.info("ingested %s", dim_file)
+            except Exception as e:
+                LOGGER.info(e)
 
     def _ingest_zip(self, entries: list):
         zip_files = [e.get_data() for e in entries]

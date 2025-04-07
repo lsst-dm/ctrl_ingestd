@@ -26,3 +26,4 @@ class DataType:
     DATA_PRODUCT = "data_product"
     RAW_FILE = "raw_file"
     ZIP_FILE = "zip_file"
+    DIM_FILE = "dim_file"
