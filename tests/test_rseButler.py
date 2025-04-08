@@ -103,6 +103,35 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         entry = event_factory.create_entry(self.msg)
         butler.ingest([entry])
 
+    def testDim(self):
+        """Test dimension file ingest"""
+
+        json_name = "dim_message.json"
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        json_file = os.path.join(testdir, "data", json_name)
+
+        with open(json_file) as f:
+            fake_data = f.read()
+
+        fake_msg = FakeKafkaMessage(fake_data)
+        self.msg = Message(fake_msg)
+
+        self.repo_dir = tempfile.mkdtemp()
+        Butler.makeRepo(self.repo_dir)
+
+        butler = RseButler(self.repo_dir)
+        instr = Instrument.from_string("lsst.obs.lsst.Latiss")
+
+        instr.register(butler.butler.registry)
+
+        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config = Config(config_file)
+        mapper = Mapper(config.get_topic_dict())
+
+        event_factory = EntryFactory(butler, mapper)
+        entry = event_factory.create_entry(self.msg)
+        butler.ingest([entry])
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass

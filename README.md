@@ -42,4 +42,4 @@ topics:
 The "topics" section is set to the Kafka topics from which this ingestd daemon will ingest files.  The topic
 name is a combination of the RSE name and the scope for that RSE.  Each has a prefix mapping between logical file names and physical file names.
 
-The ingestd daemon listens to the topics XRD1 and XRD2 for messages coming from the rucio-daemons-hermesk daemon.
+The ingestd daemon listens to the topics "XRD1-test" and "XRD2-test" for messages coming from the rucio-daemons-hermesk daemon.

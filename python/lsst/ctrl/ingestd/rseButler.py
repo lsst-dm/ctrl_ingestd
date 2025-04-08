@@ -68,7 +68,6 @@ class RseButler:
             data_type = entry.get_data_type()
             if data_type not in data_type_dict:
                 data_type_dict[data_type] = []
-            LOGGER.debug(f"adding {data_type=}, {entry=}")
             data_type_dict[data_type].append(entry)
 
         if DataType.ZIP_FILE in data_type_dict:
@@ -77,6 +76,18 @@ class RseButler:
             self._ingest(data_type_dict[DataType.RAW_FILE], "direct", True)
         if DataType.DATA_PRODUCT in data_type_dict:
             self._ingest(data_type_dict[DataType.DATA_PRODUCT], "auto", False)
+        if DataType.DIM_FILE in data_type_dict:
+            self._ingest_dim(data_type_dict[DataType.DIM_FILE])
+
+    def _ingest_dim(self, entries: list):
+        dim_files = [e.get_data() for e in entries]
+        for dim_file in dim_files:
+            try:
+                LOGGER.info("importing dimension file %s", dim_file)
+                self.butler.import_(filename=dim_file)
+                LOGGER.info("imported %s", dim_file)
+            except Exception as e:
+                LOGGER.info(e)
 
     def _ingest_zip(self, entries: list):
         zip_files = [e.get_data() for e in entries]
@@ -90,7 +101,6 @@ class RseButler:
     def _ingest_raw(self, entries: list):
         try:
             files = [e.file_to_ingest for e in entries]
-            LOGGER.debug(f"{files=}")
             self.task.run(files)
         except Exception as e:
             LOGGER.warning(e)
