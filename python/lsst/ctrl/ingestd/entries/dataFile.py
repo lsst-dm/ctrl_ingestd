@@ -34,11 +34,11 @@ class DataFile(Entry):
 
     Parameters
     ----------
-    butler : Butler
+    butler : `lsst.daf.butler.Butler`
         Butler associated with this entry
-    message : Message
+    message : `lsst.ctrl.ingestd.message.Message`
         Message representing data to ingest
-    mapper : Mapper
+    mapper : `lsst.ctrl.ingestd.mapper.Mapper`
         Mapping of RSE entry to Butler repo location
     """
 
