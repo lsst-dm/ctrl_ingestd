@@ -1,5 +1,5 @@
 ARG LSST_STACK_VERSION
-FROM lsstsqre/centos:${LSST_STACK_VERSION}
+FROM ghcr.io/lsst/scipipe:${LSST_STACK_VERSION}
 
 WORKDIR /home/lsst
 
