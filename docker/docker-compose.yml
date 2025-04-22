@@ -9,7 +9,8 @@ services:
     extra_hosts:
         - "kafka:127.0.0.1"
     build:
-      context: ./ingestd
+      context: ..
+      dockerfile: docker/ingestd/Dockerfile
       args:
         - LSST_STACK_VERSION
         - CTRL_INGESTD_GIT_VERSION

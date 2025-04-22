@@ -1,8 +1,8 @@
-name: Build Rucio/Butler ingestd container
+name: Build Rucio/Butler ingestd container in a test environment
 on:
   push:
     tags:
-    - v*
+     - '*'
   pull_request:
 
 env:
@@ -18,10 +18,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Build ingest image
-      working-directory: docker
+    - name: Set tag-based Docker tag
+      id: tag
       run: |
-        docker compose -f "docker-compose.yml" --env-file versions.env build ingestd
+        GIT_TAG="${GITHUB_REF_NAME}"
+        VERSION=$(echo "$GIT_TAG" | sed 's#[^a-zA-Z0-9_.-]#-#g')
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Echo the Docker tag name
+      run: |
+         echo "Docker image will be tagged as: ${VERSION}"
+
+    - name: Build ingest image
+      run: |
+        docker compose -f "docker/docker-compose.yml" --env-file docker/versions.env build ingestd
 
     - name: Log in to GitHub Container Registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
@@ -30,7 +40,6 @@ jobs:
       run: |
         INGESTD_ID=ghcr.io/${{ github.repository_owner }}/$INGESTD_NAME
 
-        VERSION=$(cat docker/versions.env | grep CTRL_INGESTD_VERSION | sed 's/=/ /g' |cut -d " " -f2)
         echo INGESTD_ID=$INGESTD_ID
         echo VERSION=$VERSION
         docker tag $INGESTD_NAME $INGESTD_ID:$VERSION
