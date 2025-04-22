@@ -13,21 +13,17 @@ services:
       dockerfile: docker/ingestd/Dockerfile
       args:
         - LSST_STACK_VERSION
-        - CTRL_INGESTD_GIT_VERSION
-        - CONFLUENT_KAFKA_VERSION
   testenv-ingestd:
     container_name: testenv-ingestd
     environment:
         - CTRL_INGESTD_CONFIG=/home/lsst/ctrl_ingestd/etc/ingestd.yml
-    image: testenv-ingestd:${CTRL_INGESTD_VERSION}
+    image: testenv-ingestd
     extra_hosts:
         - "kafka:127.0.0.1"
     build:
       context: ./testenv-ingestd
       args:
         - LSST_STACK_VERSION
-        - CTRL_INGESTD_GIT
-        - CONFLUENT_KAFKA_VERSION
     volumes:
       - /tmp:/tmp/
       - ${HOME}/rucio/ctrl_ingestd:/home/lsst/ctrl_ingestd
