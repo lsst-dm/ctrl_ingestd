@@ -22,7 +22,7 @@
 import logging
 
 from lsst.ctrl.ingestd.entries.dataType import DataType
-from lsst.daf.butler import Butler
+from lsst.daf.butler import Butler, DatasetType, FileDataset
 from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
 from lsst.obs.base.ingest import RawIngestConfig, RawIngestTask
 
@@ -79,6 +79,25 @@ class RseButler:
         if DataType.DIM_FILE in data_type_dict:
             self._ingest_dim(data_type_dict[DataType.DIM_FILE])
 
+    def _get_non_registered_datasets(self, datasets: list[FileDataset]) -> list[FileDataset]:
+        """Return the list of datasets which are unknown to this butler among
+        the provided list of datasets.
+
+        Parameters
+        ----------
+        datasets : `list`
+            List of FileDataset objects.
+        """
+        non_registered: list[FileDataset] = []
+        for dataset in datasets:
+            for dataset_id in {ref.id for ref in dataset.refs}:
+                if self.butler.get_dataset(dataset_id) is None:
+                    non_registered.append(dataset)
+                else:
+                    LOGGER.info(f'file "{dataset.path}" is already ingested')
+
+        return non_registered
+
     def _ingest_dim(self, entries: list):
         dim_files = [e.get_data() for e in entries]
         for dim_file in dim_files:
@@ -99,11 +118,26 @@ class RseButler:
                 LOGGER.info(e)
 
     def _ingest_raw(self, entries: list):
-        try:
-            files = [e.file_to_ingest for e in entries]
-            self.task.run(files)
-        except Exception as e:
-            LOGGER.warning(e)
+        files = [e.file_to_ingest for e in entries]
+        self.task.run(files)
+
+    def _registerDatasetTypes(self, datasets: list[FileDataset]) -> None:
+        dst_set: set[DatasetType] = set()
+        for dataset in datasets:
+            dst_set.update({ref.datasetType for ref in dataset.refs})
+
+        for dst in dst_set:
+            LOGGER.info("registering dataset type: %s", dst.name)
+            self.butler.registry.registerDatasetType(dst)
+
+    def _registerRuns(self, datasets: list[FileDataset]) -> None:
+        run_set: set[str] = set()
+        for dataset in datasets:
+            run_set.update({ref.run for ref in dataset.refs})
+
+        for run in run_set:
+            LOGGER.info("registering %s", run)
+            self.butler.registry.registerRun(run)
 
     def _ingest(self, entries: list, transfer, retry_as_raw):
         """Ingest
@@ -122,8 +156,15 @@ class RseButler:
 
         datasets = [e.get_data() for e in entries]
 
+        dataset_count = len(datasets)
+        maximum_attempts = dataset_count + 2
+
+        remaining_attempts = maximum_attempts
+
         while not completed:
+            error = "Unknown"
             try:
+                remaining_attempts -= 1
                 self.butler.ingest(*datasets, transfer=transfer)
                 LOGGER.debug("ingest succeeded")
                 for dataset in datasets:
@@ -131,27 +172,71 @@ class RseButler:
                 completed = True
             except DatasetTypeError:
                 LOGGER.debug("DatasetTypeError")
-                dst_set = set()
-                for dataset in datasets:
-                    for dst in {ref.datasetType for ref in dataset.refs}:
-                        dst_set.add(dst)
-                for dst in dst_set:
-                    self.butler.registry.registerDatasetType(dst)
+                self._registerDatasetTypes(datasets)
+                error = "'need to register dataset type'"
             except MissingCollectionError:
                 LOGGER.debug("MissingCollectionError")
-                run_set = set()
-                for dataset in datasets:
-                    for run in {ref.run for ref in dataset.refs}:
-                        run_set.add(run)
-                for run in run_set:
-                    self.butler.registry.registerRun(run)
+                self._registerRuns(datasets)
+                error = "'missing collections'"
             except Exception as e:
                 if retry_as_raw:
                     LOGGER.debug(f"{e} - defaulting to raw ingest task")
                     self._ingest_raw(entries)
+                    completed = True
                 else:
                     LOGGER.warning(e)
-                completed = True
+
+            if not completed:
+                pending_datasets = self._get_non_registered_datasets(datasets)
+                if not pending_datasets:
+                    LOGGER.info("all pending datasets ingested")
+                    return
+                elif remaining_attempts > 0:
+                    datasets = pending_datasets
+                    LOGGER.info(
+                        "datasets left to ingest after %s error: %d out of %d",
+                        error,
+                        len(pending_datasets),
+                        dataset_count,
+                    )
+                else:
+                    LOGGER.info(
+                        "could not ingest %d/%d datasets but reached limit of %d ingest attempts",
+                        len(pending_datasets),
+                        dataset_count,
+                        maximum_attempts,
+                    )
+                    for dataset in pending_datasets:
+                        self._single_ingest(dataset, transfer, retry_as_raw)
+                    return
+        LOGGER.info("all %d datasets ingested", dataset_count)
+
+    def _single_ingest(self, dataset, transfer, retry_as_raw):
+        LOGGER.debug("called")
+        still_attempting = True
+        datasets = [dataset]
+        while still_attempting:
+            still_attempting = False
+            try:
+                self.butler.ingest(*datasets, transfer=transfer)
+                LOGGER.info("ingested: %s", dataset.path)
+            except DatasetTypeError:
+                LOGGER.debug("DatasetTypeError")
+                self._registerDatasetTypes(datasets)
+                still_attempting = True
+            except MissingCollectionError:
+                LOGGER.debug("MissingCollectionError")
+                self._registerRuns(datasets)
+                still_attempting = True
+            except Exception as e:
+                if retry_as_raw:
+                    LOGGER.debug(f"{e} - defaulting to raw ingest task")
+                    self._ingest_raw([dataset.path])  # XYZZY - fix this
+                else:
+                    LOGGER.warning(e)
+            if not still_attempting:
+                LOGGER.info("couldn't ingest %s", dataset.path)
+                return
 
     def on_success(self, datasets):
         """Callback used on successful ingest. Used to transmit

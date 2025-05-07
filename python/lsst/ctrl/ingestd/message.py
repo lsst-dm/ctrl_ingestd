@@ -64,3 +64,6 @@ class Message:
     def get_scope(self) -> str:
         """Getter to retrieve the 'scope' metadata as a string"""
         return self.payload.get(SCOPE, None)
+
+    def __str__(self) -> str:
+        return f"{self._message}"
