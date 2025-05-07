@@ -207,7 +207,11 @@ class RseButler:
                         maximum_attempts,
                     )
                     for dataset in pending_datasets:
-                        self._single_ingest(dataset, transfer, retry_as_raw)
+                        try:
+                            self._single_ingest(dataset, transfer, retry_as_raw)
+                        except RuntimeError as re:
+                            continue
+                    # XXX - probably raise an exception here
                     return
         LOGGER.info("all %d datasets ingested", dataset_count)
 
@@ -236,7 +240,7 @@ class RseButler:
                     LOGGER.warning(e)
             if not still_attempting:
                 LOGGER.info("couldn't ingest %s", dataset.path)
-                return
+                raise RuntimeError(f"couldn't ingest {dataset.path}")
 
     def on_success(self, datasets):
         """Callback used on successful ingest. Used to transmit

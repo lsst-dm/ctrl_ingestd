@@ -44,7 +44,7 @@ class FakeKafkaMessage:
 
 
 class RseButlerTestCase(lsst.utils.tests.TestCase):
-    def _testRseButler(self):
+    def testRseButler(self):
         """Test data product ingest"""
 
         json_name = "message.json"
@@ -77,7 +77,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         entry = event_factory.create_entry(self.msg)
         butler.ingest([entry])
 
-    def _testRseButler2(self):
+    def testRseButler2(self):
         """Test raw file ingest"""
 
         json_name = "raw_message.json"
@@ -107,7 +107,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         with self.assertRaises(RuntimeError):
             butler.ingest([entry])
 
-    def _testDim(self):
+    def testDim(self):
         """Test dimension file ingest"""
 
         json_name = "dim_message.json"
@@ -146,8 +146,8 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         with open(json_file) as f:
             fake_data = f.read()
 
-        #with open("/tmp/data") as f:
-        #    f.write("hi")
+        with open("/tmp/data.fits", 'w') as f:
+            f.write("hi")
 
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
