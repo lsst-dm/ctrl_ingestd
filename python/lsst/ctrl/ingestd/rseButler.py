@@ -201,7 +201,8 @@ class RseButler:
                     )
                 else:
                     LOGGER.info(
-                        "could not ingest %d/%d datasets but reached limit of %d ingest attempts",
+                        "could not ingest %d/%d datasets but reached limit of %d ingest attempts"
+                        "; attempting single ingest",
                         len(pending_datasets),
                         dataset_count,
                         maximum_attempts,
@@ -224,6 +225,7 @@ class RseButler:
             try:
                 self.butler.ingest(*datasets, transfer=transfer)
                 LOGGER.info("ingested: %s", dataset.path)
+                return
             except DatasetTypeError:
                 LOGGER.debug("DatasetTypeError")
                 self._registerDatasetTypes(datasets)

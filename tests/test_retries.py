@@ -45,11 +45,25 @@ class FakeKafkaMessage:
 
 
 class RetriesTestCase(lsst.utils.tests.TestCase):
-    def createData(self, json_name):
+    def createRseButler(self):
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        prep_file = os.path.join(testdir, "data", "prep.yaml")
+
+        self.repo_dir = tempfile.mkdtemp()
+        Butler.makeRepo(self.repo_dir)
+
+        rse_butler = RseButler(self.repo_dir)
+        instr = Instrument.from_string("lsst.obs.lsst.LsstComCam")
+
+        instr.register(rse_butler.butler.registry)
+        rse_butler.butler.import_(filename=prep_file)
+        return rse_butler
+
+    def createData(self, butler, json_name):
         """Test data product ingest"""
 
-        self.testdir = os.path.abspath(os.path.dirname(__file__))
-        json_file = os.path.join(self.testdir, "data", json_name)
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        json_file = os.path.join(testdir, "data", json_name)
 
         with open(json_file) as f:
             fake_data = f.read()
@@ -57,51 +71,70 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
 
-        prep_file = os.path.join(self.testdir, "data", "prep.yaml")
 
-        self.repo_dir = tempfile.mkdtemp()
-        Butler.makeRepo(self.repo_dir)
-
-        self.butler = RseButler(self.repo_dir)
-        instr = Instrument.from_string("lsst.obs.lsst.LsstComCam")
-
-        instr.register(self.butler.butler.registry)
-        self.butler.butler.import_(filename=prep_file)
-
-        config_file = os.path.join(self.testdir, "etc", "ingestd.yml")
+        config_file = os.path.join(testdir, "etc", "ingestd.yml")
         config = Config(config_file)
         mapper = Mapper(config.get_topic_dict())
 
-        event_factory = EntryFactory(self.butler, mapper)
+        event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
         return entry
 
 
     def testSingleRetry(self):
-        entry = self.createData("truncated.json")
+        rse_butler = self.createRseButler()
+        entry = self.createData(rse_butler, "truncated.json")
         with open("/tmp/data.fits", "w") as f:
             f.write("hi")
 
         dataset = entry.get_data()
         with self.assertRaises(RuntimeError):
-            self.butler._single_ingest(dataset, transfer="auto", retry_as_raw=False)
+            rse_butler._single_ingest(dataset, transfer="auto", retry_as_raw=False)
 
     def testRetriesBad(self):
-        entry = self.createData("truncated2.json")
+        rse_butler = self.createRseButler()
+        entry = self.createData(rse_butler, "truncated2.json")
         with open("/tmp/bad_data.fits", "w") as f:
             f.write("hi")
 
-        self.butler.ingest([entry])
+        rse_butler.ingest([entry])
 
     def testRetries(self):
-        entry = self.createData("message330.json")
+        rse_butler = self.createRseButler()
+        entry = self.createData(rse_butler, "message330.json")
 
         tmpdir = "/tmp"
         data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
-        fits_file = os.path.join(self.testdir, "data", data_file)
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        fits_file = os.path.join(testdir, "data", data_file)
         dest_file = os.path.join(tmpdir, data_file)
         copyfile(fits_file, dest_file)
         
-        self.butler.ingest([entry])
+        rse_butler.ingest([entry])
+
+    def createMultiTestEnv(self):
+        rse_butler = self.createRseButler()
+        entry = self.createData(rse_butler, "message330.json")
+
+        tmpdir = "/tmp"
+        data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        fits_file = os.path.join(testdir, "data", data_file)
+        dest_file = os.path.join(tmpdir, data_file)
+        copyfile(fits_file, dest_file)
+        
+        entry2 = self.createData(rse_butler, "truncated2.json")
+        with open("/tmp/bad_data.fits", "w") as f:
+            f.write("hi")
+        return rse_butler, entry, entry2
+
+    def testMultiRetries(self):
+        rse_butler, entry, entry2 = self.createMultiTestEnv()
+        rse_butler.ingest([entry2, entry])
+
+    def testMultiRetries2(self):
+        rse_butler, entry, entry2 = self.createMultiTestEnv()
+        rse_butler.ingest([entry, entry2])
+
 
     # write clean up
