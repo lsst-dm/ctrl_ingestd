@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os.path
+from shutil import copyfile
 import tempfile
 
 import lsst.utils.tests
@@ -44,41 +45,63 @@ class FakeKafkaMessage:
 
 
 class RetriesTestCase(lsst.utils.tests.TestCase):
-    def testSingleRetry(self):
+    def createData(self, json_name):
         """Test data product ingest"""
 
-        json_name = "truncated.json"
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        json_file = os.path.join(testdir, "data", json_name)
+        self.testdir = os.path.abspath(os.path.dirname(__file__))
+        json_file = os.path.join(self.testdir, "data", json_name)
 
         with open(json_file) as f:
             fake_data = f.read()
 
-        with open("/tmp/data.fits", 'w') as f:
-            f.write("hi")
-
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
 
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        prep_file = os.path.join(testdir, "data", "prep.yaml")
+        prep_file = os.path.join(self.testdir, "data", "prep.yaml")
 
         self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
 
-        butler = RseButler(self.repo_dir)
-        instr = Instrument.from_string("lsst.obs.subaru.HyperSuprimeCam")
+        self.butler = RseButler(self.repo_dir)
+        instr = Instrument.from_string("lsst.obs.lsst.LsstComCam")
 
-        instr.register(butler.butler.registry)
-        butler.butler.import_(filename=prep_file)
+        instr.register(self.butler.butler.registry)
+        self.butler.butler.import_(filename=prep_file)
 
-        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config_file = os.path.join(self.testdir, "etc", "ingestd.yml")
         config = Config(config_file)
         mapper = Mapper(config.get_topic_dict())
 
-        event_factory = EntryFactory(butler, mapper)
+        event_factory = EntryFactory(self.butler, mapper)
         entry = event_factory.create_entry(self.msg)
-        print(entry)
+        return entry
+
+
+    def testSingleRetry(self):
+        entry = self.createData("truncated.json")
+        with open("/tmp/data.fits", "w") as f:
+            f.write("hi")
+
         dataset = entry.get_data()
-        with self.assertRaises(Exception):
-            butler._single_ingest(dataset, transfer="auto", retry_as_raw=False)
+        with self.assertRaises(RuntimeError):
+            self.butler._single_ingest(dataset, transfer="auto", retry_as_raw=False)
+
+    def testRetriesBad(self):
+        entry = self.createData("truncated2.json")
+        with open("/tmp/bad_data.fits", "w") as f:
+            f.write("hi")
+
+        self.butler.ingest([entry])
+
+    def testRetries(self):
+        entry = self.createData("message330.json")
+
+        tmpdir = "/tmp"
+        data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
+        fits_file = os.path.join(self.testdir, "data", data_file)
+        dest_file = os.path.join(tmpdir, data_file)
+        copyfile(fits_file, dest_file)
+        
+        self.butler.ingest([entry])
+
+    # write clean up

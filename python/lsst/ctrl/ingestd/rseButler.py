@@ -209,7 +209,7 @@ class RseButler:
                     for dataset in pending_datasets:
                         try:
                             self._single_ingest(dataset, transfer, retry_as_raw)
-                        except RuntimeError as re:
+                        except RuntimeError:
                             continue
                     # XXX - probably raise an exception here
                     return
