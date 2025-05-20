@@ -98,7 +98,6 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
             f.write("hi")
         return rse_butler, good_entry, bad_entry
 
-
     def testSingle(self):
         """Test the single ingest method"""
 
@@ -138,7 +137,7 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         rse_butler.ingest([entry])
 
     def testMultiRetries(self):
-        """Test ingest bad file, then good file """
+        """Test ingest bad file, then good file"""
 
         rse_butler, good_entry, bad_entry = self.createMultiTestEnv()
         rse_butler.ingest([bad_entry, good_entry])
