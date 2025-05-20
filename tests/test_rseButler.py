@@ -146,7 +146,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         with open(json_file) as f:
             fake_data = f.read()
 
-        with open("/tmp/data.fits", 'w') as f:
+        with open("/tmp/data.fits", "w") as f:
             f.write("hi")
 
         fake_msg = FakeKafkaMessage(fake_data)
@@ -170,7 +170,6 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
-        print(entry)
         butler.ingest([entry])
 
 

@@ -140,18 +140,17 @@ class RseButler:
             self.butler.registry.registerRun(run)
 
     def _ingest(self, entries: list, transfer, retry_as_raw):
-        """Ingest
+        """Ingest a list of entries
 
         Parameters
         ----------
-        entries : `list`
+        entries : `list` [`lsst.ctrl.ingestd.entries.Entry`]
             List of Entry
-        transfer: `str`
+        transfer : `str`
             Butler transfer type
-        retry_as_raw: `bool`
+        retry_as_raw : `bool`
             on ingest failure, retry using RawIngestTask
         """
-        LOGGER.debug(f"{entries=}")
         completed = False
 
         datasets = [e.get_data() for e in entries]
@@ -168,7 +167,7 @@ class RseButler:
                 self.butler.ingest(*datasets, transfer=transfer)
                 LOGGER.debug("ingest succeeded")
                 for dataset in datasets:
-                    LOGGER.info(f"ingested: {dataset.path}")
+                    LOGGER.info("ingested: %s", dataset.path)
                 completed = True
             except DatasetTypeError:
                 LOGGER.debug("DatasetTypeError")
@@ -180,7 +179,7 @@ class RseButler:
                 error = "'missing collections'"
             except Exception as e:
                 if retry_as_raw:
-                    LOGGER.debug(f"{e} - defaulting to raw ingest task")
+                    LOGGER.info("%s - defaulting to raw ingest task", str(e))
                     self._ingest_raw(entries)
                     completed = True
                 else:
@@ -193,7 +192,7 @@ class RseButler:
                     return
                 elif remaining_attempts > 0:
                     datasets = pending_datasets
-                    LOGGER.info(
+                    LOGGER.debug(
                         "datasets left to ingest after %s error: %d out of %d",
                         error,
                         len(pending_datasets),
@@ -210,16 +209,29 @@ class RseButler:
                     for dataset in pending_datasets:
                         try:
                             self._single_ingest(dataset, transfer, retry_as_raw)
-                        except RuntimeError:
+                        except RuntimeError as re:
+                            LOGGER.info(re)
                             continue
-                    # XXX - probably raise an exception here
                     return
         LOGGER.info("all %d datasets ingested", dataset_count)
 
-    def _single_ingest(self, dataset, transfer, retry_as_raw):
+    def _single_ingest(self, dataset: FileDataset, transfer: str, retry_as_raw: bool):
+        """Use as a backup to do single ingest
+
+        Parameters
+        ----------
+        dataset : `lsst.daf.butler.FileDataset`
+            FileDataset to ingest
+        transfer : `str`
+            Butler transfer type
+        retry_as_raw : `bool`
+            on ingest failure, retry using RawIngestTask
+        """
         LOGGER.debug("called")
+
         still_attempting = True
         datasets = [dataset]
+
         while still_attempting:
             still_attempting = False
             try:
@@ -241,7 +253,6 @@ class RseButler:
                 else:
                     LOGGER.warning(e)
             if not still_attempting:
-                LOGGER.info("couldn't ingest %s", dataset.path)
                 raise RuntimeError(f"couldn't ingest {dataset.path}")
 
     def on_success(self, datasets):
