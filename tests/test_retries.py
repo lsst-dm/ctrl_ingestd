@@ -100,8 +100,8 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
 
 
     def testSingle(self):
-        """Test the single ingest method
-        """
+        """Test the single ingest method"""
+
         rse_butler = self.createRseButler()
         entry = self.createData(rse_butler, "truncated.json")
         with open("/tmp/data.fits", "w") as f:
@@ -113,8 +113,8 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(str(context.exception), "couldn't ingest file:///tmp/data.fits")
 
     def testBadFile(self):
-        """Test a bad file ingest
-        """
+        """Test a bad file ingest"""
+
         rse_butler = self.createRseButler()
         entry = self.createData(rse_butler, "truncated2.json")
         with open("/tmp/bad_data.fits", "w") as f:
@@ -123,8 +123,8 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         rse_butler.ingest([entry])
 
     def testRetries(self):
-        """Test ingest interface
-        """
+        """Test ingest interface"""
+
         rse_butler = self.createRseButler()
         entry = self.createData(rse_butler, "message330.json")
 
@@ -138,22 +138,21 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         rse_butler.ingest([entry])
 
     def testMultiRetries(self):
-        """Test ingest bad file, then good file
-        """
+        """Test ingest bad file, then good file """
+
         rse_butler, good_entry, bad_entry = self.createMultiTestEnv()
         rse_butler.ingest([bad_entry, good_entry])
 
     def testMultiRetries2(self):
-        """Test ingest good file file, then bad file
-        """
+        """Test ingest good file file, then bad file"""
+
         rse_butler, good_entry, bad_entry = self.createMultiTestEnv()
         rse_butler.ingest([good_entry, bad_entry])
 
     def testMultiRetries3(self):
-        """Test ingest good file, then re-ingest of good file
-        """
+        """Test ingest good file, then re-ingest of good file"""
+
         rse_butler, good_entry, bad_entry = self.createMultiTestEnv()
         rse_butler._single_ingest(good_entry.get_data(), transfer="auto", retry_as_raw=False)
         with self.assertRaises(RuntimeError):
             rse_butler._single_ingest(good_entry.get_data(), transfer="auto", retry_as_raw=False)
-    # write clean up
