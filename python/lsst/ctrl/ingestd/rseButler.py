@@ -81,7 +81,7 @@ class RseButler:
 
     def _get_non_registered_datasets(self, datasets: list[FileDataset]) -> list[FileDataset]:
         """Return the list of datasets which are unknown to this butler among
-        the provided list of datasets.
+        the provided list of datasets
 
         Parameters
         ----------
