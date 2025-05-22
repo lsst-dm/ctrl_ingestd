@@ -23,7 +23,6 @@ import logging
 
 from lsst.ctrl.ingestd.entries.dataType import DataType
 from lsst.daf.butler import Butler, DatasetType, FileDataset
-from lsst.daf.butler.registry import DatasetTypeError, MissingCollectionError
 from lsst.obs.base.ingest import RawIngestConfig, RawIngestTask
 
 LOGGER = logging.getLogger(__name__)
@@ -169,14 +168,6 @@ class RseButler:
                 for dataset in datasets:
                     LOGGER.info("ingested: %s", dataset.path)
                 completed = True
-            except DatasetTypeError:
-                LOGGER.debug("DatasetTypeError")
-                self._registerDatasetTypes(datasets)
-                error = "'need to register dataset type'"
-            except MissingCollectionError:
-                LOGGER.debug("MissingCollectionError")
-                self._registerRuns(datasets)
-                error = "'missing collections'"
             except Exception as e:
                 if retry_as_raw:
                     LOGGER.info("%s - defaulting to raw ingest task", str(e))
@@ -238,14 +229,6 @@ class RseButler:
                 self.butler.ingest(*datasets, transfer=transfer)
                 LOGGER.info("ingested: %s", dataset.path)
                 return
-            except DatasetTypeError:
-                LOGGER.debug("DatasetTypeError")
-                self._registerDatasetTypes(datasets)
-                still_attempting = True
-            except MissingCollectionError:
-                LOGGER.debug("MissingCollectionError")
-                self._registerRuns(datasets)
-                still_attempting = True
             except Exception as e:
                 if retry_as_raw:
                     LOGGER.debug(f"{e} - defaulting to raw ingest task")
