@@ -22,7 +22,7 @@
 import logging
 
 from lsst.ctrl.ingestd.entries.dataType import DataType
-from lsst.daf.butler import Butler, DatasetType, FileDataset
+from lsst.daf.butler import Butler, FileDataset
 from lsst.obs.base.ingest import RawIngestConfig, RawIngestTask
 
 LOGGER = logging.getLogger(__name__)
@@ -119,24 +119,6 @@ class RseButler:
     def _ingest_raw(self, entries: list):
         files = [e.file_to_ingest for e in entries]
         self.task.run(files)
-
-    def _registerDatasetTypes(self, datasets: list[FileDataset]) -> None:
-        dst_set: set[DatasetType] = set()
-        for dataset in datasets:
-            dst_set.update({ref.datasetType for ref in dataset.refs})
-
-        for dst in dst_set:
-            LOGGER.info("registering dataset type: %s", dst.name)
-            self.butler.registry.registerDatasetType(dst)
-
-    def _registerRuns(self, datasets: list[FileDataset]) -> None:
-        run_set: set[str] = set()
-        for dataset in datasets:
-            run_set.update({ref.run for ref in dataset.refs})
-
-        for run in run_set:
-            LOGGER.info("registering %s", run)
-            self.butler.registry.registerRun(run)
 
     def _ingest(self, entries: list, transfer, retry_as_raw):
         """Ingest a list of entries
