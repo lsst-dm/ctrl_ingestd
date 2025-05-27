@@ -22,3 +22,6 @@ topics:
     XRD4-test:
         rucio_prefix: root://xrd4:1097//rucio
         fs_prefix: file:///rucio/disks/xrd4/rucio
+    XRD5-test:
+        rucio_prefix: root://xrd5:1098//rucio
+        fs_prefix: file:///tmp
