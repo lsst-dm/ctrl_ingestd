@@ -93,7 +93,7 @@ class RseButler:
                 if self.butler.get_dataset(dataset_id) is None:
                     non_registered.append(dataset)
                 else:
-                    LOGGER.info(f'file "{dataset.path}" is already ingested')
+                    LOGGER.debug('file %s is already ingested', dataset.path)
 
         return non_registered
 
