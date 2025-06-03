@@ -38,24 +38,28 @@ class Config:
         with open(filename) as file:
             config = yaml.load(file, Loader=yaml.FullLoader)
 
-            if "topics" not in config:
+            self._topic_dict = config.get("topics")
+            if not self._topic_dict:
                 raise Exception("Can't find 'topics'")
-            self._topic_dict = config["topics"]
-            if "brokers" not in config:
+
+            brokers = config.get("brokers", None)
+            if brokers:
+                self._brokers = ",".join(brokers)
+            else:
                 raise Exception("Can't find 'brokers'")
-            self._brokers = config["brokers"]
-            if "group_id" not in config:
+
+            self._group_id = config.get("group_id")
+            if not self._group_id:
                 raise Exception("Can't find 'group_id'")
-            self._group_id = config["group_id"]
+
             self._num_messages = config.get("num_messages", 1)
             self._timeout = config.get("timeout", 1)
 
-            self._butler_config = config["butler"]
-            if "repo" not in self._butler_config:
-                raise Exception("Can't find 'repo' in 'butler' section")
-            self._repo = self._butler_config.get("repo")
+            self._butler_repo = config.get("butler_repo", None)
+            if not self._butler_repo:
+                raise Exception("Can't find 'butler_repo' in configuration file")
 
-            LOGGER.info("butler location: %s", self._repo)
+            LOGGER.info("butler location: %s", self._butler_repo)
             LOGGER.info("brokers: %s", self._brokers)
             LOGGER.info("rse topics: %s", self._topic_dict.keys())
             LOGGER.info("will batch as many as %d at a time", self._num_messages)
@@ -84,10 +88,6 @@ class Config:
         """Getter method for Kafka group_id"""
         return self._group_id
 
-    def get_butler_config(self) -> dict:
-        """Getter method for entire configuration dictionary"""
-        return self._butler_config
-
-    def get_repo(self) -> str:
-        """Getter method for Butler repo location"""
-        return self._repo
+    def get_butler_repo(self) -> str:
+        """Getter method for the butler repo"""
+        return self._butler_repo

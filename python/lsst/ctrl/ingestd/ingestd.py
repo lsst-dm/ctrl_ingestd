@@ -67,7 +67,7 @@ class IngestD:
         self.consumer = Consumer(conf)
         self.consumer.subscribe(topics)
 
-        self.rse_butler = RseButler(config.get_repo())
+        self.rse_butler = RseButler(config.get_butler_repo())
         self.entry_factory = EntryFactory(self.rse_butler, self.mapper)
 
     def run(self):
