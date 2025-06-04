@@ -42,7 +42,7 @@ topics:
 
 The `topics` section is set to the Kafka topics from which this ingestd daemon will ingest files.  The topic
 name is a combination of the RSE name and the scope for that RSE.  Each has a prefix mapping between logical file names and physical file names.
-Note that by default, if "fs_prefix" does not exist in the YAML file, the default value will be set to empty string: ""
+Note that by default, if `fs_prefix` does not exist in the YAML file, the default value will be set to empty string: ""
 
 The ingestd daemon listens to the topics "XRD1-test" and "XRD2-test" for messages coming from the rucio-daemons-hermesk daemon.
 
