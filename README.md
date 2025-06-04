@@ -11,14 +11,14 @@ ingestd daemon will listen on topics XRD1 and XRD2.
 
 ## Example YAML file:
 ```
-brokers: kafka:9092
+brokers: 
+    - kafka:9092
 
 group_id: "my_test_group"
 
 num_messages: 50
 
-butler:
-    repo: /tmp/repo
+butler_repo: /tmp/repo
 
 topics:
     XRD1-test:
@@ -29,17 +29,30 @@ topics:
         fs_prefix: file:///rucio/disks/xrd2/rucio
 ```
 
-## Explanation of configuration file:
+## Explanation of YAML configuration file:
 
-"brokers" is set to the host Kafka "kafka", listening to port 9092.
 
-"group_id" is the Kafka group id, which can be set to what you wish. It should be unique if you want a single client to handle all the messages, but should be set to the same value if multiple clients are handling requests in parallel for the same repos.  In this case, the values has been set to "my_test_group".
+`brokers` is set to the host Kafka "kafka", listening to port 9092.
 
-"num_messages" is the maximum message batch size of messages that are processed at one time.  In this case, it has been set to 50.
+`group_id` is the Kafka group id, which can be set to what you wish. It should be unique if you want a single client to handle all the messages, but should be set to the same value if multiple clients are handling requests in parallel for the same repos.  In this case, the values has been set to "my_test_group".
 
-"butler" section is set to the butler configuration.  It contains the location of the Butler repository.
+`num_messages` is the maximum message batch size of messages that are processed at one time.  In this case, it has been set to 50.
 
-The "topics" section is set to the Kafka topics from which this ingestd daemon will ingest files.  The topic
+`butler_repo` contains the location of the Butler repository.
+
+The `topics` section is set to the Kafka topics from which this ingestd daemon will ingest files.  The topic
 name is a combination of the RSE name and the scope for that RSE.  Each has a prefix mapping between logical file names and physical file names.
+Note that by default, if "fs_prefix" does not exist in the YAML file, the default value will be set to empty string: ""
 
 The ingestd daemon listens to the topics "XRD1-test" and "XRD2-test" for messages coming from the rucio-daemons-hermesk daemon.
+
+Changes since version 1.10:
+
+`brokers` section is now a list
+
+The `butler` section and `repo` subsection has been replaced by `butler_repo`.
+
+`fs_prefix` is set to empty string "" by default, if it does not exist in the YAML file.
+
+rucio_prefix and fs_prefix will now automatically append a "/" to the end of the string name if it does not exist.
+The only exception to this is if `fs_prefix` is set to empty string: ""
