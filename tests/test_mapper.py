@@ -43,6 +43,7 @@ class MapperTestCase(lsst.utils.tests.TestCase):
                 "fs_prefix": "file:///rucio3/",
             },
         }
+
         mapper = Mapper(topic_dict)
         s = mapper.rewrite("XRD1-test1", "root://xrd1:1094//rucio/test/28/27/test")
         self.assertEqual(s, "file:///rucio0/test/28/27/test")
@@ -55,6 +56,7 @@ class MapperTestCase(lsst.utils.tests.TestCase):
 
         s = mapper.rewrite("XRD1-test4", "root://xrd4:1097//rucio/test/48/47/test")
         self.assertEqual(s, "file:///rucio3/test/48/47/test")
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
