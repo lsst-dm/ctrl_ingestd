@@ -7,7 +7,7 @@ the enviroment variable CTRL_INGESTD_CONFIG.
 
 The daemon listens on Kafka RSE topics that are named in the
 CTRL_INGESTD_CONFIG YAML file.  For example, in the example YAML file below, the
-ingestd daemon will listen on topics XRD1 and XRD2.
+ingestd daemon will listen on topics XRD1-test and XRD2-test.
 
 ## Example YAML file:
 ```
@@ -16,7 +16,8 @@ brokers:
 
 group_id: "my_test_group"
 
-num_messages: 50
+num_messages: 100
+timeout: 5
 
 butler_repo: /tmp/repo
 
@@ -32,19 +33,33 @@ topics:
 ## Explanation of YAML configuration file:
 
 
+
+REQUIRED: `brokers`
 `brokers` is set to the host Kafka "kafka", listening to port 9092.
 
+OPTIONAL: `client_id` (defaults to the hostname of the ingestd daemon)
+`client_id` is the Kafka client id, which can be set to what you wish.  This should be unique if running multiple ingestd daemons on the same host.
+
+REQUIRED: `group_id`
 `group_id` is the Kafka group id, which can be set to what you wish. It should be unique if you want a single client to handle all the messages, but should be set to the same value if multiple clients are handling requests in parallel for the same repos.  In this case, the values has been set to "my_test_group".
 
-`num_messages` is the maximum message batch size of messages that are processed at one time.  In this case, it has been set to 50.
+OPTIONAL: `num_messages` (defaults to 50)
+`num_messages` is the maximum message batch size of messages that are processed at one time.  In this case, it has been set to 100.
 
-`butler_repo` contains the location of the Butler repository.
+OPTIONAL: `timeout` (defaults to 1)
+`timeout` is the amount of time in seconds which the Kafka consumer waits for new messages to arrive.  In this case, it has been set to 5 seconds.
 
+REQUIRED: `butler_repo`
+`butler_repo` is an indicator of the butler repository.  This can be contains Butler repository location, the path to it's `butler.yaml`, or an alias present in the file pointed to by $DAF_BUTLER_REPOSITORY_INDEX.
+
+REQUIRED: `topics`
 The `topics` section is set to the Kafka topics from which this ingestd daemon will ingest files.  The topic
-name is a combination of the RSE name and the scope for that RSE.  Each has a prefix mapping between logical file names and physical file names.
+name is a combination of the RSE name and the scope for that RSE.  Each topic has a mapping between the prefix of logical file names (`rucio_prefix`) and physical file names (`fs_prefix`).
+
+In this example, The ingestd daemon listens to the topics "XRD1-test" and "XRD2-test" for messages coming from the rucio-daemons-hermesk daemon.
+
 Note that by default, if `fs_prefix` does not exist in the YAML file, the default value will be set to empty string: ""
 
-The ingestd daemon listens to the topics "XRD1-test" and "XRD2-test" for messages coming from the rucio-daemons-hermesk daemon.
 
 Changes since version 1.10:
 

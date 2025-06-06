@@ -21,7 +21,6 @@
 
 import logging
 import os
-import socket
 
 from confluent_kafka import Consumer
 
@@ -47,6 +46,7 @@ class IngestD:
 
         config = Config(self.config_file)
         topic_dict = config.get_topic_dict()
+        client_id = config.get_client_id()
         group_id = config.get_group_id()
         brokers = config.get_brokers()
         topics = config.get_topics()
@@ -58,7 +58,7 @@ class IngestD:
 
         conf = {
             "bootstrap.servers": brokers,
-            "client.id": socket.gethostname,
+            "client.id": client_id,
             "group.id": group_id,
             "auto.offset.reset": "earliest",
             "enable.auto.commit": True,

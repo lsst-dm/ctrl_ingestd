@@ -50,19 +50,8 @@ class Mapper:
         if not mapping_dict:
             raise Exception(f"couldn't find {topic} in topics list")
 
-        rucio_prefix = mapping_dict.get("rucio_prefix", None)
-        if not rucio_prefix:
-            raise Exception("rucio_prefix not specified in configuration file")
-
-        if not rucio_prefix.endswith("/"):
-            rucio_prefix = rucio_prefix + "/"
-
-        fs_prefix = mapping_dict.get("fs_prefix", None)
-        if fs_prefix:
-            if not fs_prefix.endswith("/"):
-                fs_prefix = fs_prefix + "/"
-        else:
-            fs_prefix = ""
+        rucio_prefix = mapping_dict.get("rucio_prefix")
+        fs_prefix = mapping_dict.get("fs_prefix")
 
         ret = url.replace(rucio_prefix, fs_prefix)
         return ret

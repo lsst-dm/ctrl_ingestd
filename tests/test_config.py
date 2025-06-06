@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os.path
+import socket
 
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
@@ -72,6 +73,7 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
         self.assertTrue("XRD4-test" in topics)
 
         self.assertEqual(self.config.get_brokers(), "kafka:9092")
+        self.assertEqual(self.config.get_client_id(), socket.gethostname())
         self.assertEqual(self.config.get_group_id(), "my_test_group")
 
         butler_repo = self.config.get_butler_repo()
