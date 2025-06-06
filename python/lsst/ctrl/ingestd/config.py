@@ -59,7 +59,6 @@ class Config:
             if not self._group_id:
                 raise Exception("Can't find 'group_id'")
 
-
             self._num_messages = config.get("num_messages", 50)
             self._timeout = config.get("timeout", 1)
 
@@ -81,7 +80,7 @@ class Config:
             mapping_dict = self._topic_dict.get(topic)
             rucio_prefix = mapping_dict.get("rucio_prefix", None)
             if not rucio_prefix:
-                raise Exception(f"rucio_prefix not specified in configuration file for topic {topic}")
+                raise Exception(f"rucio_prefix not specified in config file for {topic}")
 
             if not rucio_prefix.endswith("/"):
                 rucio_prefix = rucio_prefix + "/"
