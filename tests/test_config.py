@@ -87,7 +87,6 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
         self.assertTrue("XRD3-test" in topics)
         self.assertTrue("XRD4-test" in topics)
 
-
         self.assertEqual(self.config.get_brokers(), "kafka:9092")
         self.assertEqual(self.config.get_client_id(), socket.gethostname())
         self.assertEqual(self.config.get_group_id(), "my_test_group")
