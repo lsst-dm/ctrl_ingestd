@@ -46,8 +46,12 @@ class Mapper:
         url : `str`
             Rucio URL to translate
         """
-        mapping_dict = self._topic_dict[topic]
-        rucio_prefix = mapping_dict["rucio_prefix"]
-        fs_prefix = mapping_dict["fs_prefix"]
+        mapping_dict = self._topic_dict.get(topic, None)
+        if not mapping_dict:
+            raise Exception(f"couldn't find {topic} in topics list")
+
+        rucio_prefix = mapping_dict.get("rucio_prefix")
+        fs_prefix = mapping_dict.get("fs_prefix")
+
         ret = url.replace(rucio_prefix, fs_prefix)
         return ret

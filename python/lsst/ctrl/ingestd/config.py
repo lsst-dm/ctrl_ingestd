@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+import socket
 
 import yaml
 
@@ -38,27 +39,60 @@ class Config:
         with open(filename) as file:
             config = yaml.load(file, Loader=yaml.FullLoader)
 
-            if "topics" not in config:
+            self._topic_dict = config.get("topics")
+            if not self._topic_dict:
                 raise Exception("Can't find 'topics'")
-            self._topic_dict = config["topics"]
-            if "brokers" not in config:
+
+            self._adjust_topic_prefixes()
+
+            brokers = config.get("brokers", None)
+            if brokers:
+                self._brokers = ",".join(brokers)
+            else:
                 raise Exception("Can't find 'brokers'")
-            self._brokers = config["brokers"]
-            if "group_id" not in config:
+
+            self._client_id = config.get("client_id", None)
+            if not self._client_id:
+                self._client_id = socket.gethostname()
+
+            self._group_id = config.get("group_id", None)
+            if not self._group_id:
                 raise Exception("Can't find 'group_id'")
-            self._group_id = config["group_id"]
-            self._num_messages = config.get("num_messages", 1)
+
+            self._num_messages = config.get("num_messages", 50)
             self._timeout = config.get("timeout", 1)
 
-            self._butler_config = config["butler"]
-            if "repo" not in self._butler_config:
-                raise Exception("Can't find 'repo' in 'butler' section")
-            self._repo = self._butler_config.get("repo")
+            self._butler_repo = config.get("butler_repo", None)
+            if not self._butler_repo:
+                raise Exception("Can't find 'butler_repo' in configuration file")
 
-            LOGGER.info("butler location: %s", self._repo)
+            LOGGER.info("client.id: %s", self._client_id)
+            LOGGER.info("group.id: %s", self._group_id)
+            LOGGER.info("butler location: %s", self._butler_repo)
             LOGGER.info("brokers: %s", self._brokers)
             LOGGER.info("rse topics: %s", self._topic_dict.keys())
             LOGGER.info("will batch as many as %d at a time", self._num_messages)
+
+    def _adjust_topic_prefixes(self) -> None:
+        """fix values for rse_prefix and fs_prefix, by adding '/', if needed"""
+        topics = self.get_topics()
+        for topic in topics:
+            mapping_dict = self._topic_dict.get(topic)
+            rucio_prefix = mapping_dict.get("rucio_prefix", None)
+            if not rucio_prefix:
+                raise Exception(f"rucio_prefix not specified in config file for {topic}")
+
+            if not rucio_prefix.endswith("/"):
+                rucio_prefix = rucio_prefix + "/"
+                self._topic_dict[topic]["rucio_prefix"] = rucio_prefix
+
+            fs_prefix = mapping_dict.get("fs_prefix", None)
+            if fs_prefix:
+                if not fs_prefix.endswith("/"):
+                    fs_prefix = fs_prefix + "/"
+            else:
+                fs_prefix = ""
+            self._topic_dict[topic]["fs_prefix"] = fs_prefix
 
     def get_num_messages(self) -> int:
         """Getter method for number of Kafka messages to process at a time"""
@@ -80,14 +114,14 @@ class Config:
         """Getter method for Kafka brokers"""
         return self._brokers
 
+    def get_client_id(self) -> str:
+        """Getter method for Kafka client.id"""
+        return self._client_id
+
     def get_group_id(self) -> str:
-        """Getter method for Kafka group_id"""
+        """Getter method for Kafka group.id"""
         return self._group_id
 
-    def get_butler_config(self) -> dict:
-        """Getter method for entire configuration dictionary"""
-        return self._butler_config
-
-    def get_repo(self) -> str:
-        """Getter method for Butler repo location"""
-        return self._repo
+    def get_butler_repo(self) -> str:
+        """Getter method for the butler repo"""
+        return self._butler_repo

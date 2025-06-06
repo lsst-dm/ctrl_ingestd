@@ -34,12 +34,28 @@ class MapperTestCase(lsst.utils.tests.TestCase):
                 "rucio_prefix": "root://xrd2:1095//rucio",
                 "fs_prefix": "file:///rucio1",
             },
+            "XRD1-test3": {
+                "rucio_prefix": "root://xrd3:1096//rucio/",
+                "fs_prefix": "file:///rucio2/",
+            },
+            "XRD1-test4": {
+                "rucio_prefix": "root://xrd4:1097//rucio/",
+                "fs_prefix": "file:///rucio3/",
+            },
         }
+
         mapper = Mapper(topic_dict)
         s = mapper.rewrite("XRD1-test1", "root://xrd1:1094//rucio/test/28/27/test")
         self.assertEqual(s, "file:///rucio0/test/28/27/test")
+
         s = mapper.rewrite("XRD1-test2", "root://xrd2:1095//rucio/test/48/47/test")
         self.assertEqual(s, "file:///rucio1/test/48/47/test")
+
+        s = mapper.rewrite("XRD1-test3", "root://xrd3:1096//rucio/test/48/47/test")
+        self.assertEqual(s, "file:///rucio2/test/48/47/test")
+
+        s = mapper.rewrite("XRD1-test4", "root://xrd4:1097//rucio/test/48/47/test")
+        self.assertEqual(s, "file:///rucio3/test/48/47/test")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

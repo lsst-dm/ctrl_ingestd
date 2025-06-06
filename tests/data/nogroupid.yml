@@ -1,9 +1,9 @@
-brokers: kafka:9092
+brokers: 
+    - kafka:9092
 
 num_messages: 50
 
-butler:
-    repo: /tmp/repo
+butler_repo: /tmp/repo
 
 topics:
     XRD1-test:
