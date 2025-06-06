@@ -74,7 +74,7 @@ class Config:
             LOGGER.info("will batch as many as %d at a time", self._num_messages)
 
     def _adjust_topic_prefixes(self) -> None:
-        """adjust default values for rse_prefix and fs_prefix, by adding '/', if needed"""
+        """fix values for rse_prefix and fs_prefix, by adding '/', if needed"""
         topics = self.get_topics()
         for topic in topics:
             mapping_dict = self._topic_dict.get(topic)
