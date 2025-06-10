@@ -19,109 +19,32 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import logging
 import socket
 
-import yaml
-
-LOGGER = logging.getLogger(__name__)
+from pydantic import BaseModel, Field, computed_field, model_validator
 
 
-class Config:
-    def __init__(self, filename: str):
-        """ingestd configuration
+class _TopicModel(BaseModel):
+     rucio_prefix: str
+     fs_prefix: str = ""
 
-        Parameters
-        ----------
-        filename : `str`
-            Name of the configuration file
-        """
-        with open(filename) as file:
-            config = yaml.load(file, Loader=yaml.FullLoader)
+     @model_validator(mode="after")
+     def process_strings(self) -> "_TopicModel":
+         if not self.rucio_prefix.endswith("/"):
+             self.rucio_prefix += "/"
+         if self.fs_prefix and not self.fs_prefix.endswith("/"):
+             self.fs_prefix += "/"
+         return self
 
-            self._topic_dict = config.get("topics")
-            if not self._topic_dict:
-                raise Exception("Can't find 'topics'")
+class Config(BaseModel):
+    brokers: list[str]
+    client_id: str = Field(default_factory=lambda: socket.gethostname())
+    group_id: str
+    num_messages: int = 50
+    timeout: int = 1
+    butler_repo: str
+    topics: dict[str, _TopicModel] = Field(min_length=1)
 
-            self._adjust_topic_prefixes()
-
-            brokers = config.get("brokers", None)
-            if brokers:
-                self._brokers = ",".join(brokers)
-            else:
-                raise Exception("Can't find 'brokers'")
-
-            self._client_id = config.get("client_id", None)
-            if not self._client_id:
-                self._client_id = socket.gethostname()
-
-            self._group_id = config.get("group_id", None)
-            if not self._group_id:
-                raise Exception("Can't find 'group_id'")
-
-            self._num_messages = config.get("num_messages", 50)
-            self._timeout = config.get("timeout", 1)
-
-            self._butler_repo = config.get("butler_repo", None)
-            if not self._butler_repo:
-                raise Exception("Can't find 'butler_repo' in configuration file")
-
-            LOGGER.info("client.id: %s", self._client_id)
-            LOGGER.info("group.id: %s", self._group_id)
-            LOGGER.info("butler location: %s", self._butler_repo)
-            LOGGER.info("brokers: %s", self._brokers)
-            LOGGER.info("rse topics: %s", self._topic_dict.keys())
-            LOGGER.info("will batch as many as %d at a time", self._num_messages)
-
-    def _adjust_topic_prefixes(self) -> None:
-        """fix values for rse_prefix and fs_prefix, by adding '/', if needed"""
-        topics = self.get_topics()
-        for topic in topics:
-            mapping_dict = self._topic_dict.get(topic)
-            rucio_prefix = mapping_dict.get("rucio_prefix", None)
-            if not rucio_prefix:
-                raise Exception(f"rucio_prefix not specified in config file for {topic}")
-
-            if not rucio_prefix.endswith("/"):
-                rucio_prefix = rucio_prefix + "/"
-                self._topic_dict[topic]["rucio_prefix"] = rucio_prefix
-
-            fs_prefix = mapping_dict.get("fs_prefix", None)
-            if fs_prefix:
-                if not fs_prefix.endswith("/"):
-                    fs_prefix = fs_prefix + "/"
-            else:
-                fs_prefix = ""
-            self._topic_dict[topic]["fs_prefix"] = fs_prefix
-
-    def get_num_messages(self) -> int:
-        """Getter method for number of Kafka messages to process at a time"""
-        return self._num_messages
-
-    def get_timeout(self) -> int:
-        """Getter method for length of time to wait for Kafka messages"""
-        return self._timeout
-
-    def get_topic_dict(self) -> dict:
-        """Getter method for topic to local prefix mapping"""
-        return self._topic_dict
-
-    def get_topics(self) -> list:
-        """Getter method for Kafka topics"""
-        return list(self._topic_dict.keys())
-
-    def get_brokers(self) -> str:
-        """Getter method for Kafka brokers"""
-        return self._brokers
-
-    def get_client_id(self) -> str:
-        """Getter method for Kafka client.id"""
-        return self._client_id
-
-    def get_group_id(self) -> str:
-        """Getter method for Kafka group.id"""
-        return self._group_id
-
-    def get_butler_repo(self) -> str:
-        """Getter method for the butler repo"""
-        return self._butler_repo
+    @computed_field
+    def brokers_as_string(self) -> str:
+        return ",".join(self.brokers)

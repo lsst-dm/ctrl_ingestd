@@ -22,6 +22,8 @@
 import os.path
 import tempfile
 
+import yaml
+
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
 from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
@@ -70,8 +72,12 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         butler.butler.import_(filename=prep_file)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        config = Config(config_file)
-        mapper = Mapper(config.get_topic_dict())
+        with open(config_file) as file:
+            config_data = yaml.load(file, Loader=yaml.FullLoader)
+
+        config = Config(**config_data)
+
+        mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
@@ -99,8 +105,11 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        config = Config(config_file)
-        mapper = Mapper(config.get_topic_dict())
+        with open(config_file) as file:
+            config_data = yaml.load(file, Loader=yaml.FullLoader)
+
+        config = Config(**config_data)
+        mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
@@ -129,8 +138,11 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        config = Config(config_file)
-        mapper = Mapper(config.get_topic_dict())
+        with open(config_file) as file:
+            config_data = yaml.load(file, Loader=yaml.FullLoader)
+
+        config = Config(**config_data)
+        mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
@@ -165,8 +177,11 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         butler.butler.import_(filename=prep_file)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        config = Config(config_file)
-        mapper = Mapper(config.get_topic_dict())
+        with open(config_file) as file:
+            config_data = yaml.load(file, Loader=yaml.FullLoader)
+
+        config = Config(**config_data)
+        mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)

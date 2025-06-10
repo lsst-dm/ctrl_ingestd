@@ -23,6 +23,8 @@ import os.path
 import tempfile
 from shutil import copyfile
 
+import yaml
+
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
 from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
@@ -72,8 +74,11 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         self.msg = Message(fake_msg)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        config = Config(config_file)
-        mapper = Mapper(config.get_topic_dict())
+        with open(config_file) as file:
+            config_data = yaml.load(file, Loader=yaml.FullLoader)
+
+        config = Config(**config_data)
+        mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)

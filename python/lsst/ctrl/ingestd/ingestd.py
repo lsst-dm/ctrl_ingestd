@@ -22,6 +22,7 @@
 import logging
 import os
 
+import yaml
 from confluent_kafka import Consumer
 
 from lsst.ctrl.ingestd.config import Config
@@ -44,15 +45,18 @@ class IngestD:
         else:
             raise FileNotFoundError("CTRL_INGESTD_CONFIG is not set")
 
-        config = Config(self.config_file)
-        topic_dict = config.get_topic_dict()
-        client_id = config.get_client_id()
-        group_id = config.get_group_id()
-        brokers = config.get_brokers()
-        topics = config.get_topics()
+        with open("/tmp/ingestd.yml") as file:
+            config_dict = yaml.load(file, Loader=yaml.FullLoader)
+        config = Config(**config_dict)
 
-        self.num_messages = config.get_num_messages()
-        self.timeout = config.get_timeout()
+        topic_dict = config.topics
+        client_id = config.client_id
+        group_id = config.group_id
+        brokers = config.brokers
+        topics = config.topics
+
+        self.num_messages = config.num_messages
+        self.timeout = config.timeout
 
         self.mapper = Mapper(topic_dict)
 
@@ -69,6 +73,14 @@ class IngestD:
 
         self.rse_butler = RseButler(config.get_butler_repo())
         self.entry_factory = EntryFactory(self.rse_butler, self.mapper)
+
+        LOGGER.info("brokers = ", config.brokers_as_string)
+        LOGGER.info("client.id = ", config.client_id)
+        LOGGER.info("group.id = ", config.group_id)
+        LOGGER.info("num_messages =", config.num_messages)
+        LOGGER.info("timeout = ", config.timeout)
+        LOGGER.info("butler_repo= ", config.butler_repo)
+        LOGGER.info("topics =", ",".join(config.topics.keys()))
 
     def run(self):
         """continually process messages"""
