@@ -48,3 +48,7 @@ class Config(BaseModel):
     @computed_field
     def brokers_as_string(self) -> str:
         return ",".join(self.brokers)
+
+    @computed_field
+    def topics_as_list(self) -> list:
+        return list(self.topics.keys())

@@ -45,15 +45,15 @@ class IngestD:
         else:
             raise FileNotFoundError("CTRL_INGESTD_CONFIG is not set")
 
-        with open("/tmp/ingestd.yml") as file:
+        with open(self.config_file) as file:
             config_dict = yaml.load(file, Loader=yaml.FullLoader)
         config = Config(**config_dict)
 
         topic_dict = config.topics
         client_id = config.client_id
         group_id = config.group_id
-        brokers = config.brokers
-        topics = config.topics
+        brokers = config.brokers_as_string
+        topics = config.topics_as_list
 
         self.num_messages = config.num_messages
         self.timeout = config.timeout
@@ -71,16 +71,16 @@ class IngestD:
         self.consumer = Consumer(conf)
         self.consumer.subscribe(topics)
 
-        self.rse_butler = RseButler(config.get_butler_repo())
+        self.rse_butler = RseButler(config.butler_repo)
         self.entry_factory = EntryFactory(self.rse_butler, self.mapper)
 
-        LOGGER.info("brokers = ", config.brokers_as_string)
-        LOGGER.info("client.id = ", config.client_id)
-        LOGGER.info("group.id = ", config.group_id)
-        LOGGER.info("num_messages =", config.num_messages)
-        LOGGER.info("timeout = ", config.timeout)
-        LOGGER.info("butler_repo= ", config.butler_repo)
-        LOGGER.info("topics =", ",".join(config.topics.keys()))
+        LOGGER.info("brokers = %s", config.brokers_as_string)
+        LOGGER.info("client.id = %s", config.client_id)
+        LOGGER.info("group.id = %s", config.group_id)
+        LOGGER.info("num_messages = %d", config.num_messages)
+        LOGGER.info("timeout = %d", config.timeout)
+        LOGGER.info("butler_repo= %s", config.butler_repo)
+        LOGGER.info("topics = %s", ",".join(config.topics.keys()))
 
     def run(self):
         """continually process messages"""
