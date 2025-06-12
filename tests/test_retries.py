@@ -23,8 +23,6 @@ import os.path
 import tempfile
 from shutil import copyfile
 
-import yaml
-
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
 from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
@@ -40,9 +38,6 @@ class FakeKafkaMessage:
         self.val = value
 
     def value(self) -> str:
-        return self.val
-
-    def __str__(self) -> str:
         return self.val
 
 
@@ -74,10 +69,8 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         self.msg = Message(fake_msg)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        with open(config_file) as file:
-            config_data = yaml.load(file, Loader=yaml.FullLoader)
 
-        config = Config(**config_data)
+        config = Config.load(config_file)
         mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)

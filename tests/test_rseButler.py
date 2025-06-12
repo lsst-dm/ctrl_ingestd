@@ -22,8 +22,6 @@
 import os.path
 import tempfile
 
-import yaml
-
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
 from lsst.ctrl.ingestd.entries.entryFactory import EntryFactory
@@ -39,9 +37,6 @@ class FakeKafkaMessage:
         self.val = value
 
     def value(self) -> str:
-        return self.val
-
-    def __str__(self) -> str:
         return self.val
 
 
@@ -72,10 +67,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         butler.butler.import_(filename=prep_file)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        with open(config_file) as file:
-            config_data = yaml.load(file, Loader=yaml.FullLoader)
-
-        config = Config(**config_data)
+        config = Config.load(config_file)
 
         mapper = Mapper(config.topics)
 
@@ -105,10 +97,8 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        with open(config_file) as file:
-            config_data = yaml.load(file, Loader=yaml.FullLoader)
+        config = Config.load(config_file)
 
-        config = Config(**config_data)
         mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)
@@ -138,10 +128,8 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        with open(config_file) as file:
-            config_data = yaml.load(file, Loader=yaml.FullLoader)
+        config = Config.load(config_file)
 
-        config = Config(**config_data)
         mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)
@@ -177,10 +165,8 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         butler.butler.import_(filename=prep_file)
 
         config_file = os.path.join(testdir, "etc", "ingestd.yml")
-        with open(config_file) as file:
-            config_data = yaml.load(file, Loader=yaml.FullLoader)
+        config = Config.load(config_file)
 
-        config = Config(**config_data)
         mapper = Mapper(config.topics)
 
         event_factory = EntryFactory(butler, mapper)

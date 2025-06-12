@@ -21,8 +21,6 @@
 
 import os
 
-import yaml
-
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
 from lsst.ctrl.ingestd.mapper import Mapper
@@ -31,11 +29,9 @@ from lsst.ctrl.ingestd.mapper import Mapper
 class MapperTestCase(lsst.utils.tests.TestCase):
     def testRewrite(self):
         testdir = os.path.abspath(os.path.dirname(__file__))
-        config_file = os.path.join(testdir, "data", "mapper.yml")
 
-        with open(config_file) as file:
-            config_data = yaml.load(file, Loader=yaml.FullLoader)
-        config = Config(**config_data)
+        config_file = os.path.join(testdir, "data", "mapper.yml")
+        config = Config.load(config_file)
 
         mapper = Mapper(config.topics)
         s = mapper.rewrite("XRD1-test1", "root://xrd1:1094//rucio/test/28/27/test")

@@ -22,9 +22,6 @@
 import os.path
 import socket
 
-import yaml
-from pydantic import ValidationError
-
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
 
@@ -32,26 +29,24 @@ from lsst.ctrl.ingestd.config import Config
 class ConfigTestCase(lsst.utils.tests.TestCase):
     def createConfig(self, config_name):
         testdir = os.path.abspath(os.path.dirname(__file__))
-        config_file = os.path.join(testdir, "data", config_name)
 
-        with open(config_file) as file:
-            config_data = yaml.load(file, Loader=yaml.FullLoader)
-        self.config = Config(**config_data)
+        config_file = os.path.join(testdir, "data", config_name)
+        self.config = Config.load(config_file)
 
     def testNoRses(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(RuntimeError):
             self.createConfig("notopics.yml")
 
     def testNoBrokers(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(RuntimeError):
             self.createConfig("nobrokers.yml")
 
     def testNoGroupID(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(RuntimeError):
             self.createConfig("nogroupid.yml")
 
     def testNoRepo(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(RuntimeError):
             self.createConfig("norepo.yml")
 
     def testAttributes(self):
@@ -82,12 +77,12 @@ class ConfigTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(topic_dict["XRD4-test"].rucio_prefix, "root://xrd4:1097//rucio/test/")
         self.assertEqual(topic_dict["XRD4-test"].fs_prefix, "file:///rucio/disks/xrd4/rucio/")
 
-        topics = self.config.topics
-        self.assertTrue("XRD1-test1" in topics)
-        self.assertTrue("XRD1-test2" in topics)
-        self.assertTrue("XRD2-test" in topics)
-        self.assertTrue("XRD3-test" in topics)
-        self.assertTrue("XRD4-test" in topics)
+        topics_list = self.config.topics_as_list
+        self.assertTrue("XRD1-test1" in topics_list)
+        self.assertTrue("XRD1-test2" in topics_list)
+        self.assertTrue("XRD2-test" in topics_list)
+        self.assertTrue("XRD3-test" in topics_list)
+        self.assertTrue("XRD4-test" in topics_list)
 
         self.assertEqual(self.config.brokers_as_string, "kafka:9092")
         self.assertEqual(self.config.client_id, socket.gethostname())

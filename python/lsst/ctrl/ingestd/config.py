@@ -21,6 +21,7 @@
 
 import socket
 
+import yaml
 from pydantic import BaseModel, Field, computed_field, model_validator
 
 
@@ -44,6 +45,18 @@ class Config(BaseModel):
     timeout: int = 1
     butler_repo: str
     topics: dict[str, _TopicModel] = Field(min_length=1)
+
+    @classmethod
+    def load(cls, config_file: str) -> "Config":
+        try:
+            with open(config_file) as file:
+                config_dict = yaml.load(file, Loader=yaml.FullLoader)
+            return cls.model_validate(config_dict)
+        except yaml.YAMLError as e:
+            raise ValueError(f"Error parsing {config_file}: {e}") from e
+        except Exception as e:
+            raise RuntimeError(f"Unexpected error loading {config_file}: {e}") from e
+
 
     @computed_field
     def brokers_as_string(self) -> str:

@@ -22,7 +22,6 @@
 import logging
 import os
 
-import yaml
 from confluent_kafka import Consumer
 
 from lsst.ctrl.ingestd.config import Config
@@ -45,9 +44,7 @@ class IngestD:
         else:
             raise FileNotFoundError("CTRL_INGESTD_CONFIG is not set")
 
-        with open(self.config_file) as file:
-            config_dict = yaml.load(file, Loader=yaml.FullLoader)
-        config = Config(**config_dict)
+        config = Config.load(self.config_file)
 
         topic_dict = config.topics
         client_id = config.client_id
