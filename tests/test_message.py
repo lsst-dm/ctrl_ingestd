@@ -48,11 +48,11 @@ class MessageTestCase(lsst.utils.tests.TestCase):
     def testAttributes(self):
         self.maxDiff = None
         self.configure("message.json")
-        self.assertEqual(self.msg.get_dst_rse(), "XRD3")
+        self.assertEqual(self.msg.get_dst_rse(), "XRD5")
         self.assertEqual(
             self.msg.get_dst_url(),
             (
-                "root://xrd3:1096//rucio/test/something/"
+                "root://xrd5:1098//rucio/"
                 "visitSummary_HSC_y_HSC-Y_328_HSC_runs_"
                 "RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
             ),

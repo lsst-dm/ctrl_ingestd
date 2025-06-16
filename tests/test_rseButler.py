@@ -20,7 +20,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os.path
+import shutil
 import tempfile
+from urllib.parse import unquote, urlparse
 
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
@@ -41,10 +43,10 @@ class FakeKafkaMessage:
 
 
 class RseButlerTestCase(lsst.utils.tests.TestCase):
-    def testRseButler(self):
+    def testDataProduct(self):
         """Test data product ingest"""
 
-        json_name = "message.json"
+        json_name = "message440.json"
         testdir = os.path.abspath(os.path.dirname(__file__))
         json_file = os.path.join(testdir, "data", json_name)
 
@@ -73,9 +75,14 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        fits_file = os.path.join(testdir, "data",
+                                 "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits")
+
+        entry = self._copy_and_rewrite_url(entry, fits_file)
         butler.ingest([entry])
 
-    def testRseButler2(self):
+    def testRaw(self):
         """Test raw file ingest"""
 
         json_name = "raw_message.json"
@@ -103,8 +110,13 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
-        with self.assertRaises(RuntimeError):
-            butler.ingest([entry])
+
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        fits_file = os.path.join(testdir, "data", "AT_O_20250113_000004_R00_S00.fits")
+
+        entry = self._copy_and_rewrite_url(entry, fits_file)
+
+        butler.ingest([entry])
 
     def testDim(self):
         """Test dimension file ingest"""
@@ -134,6 +146,11 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
+
+        testdir = os.path.abspath(os.path.dirname(__file__))
+        prep_file = os.path.join(testdir, "data", "prep.yaml")
+
+        entry = self._copy_and_rewrite_url(entry, prep_file)
         butler.ingest([entry])
 
     def testRetry(self):
@@ -173,6 +190,17 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         entry = event_factory.create_entry(self.msg)
         butler.ingest([entry])
 
+    def _copy_and_rewrite_url(self, entry, prep_file, json_file=None):
+        #dest_dir = tempfile.mkdtemp()
+        dest_dir = "/tmp"
+        src_path = unquote(urlparse(prep_file).path)
+        base_name = os.path.basename(src_path)
+        dest_path = os.path.join(dest_dir, base_name)
+
+        shutil.copy2(prep_file, dest_path)
+        # entry.data = dest_path
+        entry.file_to_ingest = dest_path
+        return entry
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
