@@ -20,8 +20,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os.path
+import shutil
 import tempfile
-from shutil import copyfile
+from urllib.parse import unquote, urlparse
 
 import lsst.utils.tests
 from lsst.ctrl.ingestd.config import Config
@@ -42,9 +43,11 @@ class FakeKafkaMessage:
 
 
 class RetriesTestCase(lsst.utils.tests.TestCase):
+    def setUp(self):
+        self.test_dir = os.path.abspath(os.path.dirname(__file__))
+        
     def createRseButler(self):
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        prep_file = os.path.join(testdir, "data", "prep.yaml")
+        prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
 
         self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
@@ -59,8 +62,7 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
     def createData(self, butler, json_name):
         """Test data product ingest"""
 
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        json_file = os.path.join(testdir, "data", json_name)
+        json_file = os.path.join(self.test_dir, "data", json_name)
 
         with open(json_file) as f:
             fake_data = f.read()
@@ -68,7 +70,7 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
 
-        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config_file = os.path.join(self.test_dir, "etc", "ingestd.yml")
 
         config = Config.load(config_file)
         mapper = Mapper(config.topics)
@@ -84,12 +86,11 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
 
         good_entry = self.createData(rse_butler, "message440.json")
 
-        tmpdir = "/tmp"
         data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        fits_file = os.path.join(testdir, "data", data_file)
-        dest_file = os.path.join(tmpdir, data_file)
-        copyfile(fits_file, dest_file)
+
+        fits_file = os.path.join(self.test_dir, "data", data_file)
+
+        self._copy_tmp_file(fits_file)
 
         bad_entry = self.createData(rse_butler, "truncated2.json")
         with open("/tmp/bad_data.fits", "w") as f:
@@ -125,31 +126,38 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         rse_butler = self.createRseButler()
         entry = self.createData(rse_butler, "message330.json")
 
-        tmpdir = "/tmp"
         data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        fits_file = os.path.join(testdir, "data", data_file)
-        dest_file = os.path.join(tmpdir, data_file)
-        copyfile(fits_file, dest_file)
+        fits_file = os.path.join(self.test_dir, "data", data_file)
+
+        self._copy_tmp_file(fits_file)
 
         rse_butler.ingest([entry])
 
-    def testMultiRetries(self):
+    def testBadGood(self):
         """Test ingest bad file, then good file"""
 
         rse_butler, good_entry, bad_entry = self.createMultiTestEnv()
         rse_butler.ingest([bad_entry, good_entry])
 
-    def testMultiRetries2(self):
+    def testGoodBad(self):
         """Test ingest good file file, then bad file"""
 
         rse_butler, good_entry, bad_entry = self.createMultiTestEnv()
         rse_butler.ingest([good_entry, bad_entry])
 
-    def testMultiRetries3(self):
+    def testMultiSingleIngest(self):
         """Test ingest good file, then re-ingest of good file"""
 
         rse_butler, good_entry, bad_entry = self.createMultiTestEnv()
         rse_butler._single_ingest(good_entry.get_data(), transfer="auto", retry_as_raw=False)
         with self.assertRaises(RuntimeError):
             rse_butler._single_ingest(good_entry.get_data(), transfer="auto", retry_as_raw=False)
+
+    def _copy_tmp_file(self, prep_file):
+        dest_dir = tempfile.mkdtemp()
+        src_path = unquote(urlparse(prep_file).path)
+        base_name = os.path.basename(src_path)
+        dest_path = os.path.join(dest_dir, base_name)
+
+        shutil.copy2(prep_file, dest_path)
+

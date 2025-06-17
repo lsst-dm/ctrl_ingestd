@@ -56,7 +56,6 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
 
-        testdir = os.path.abspath(os.path.dirname(__file__))
         prep_file = os.path.join(testdir, "data", "prep.yaml")
 
         self.repo_dir = tempfile.mkdtemp()
@@ -75,11 +74,10 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
-        testdir = os.path.abspath(os.path.dirname(__file__))
         fits_file = os.path.join(testdir, "data",
                                  "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits")
 
-        entry = self._copy_and_rewrite_url(entry, fits_file)
+        self._copy_tmp_file(fits_file)
         butler.ingest([entry])
 
     def testRaw(self):
@@ -111,10 +109,9 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
 
-        testdir = os.path.abspath(os.path.dirname(__file__))
         fits_file = os.path.join(testdir, "data", "AT_O_20250113_000004_R00_S00.fits")
 
-        entry = self._copy_and_rewrite_url(entry, fits_file)
+        self._copy_tmp_file(fits_file)
 
         butler.ingest([entry])
 
@@ -147,10 +144,9 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
 
-        testdir = os.path.abspath(os.path.dirname(__file__))
         prep_file = os.path.join(testdir, "data", "prep.yaml")
 
-        entry = self._copy_and_rewrite_url(entry, prep_file)
+        self._copy_tmp_file(prep_file)
         butler.ingest([entry])
 
     def testRetry(self):
@@ -169,7 +165,6 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
 
-        testdir = os.path.abspath(os.path.dirname(__file__))
         prep_file = os.path.join(testdir, "data", "prep.yaml")
 
         self.repo_dir = tempfile.mkdtemp()
@@ -190,17 +185,13 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         entry = event_factory.create_entry(self.msg)
         butler.ingest([entry])
 
-    def _copy_and_rewrite_url(self, entry, prep_file, json_file=None):
-        #dest_dir = tempfile.mkdtemp()
-        dest_dir = "/tmp"
+    def _copy_tmp_file(self, prep_file):
+        dest_dir = tempfile.mkdtemp()
         src_path = unquote(urlparse(prep_file).path)
         base_name = os.path.basename(src_path)
         dest_path = os.path.join(dest_dir, base_name)
 
         shutil.copy2(prep_file, dest_path)
-        # entry.data = dest_path
-        entry.file_to_ingest = dest_path
-        return entry
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
