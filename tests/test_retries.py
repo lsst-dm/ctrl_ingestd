@@ -59,7 +59,7 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         rse_butler.butler.import_(filename=prep_file)
         return rse_butler
 
-    def createData(self, butler, json_name):
+    def createData(self, butler, json_name, dest_path=None):
         """Test data product ingest"""
 
         json_file = os.path.join(self.test_dir, "data", json_name)
@@ -69,6 +69,8 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
 
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
+        if dest_path:
+            self.msg.set_dst_url(dest_path)
 
         config_file = os.path.join(self.test_dir, "etc", "ingestd.yml")
 
@@ -84,13 +86,11 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         instr = Instrument.from_string("lsst.obs.subaru.HyperSuprimeCam")
         instr.register(rse_butler.butler.registry)
 
-        good_entry = self.createData(rse_butler, "message440.json")
-
         data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
-
         fits_file = os.path.join(self.test_dir, "data", data_file)
+        dest_path = self._copy_tmp_file(fits_file)
 
-        self._copy_tmp_file(fits_file)
+        good_entry = self.createData(rse_butler, "message440.json", dest_path)
 
         bad_entry = self.createData(rse_butler, "truncated2.json")
         with open("/tmp/bad_data.fits", "w") as f:
@@ -124,13 +124,12 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         """Test ingest interface"""
 
         rse_butler = self.createRseButler()
-        entry = self.createData(rse_butler, "message330.json")
 
         data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
         fits_file = os.path.join(self.test_dir, "data", data_file)
+        dest_path = self._copy_tmp_file(fits_file)
 
-        self._copy_tmp_file(fits_file)
-
+        entry = self.createData(rse_butler, "message330.json", dest_path)
         rse_butler.ingest([entry])
 
     def testBadGood(self):
@@ -160,3 +159,4 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         dest_path = os.path.join(dest_dir, base_name)
 
         shutil.copy2(prep_file, dest_path)
+        return f"file://{dest_path}"

@@ -56,13 +56,17 @@ class Entry:
         topic = f"{dst_rse}-{scope}"
         self.file_to_ingest = self.mapper.rewrite(topic, dst_url)
 
+
         if self.file_to_ingest == dst_url:
             # Avoid E501
-            m = f"failed to map {self.file_to_ingest}; check config file for incorrect mapping"
-            raise RuntimeError(m)
+            m = f"attempt to map {self.file_to_ingest} to same file"
+            LOGGER.warning(m)
 
     def get_data_type(self):
         return self.data_type
 
     def get_data(self):
         raise RuntimeError("Shouldn't call Entry.get_data directly")
+
+    def __str__(self):
+        return self.get_data()
