@@ -45,6 +45,11 @@ class FakeKafkaMessage:
 class RetriesTestCase(lsst.utils.tests.TestCase):
     def setUp(self):
         self.test_dir = os.path.abspath(os.path.dirname(__file__))
+        self.dest_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.dest_dir, ignore_errors=True)
+        shutil.rmtree(self.repo_dir, ignore_errors=True)
 
     def createRseButler(self):
         prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
@@ -153,10 +158,9 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
             rse_butler._single_ingest(good_entry.get_data(), transfer="auto", retry_as_raw=False)
 
     def _copy_tmp_file(self, prep_file):
-        dest_dir = tempfile.mkdtemp()
         src_path = unquote(urlparse(prep_file).path)
         base_name = os.path.basename(src_path)
-        dest_path = os.path.join(dest_dir, base_name)
+        dest_path = os.path.join(self.dest_dir, base_name)
 
         shutil.copy2(prep_file, dest_path)
         return f"file://{dest_path}"
