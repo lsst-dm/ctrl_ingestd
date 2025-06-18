@@ -45,7 +45,7 @@ class FakeKafkaMessage:
 class RetriesTestCase(lsst.utils.tests.TestCase):
     def setUp(self):
         self.test_dir = os.path.abspath(os.path.dirname(__file__))
-        
+
     def createRseButler(self):
         prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
 
@@ -160,4 +160,3 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         dest_path = os.path.join(dest_dir, base_name)
 
         shutil.copy2(prep_file, dest_path)
-

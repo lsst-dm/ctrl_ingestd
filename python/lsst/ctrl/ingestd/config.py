@@ -26,16 +26,16 @@ from pydantic import BaseModel, Field, computed_field, model_validator
 
 
 class _TopicModel(BaseModel):
-     rucio_prefix: str
-     fs_prefix: str = ""
+    rucio_prefix: str
+    fs_prefix: str = ""
 
-     @model_validator(mode="after")
-     def process_strings(self) -> "_TopicModel":
-         if not self.rucio_prefix.endswith("/"):
-             self.rucio_prefix += "/"
-         if self.fs_prefix and not self.fs_prefix.endswith("/"):
-             self.fs_prefix += "/"
-         return self
+    @model_validator(mode="after")
+    def process_strings(self) -> "_TopicModel":
+        if not self.rucio_prefix.endswith("/"):
+            self.rucio_prefix += "/"
+        if self.fs_prefix and not self.fs_prefix.endswith("/"):
+            self.fs_prefix += "/"
+        return self
 
 class Config(BaseModel):
     brokers: list[str]
@@ -56,7 +56,6 @@ class Config(BaseModel):
             raise ValueError(f"Error parsing {config_file}: {e}") from e
         except Exception as e:
             raise RuntimeError(f"Unexpected error loading {config_file}: {e}") from e
-
 
     @computed_field
     def brokers_as_string(self) -> str:
