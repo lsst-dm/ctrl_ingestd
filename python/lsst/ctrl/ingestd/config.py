@@ -37,6 +37,7 @@ class _TopicModel(BaseModel):
             self.fs_prefix += "/"
         return self
 
+
 class Config(BaseModel):
     brokers: list[str]
     client_id: str = Field(default_factory=lambda: socket.gethostname())
