@@ -77,7 +77,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         fits_file = os.path.join(
             testdir,
             "data",
-            "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
+            "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits",
         )
 
         self._copy_tmp_file(fits_file)
