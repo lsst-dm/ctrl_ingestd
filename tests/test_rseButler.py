@@ -43,18 +43,26 @@ class FakeKafkaMessage:
 
 
 class RseButlerTestCase(lsst.utils.tests.TestCase):
+    def setUp(self):
+        self.test_dir = os.path.abspath(os.path.dirname(__file__))
+        self.repo_dir = tempfile.mkdtemp()
+        self.dest_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.repo_dir, ignore_errors=True)
+        shutil.rmtree(self.dest_dir, ignore_errors=True)
+
     def testDataProduct(self):
         """Test data product ingest"""
 
         json_name = "message440.json"
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        json_file = os.path.join(testdir, "data", json_name)
+        json_file = os.path.join(self.test_dir, "data", json_name)
 
         with open(json_file) as f:
             fake_data = f.read()
 
         fits_file = os.path.join(
-            testdir,
+            self.test_dir,
             "data",
             "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits",
         )
@@ -64,9 +72,8 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         self.msg = Message(fake_msg)
         self.msg.set_dst_url(dest_path)
 
-        prep_file = os.path.join(testdir, "data", "prep.yaml")
+        prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
 
-        self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
 
         butler = RseButler(self.repo_dir)
@@ -75,12 +82,10 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
         butler.butler.import_(filename=prep_file)
 
-        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config_file = os.path.join(self.test_dir, "etc", "ingestd.yml")
         config = Config.load(config_file)
 
         mapper = Mapper(config.topics)
-
-
 
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
@@ -90,20 +95,19 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         """Test raw file ingest"""
 
         json_name = "raw_message.json"
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        json_file = os.path.join(testdir, "data", json_name)
+        self.test_dir = os.path.abspath(os.path.dirname(__file__))
+        json_file = os.path.join(self.test_dir, "data", json_name)
 
         with open(json_file) as f:
             fake_data = f.read()
 
-        fits_file = os.path.join(testdir, "data", "AT_O_20250113_000004_R00_S00.fits")
+        fits_file = os.path.join(self.test_dir, "data", "AT_O_20250113_000004_R00_S00.fits")
         dest_path = self._copy_tmp_file(fits_file)
 
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
         self.msg.set_dst_url(dest_path)
 
-        self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
 
         butler = RseButler(self.repo_dir)
@@ -111,7 +115,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         instr.register(butler.butler.registry)
 
-        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config_file = os.path.join(self.test_dir, "etc", "ingestd.yml")
         config = Config.load(config_file)
 
         mapper = Mapper(config.topics)
@@ -119,19 +123,18 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         event_factory = EntryFactory(butler, mapper)
         entry = event_factory.create_entry(self.msg)
 
-
         butler.ingest([entry])
 
     def testDim(self):
         """Test dimension file ingest"""
 
-        testdir = os.path.abspath(os.path.dirname(__file__))
+        self.test_dir = os.path.abspath(os.path.dirname(__file__))
 
-        prep_file = os.path.join(testdir, "data", "prep.yaml")
+        prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
         dest_path = self._copy_tmp_file(prep_file)
 
         json_name = "dim_message.json"
-        json_file = os.path.join(testdir, "data", json_name)
+        json_file = os.path.join(self.test_dir, "data", json_name)
 
         with open(json_file) as f:
             fake_data = f.read()
@@ -140,7 +143,6 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         self.msg = Message(fake_msg)
         self.msg.set_dst_url(dest_path)
 
-        self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
 
         butler = RseButler(self.repo_dir)
@@ -148,7 +150,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
 
         instr.register(butler.butler.registry)
 
-        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config_file = os.path.join(self.test_dir, "etc", "ingestd.yml")
         config = Config.load(config_file)
 
         mapper = Mapper(config.topics)
@@ -162,21 +164,22 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         """Test data product ingest"""
 
         json_name = "truncated.json"
-        testdir = os.path.abspath(os.path.dirname(__file__))
-        json_file = os.path.join(testdir, "data", json_name)
+        self.test_dir = os.path.abspath(os.path.dirname(__file__))
+        json_file = os.path.join(self.test_dir, "data", json_name)
 
         with open(json_file) as f:
             fake_data = f.read()
 
-        with open("/tmp/data.fits", "w") as f:
+        dest_path = f"{self.dest_dir}/data.fits"
+        with open(dest_path, "w") as f:
             f.write("hi")
 
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
+        self.msg.set_dst_url(dest_path)
 
-        prep_file = os.path.join(testdir, "data", "prep.yaml")
+        prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
 
-        self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
 
         butler = RseButler(self.repo_dir)
@@ -185,7 +188,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         instr.register(butler.butler.registry)
         butler.butler.import_(filename=prep_file)
 
-        config_file = os.path.join(testdir, "etc", "ingestd.yml")
+        config_file = os.path.join(self.test_dir, "etc", "ingestd.yml")
         config = Config.load(config_file)
 
         mapper = Mapper(config.topics)
@@ -195,10 +198,9 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         butler.ingest([entry])
 
     def _copy_tmp_file(self, prep_file):
-        dest_dir = tempfile.mkdtemp()
         src_path = unquote(urlparse(prep_file).path)
         base_name = os.path.basename(src_path)
-        dest_path = os.path.join(dest_dir, base_name)
+        dest_path = os.path.join(self.dest_dir, base_name)
 
         shutil.copy2(prep_file, dest_path)
         return f"file://{dest_path}"

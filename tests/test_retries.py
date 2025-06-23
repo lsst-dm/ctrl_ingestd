@@ -46,15 +46,21 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
     def setUp(self):
         self.test_dir = os.path.abspath(os.path.dirname(__file__))
         self.dest_dir = tempfile.mkdtemp()
+        self.repo_dir = tempfile.mkdtemp()
+        self.bad_dir = tempfile.mkdtemp()
+        self.bad_dir2 = tempfile.mkdtemp()
+        self.single_dir = tempfile.mkdtemp()
 
     def tearDown(self):
         shutil.rmtree(self.dest_dir, ignore_errors=True)
         shutil.rmtree(self.repo_dir, ignore_errors=True)
+        shutil.rmtree(self.bad_dir, ignore_errors=True)
+        shutil.rmtree(self.bad_dir2, ignore_errors=True)
+        shutil.rmtree(self.single_dir, ignore_errors=True)
 
     def createRseButler(self):
         prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
 
-        self.repo_dir = tempfile.mkdtemp()
         Butler.makeRepo(self.repo_dir)
 
         rse_butler = RseButler(self.repo_dir)
@@ -97,31 +103,38 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
 
         good_entry = self.createData(rse_butler, "message440.json", dest_path)
 
-        bad_entry = self.createData(rse_butler, "truncated2.json")
-        with open("/tmp/bad_data.fits", "w") as f:
+        bad_path = f"{self.bad_dir2}/bad_data.fits"
+        with open(bad_path, "w") as f:
             f.write("hi")
+
+        bad_entry = self.createData(rse_butler, "truncated2.json", bad_path)
         return rse_butler, good_entry, bad_entry
 
     def testSingle(self):
         """Test the single ingest method"""
 
         rse_butler = self.createRseButler()
-        entry = self.createData(rse_butler, "truncated.json")
-        with open("/tmp/data.fits", "w") as f:
+
+        data_path = f"{self.single_dir}/data.fits"
+        with open(data_path, "w") as f:
             f.write("hi")
+
+        entry = self.createData(rse_butler, "truncated.json", data_path)
 
         dataset = entry.get_data()
         with self.assertRaises(RuntimeError) as context:
             rse_butler._single_ingest(dataset, transfer="auto", retry_as_raw=False)
-        self.assertEqual(str(context.exception), "couldn't ingest file:///tmp/data.fits")
+        self.assertEqual(str(context.exception), f"couldn't ingest {data_path}")
 
     def testBadFile(self):
         """Test a bad file ingest"""
 
         rse_butler = self.createRseButler()
-        entry = self.createData(rse_butler, "truncated2.json")
-        with open("/tmp/bad_data.fits", "w") as f:
+        bad_path = f"{self.bad_dir}/bad_data2.fits"
+        with open(bad_path, "w") as f:
             f.write("hi")
+
+        entry = self.createData(rse_butler, "truncated2.json", bad_path)
 
         rse_butler.ingest([entry])
 

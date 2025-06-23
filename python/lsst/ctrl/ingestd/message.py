@@ -53,7 +53,7 @@ class Message:
         """Getter to retrieve the destination URL"""
         return self.payload.get(URL_KEY, None)
 
-    def set_dst_url(self, s : str):
+    def set_dst_url(self, s: str):
         self.payload[URL_KEY] = s
 
     def get_rubin_butler(self) -> int:

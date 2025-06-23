@@ -56,7 +56,6 @@ class Entry:
         topic = f"{dst_rse}-{scope}"
         self.file_to_ingest = self.mapper.rewrite(topic, dst_url)
 
-
         if self.file_to_ingest == dst_url:
             # Avoid E501
             m = f"attempt to map {self.file_to_ingest} to same file"
