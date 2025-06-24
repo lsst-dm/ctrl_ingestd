@@ -45,18 +45,18 @@ class FakeKafkaMessage:
 class RetriesTestCase(lsst.utils.tests.TestCase):
     def setUp(self):
         self.test_dir = os.path.abspath(os.path.dirname(__file__))
-        self.dest_dir = tempfile.mkdtemp()
         self.repo_dir = tempfile.mkdtemp()
         self.bad_dir = tempfile.mkdtemp()
-        self.bad_dir2 = tempfile.mkdtemp()
         self.single_dir = tempfile.mkdtemp()
+        self.tmp_multi_dir = tempfile.mkdtemp()
+        self.tmp_retry_dir = tempfile.mkdtemp()
 
     def tearDown(self):
-        shutil.rmtree(self.dest_dir, ignore_errors=True)
         shutil.rmtree(self.repo_dir, ignore_errors=True)
         shutil.rmtree(self.bad_dir, ignore_errors=True)
-        shutil.rmtree(self.bad_dir2, ignore_errors=True)
         shutil.rmtree(self.single_dir, ignore_errors=True)
+        shutil.rmtree(self.tmp_multi_dir, ignore_errors=True)
+        shutil.rmtree(self.tmp_retry_dir, ignore_errors=True)
 
     def createRseButler(self):
         prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
@@ -99,11 +99,11 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
 
         data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
         fits_file = os.path.join(self.test_dir, "data", data_file)
-        dest_path = self._copy_tmp_file(fits_file)
+        dest_path = self._copy_tmp_file(fits_file, self.tmp_multi_dir)
 
         good_entry = self.createData(rse_butler, "message440.json", dest_path)
 
-        bad_path = f"{self.bad_dir2}/bad_data.fits"
+        bad_path = f"{self.tmp_multi_dir}/bad_data.fits"
         with open(bad_path, "w") as f:
             f.write("hi")
 
@@ -145,7 +145,7 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
 
         data_file = "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits"
         fits_file = os.path.join(self.test_dir, "data", data_file)
-        dest_path = self._copy_tmp_file(fits_file)
+        dest_path = self._copy_tmp_file(fits_file, self.tmp_retry_dir)
 
         entry = self.createData(rse_butler, "message330.json", dest_path)
         rse_butler.ingest([entry])
@@ -170,10 +170,10 @@ class RetriesTestCase(lsst.utils.tests.TestCase):
         with self.assertRaises(RuntimeError):
             rse_butler._single_ingest(good_entry.get_data(), transfer="auto", retry_as_raw=False)
 
-    def _copy_tmp_file(self, prep_file):
+    def _copy_tmp_file(self, prep_file, dest_dir):
         src_path = unquote(urlparse(prep_file).path)
         base_name = os.path.basename(src_path)
-        dest_path = os.path.join(self.dest_dir, base_name)
+        dest_path = os.path.join(dest_dir, base_name)
 
         shutil.copy2(prep_file, dest_path)
         return f"file://{dest_path}"

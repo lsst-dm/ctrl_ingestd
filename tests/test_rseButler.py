@@ -45,12 +45,18 @@ class FakeKafkaMessage:
 class RseButlerTestCase(lsst.utils.tests.TestCase):
     def setUp(self):
         self.test_dir = os.path.abspath(os.path.dirname(__file__))
+        self.dm_dir = tempfile.mkdtemp()
+        self.dp_dir = tempfile.mkdtemp()
+        self.raw_dir = tempfile.mkdtemp()
         self.repo_dir = tempfile.mkdtemp()
-        self.dest_dir = tempfile.mkdtemp()
+        self.retry_dir = tempfile.mkdtemp()
 
     def tearDown(self):
+        shutil.rmtree(self.dm_dir, ignore_errors=True)
+        shutil.rmtree(self.dp_dir, ignore_errors=True)
+        shutil.rmtree(self.raw_dir, ignore_errors=True)
         shutil.rmtree(self.repo_dir, ignore_errors=True)
-        shutil.rmtree(self.dest_dir, ignore_errors=True)
+        shutil.rmtree(self.retry_dir, ignore_errors=True)
 
     def testDataProduct(self):
         """Test data product ingest"""
@@ -66,7 +72,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
             "data",
             "visitSummary_HSC_y_HSC-Y_330_HSC_runs_RC2_w_2023_32_DM-40356_20230814T170253Z.fits",
         )
-        dest_path = self._copy_tmp_file(fits_file)
+        dest_path = self._copy_tmp_file(fits_file, self.dp_dir)
 
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
@@ -102,7 +108,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
             fake_data = f.read()
 
         fits_file = os.path.join(self.test_dir, "data", "AT_O_20250113_000004_R00_S00.fits")
-        dest_path = self._copy_tmp_file(fits_file)
+        dest_path = self._copy_tmp_file(fits_file, self.raw_dir)
 
         fake_msg = FakeKafkaMessage(fake_data)
         self.msg = Message(fake_msg)
@@ -131,7 +137,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         self.test_dir = os.path.abspath(os.path.dirname(__file__))
 
         prep_file = os.path.join(self.test_dir, "data", "prep.yaml")
-        dest_path = self._copy_tmp_file(prep_file)
+        dest_path = self._copy_tmp_file(prep_file, self.dm_dir)
 
         json_name = "dim_message.json"
         json_file = os.path.join(self.test_dir, "data", json_name)
@@ -170,7 +176,7 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         with open(json_file) as f:
             fake_data = f.read()
 
-        dest_path = f"{self.dest_dir}/data.fits"
+        dest_path = f"{self.retry_dir}/data.fits"
         with open(dest_path, "w") as f:
             f.write("hi")
 
@@ -197,10 +203,10 @@ class RseButlerTestCase(lsst.utils.tests.TestCase):
         entry = event_factory.create_entry(self.msg)
         butler.ingest([entry])
 
-    def _copy_tmp_file(self, prep_file):
+    def _copy_tmp_file(self, prep_file, dest_dir):
         src_path = unquote(urlparse(prep_file).path)
         base_name = os.path.basename(src_path)
-        dest_path = os.path.join(self.dest_dir, base_name)
+        dest_path = os.path.join(dest_dir, base_name)
 
         shutil.copy2(prep_file, dest_path)
         return f"file://{dest_path}"
