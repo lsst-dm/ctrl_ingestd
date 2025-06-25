@@ -44,15 +44,16 @@ class IngestD:
         else:
             raise FileNotFoundError("CTRL_INGESTD_CONFIG is not set")
 
-        config = Config(self.config_file)
-        topic_dict = config.get_topic_dict()
-        client_id = config.get_client_id()
-        group_id = config.get_group_id()
-        brokers = config.get_brokers()
-        topics = config.get_topics()
+        config = Config.load(self.config_file)
 
-        self.num_messages = config.get_num_messages()
-        self.timeout = config.get_timeout()
+        topic_dict = config.topics
+        client_id = config.client_id
+        group_id = config.group_id
+        brokers = config.brokers_as_string
+        topics = config.topics_as_list
+
+        self.num_messages = config.num_messages
+        self.timeout = config.timeout
 
         self.mapper = Mapper(topic_dict)
 
@@ -67,8 +68,16 @@ class IngestD:
         self.consumer = Consumer(conf)
         self.consumer.subscribe(topics)
 
-        self.rse_butler = RseButler(config.get_butler_repo())
+        self.rse_butler = RseButler(config.butler_repo)
         self.entry_factory = EntryFactory(self.rse_butler, self.mapper)
+
+        LOGGER.info("brokers = %s", config.brokers_as_string)
+        LOGGER.info("client.id = %s", config.client_id)
+        LOGGER.info("group.id = %s", config.group_id)
+        LOGGER.info("num_messages = %d", config.num_messages)
+        LOGGER.info("timeout = %d", config.timeout)
+        LOGGER.info("butler_repo= %s", config.butler_repo)
+        LOGGER.info("topics = %s", ",".join(config.topics.keys()))
 
     def run(self):
         """continually process messages"""

@@ -29,69 +29,66 @@ from lsst.ctrl.ingestd.config import Config
 class ConfigTestCase(lsst.utils.tests.TestCase):
     def createConfig(self, config_name):
         testdir = os.path.abspath(os.path.dirname(__file__))
+
         config_file = os.path.join(testdir, "data", config_name)
-        self.config = Config(config_file)
+        self.config = Config.load(config_file)
 
     def testNoRses(self):
-        with self.assertRaises(Exception) as execinfo:
+        with self.assertRaises(RuntimeError):
             self.createConfig("notopics.yml")
-        self.assertTrue("Can't find 'topics'" in str(execinfo.exception))
 
     def testNoBrokers(self):
-        with self.assertRaises(Exception) as execinfo:
+        with self.assertRaises(RuntimeError):
             self.createConfig("nobrokers.yml")
-        self.assertTrue("Can't find 'brokers'" in str(execinfo.exception))
 
     def testNoGroupID(self):
-        with self.assertRaises(Exception) as execinfo:
+        with self.assertRaises(RuntimeError):
             self.createConfig("nogroupid.yml")
-        self.assertTrue("Can't find 'group_id'" in str(execinfo.exception))
 
     def testNoRepo(self):
-        with self.assertRaises(Exception) as execinfo:
+        with self.assertRaises(RuntimeError):
             self.createConfig("norepo.yml")
-        self.assertTrue("Can't find 'butler_repo' in configuration file" in str(execinfo.exception))
 
     def testAttributes(self):
         self.createConfig("ingestd.yml")
 
-        self.assertEqual(self.config.get_num_messages(), 50)
-        self.assertEqual(self.config.get_timeout(), 1)
+        self.assertEqual(self.config.num_messages, 50)
+        self.assertEqual(self.config.timeout, 1)
 
-        topic_dict = self.config.get_topic_dict()
+        topic_dict = self.config.topics
         self.assertTrue("XRD1-test1" in topic_dict)
         self.assertTrue("XRD1-test2" in topic_dict)
         self.assertTrue("XRD2-test" in topic_dict)
         self.assertTrue("XRD3-test" in topic_dict)
         self.assertTrue("XRD4-test" in topic_dict)
 
-        self.assertEqual(topic_dict["XRD1-test1"]["rucio_prefix"], "root://xrd1:1094//rucio/")
-        self.assertEqual(topic_dict["XRD1-test1"]["fs_prefix"], "file:///rucio/disks/xrd1a/rucio/")
+        self.assertEqual(topic_dict["XRD1-test1"].rucio_prefix, "root://xrd1:1094//rucio/")
+        self.assertEqual(topic_dict["XRD1-test1"].fs_prefix, "file:///rucio/disks/xrd1a/rucio/")
 
-        self.assertEqual(topic_dict["XRD1-test2"]["rucio_prefix"], "root://xrd1:1094//rucio/")
-        self.assertEqual(topic_dict["XRD1-test2"]["fs_prefix"], "file:///rucio/disks/xrd1b/rucio/")
+        self.assertEqual(topic_dict["XRD1-test2"].rucio_prefix, "root://xrd1:1094//rucio/")
+        self.assertEqual(topic_dict["XRD1-test2"].fs_prefix, "file:///rucio/disks/xrd1b/rucio/")
 
-        self.assertEqual(topic_dict["XRD2-test"]["rucio_prefix"], "root://xrd2:1095//rucio/")
-        self.assertEqual(topic_dict["XRD2-test"]["fs_prefix"], "file:///rucio/disks/xrd2/rucio/")
+        self.assertEqual(topic_dict["XRD2-test"].rucio_prefix, "root://xrd2:1095//rucio/")
+        self.assertEqual(topic_dict["XRD2-test"].fs_prefix, "file:///rucio/disks/xrd2/rucio/")
 
-        self.assertEqual(topic_dict["XRD3-test"]["rucio_prefix"], "root://xrd3:1096//rucio/test/")
-        self.assertEqual(topic_dict["XRD3-test"]["fs_prefix"], "file:///rucio/disks/xrd3/rucio/")
+        self.assertEqual(topic_dict["XRD3-test"].rucio_prefix, "root://xrd3:1096//rucio/test/")
+        self.assertEqual(topic_dict["XRD3-test"].fs_prefix, "file:///rucio/disks/xrd3/rucio/")
 
-        self.assertEqual(topic_dict["XRD4-test"]["rucio_prefix"], "root://xrd4:1097//rucio/test/")
-        self.assertEqual(topic_dict["XRD4-test"]["fs_prefix"], "file:///rucio/disks/xrd4/rucio/")
+        self.assertEqual(topic_dict["XRD4-test"].rucio_prefix, "root://xrd4:1097//rucio/test/")
+        self.assertEqual(topic_dict["XRD4-test"].fs_prefix, "file:///rucio/disks/xrd4/rucio/")
 
-        topics = self.config.get_topics()
-        self.assertTrue("XRD1-test1" in topics)
-        self.assertTrue("XRD1-test2" in topics)
-        self.assertTrue("XRD2-test" in topics)
-        self.assertTrue("XRD3-test" in topics)
-        self.assertTrue("XRD4-test" in topics)
+        topics_list = self.config.topics_as_list
+        self.assertTrue("XRD1-test1" in topics_list)
+        self.assertTrue("XRD1-test2" in topics_list)
+        self.assertTrue("XRD2-test" in topics_list)
+        self.assertTrue("XRD3-test" in topics_list)
+        self.assertTrue("XRD4-test" in topics_list)
 
-        self.assertEqual(self.config.get_brokers(), "kafka:9092")
-        self.assertEqual(self.config.get_client_id(), socket.gethostname())
-        self.assertEqual(self.config.get_group_id(), "my_test_group")
+        self.assertEqual(self.config.brokers_as_string, "kafka:9092")
+        self.assertEqual(self.config.client_id, socket.gethostname())
+        self.assertEqual(self.config.group_id, "my_test_group")
 
-        butler_repo = self.config.get_butler_repo()
+        butler_repo = self.config.butler_repo
         self.assertEqual(butler_repo, "/tmp/repo")
 
 

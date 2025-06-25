@@ -19,32 +19,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import os
+
 import lsst.utils.tests
+from lsst.ctrl.ingestd.config import Config
 from lsst.ctrl.ingestd.mapper import Mapper
 
 
 class MapperTestCase(lsst.utils.tests.TestCase):
     def testRewrite(self):
-        topic_dict = {
-            "XRD1-test1": {
-                "rucio_prefix": "root://xrd1:1094//rucio",
-                "fs_prefix": "file:///rucio0",
-            },
-            "XRD1-test2": {
-                "rucio_prefix": "root://xrd2:1095//rucio",
-                "fs_prefix": "file:///rucio1",
-            },
-            "XRD1-test3": {
-                "rucio_prefix": "root://xrd3:1096//rucio/",
-                "fs_prefix": "file:///rucio2/",
-            },
-            "XRD1-test4": {
-                "rucio_prefix": "root://xrd4:1097//rucio/",
-                "fs_prefix": "file:///rucio3/",
-            },
-        }
+        testdir = os.path.abspath(os.path.dirname(__file__))
 
-        mapper = Mapper(topic_dict)
+        config_file = os.path.join(testdir, "data", "mapper.yml")
+        config = Config.load(config_file)
+
+        mapper = Mapper(config.topics)
         s = mapper.rewrite("XRD1-test1", "root://xrd1:1094//rucio/test/28/27/test")
         self.assertEqual(s, "file:///rucio0/test/28/27/test")
 

@@ -78,6 +78,3 @@ class DataFile(Entry):
             data associated with this DataFile
         """
         return self.data
-
-    def __str__(self):
-        return f"{self.message}"
