@@ -58,8 +58,7 @@ class Entry:
 
         if self.file_to_ingest == dst_url:
             # Avoid E501
-            m = f"attempt to map {self.file_to_ingest} to same file"
-            LOGGER.warning(m)
+            LOGGER.warning(f"attempt to map {self.file_to_ingest} to same file")
 
     def get_data_type(self):
         return self.data_type

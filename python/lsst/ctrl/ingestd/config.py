@@ -64,4 +64,4 @@ class Config(BaseModel):
 
     @computed_field
     def topics_as_list(self) -> list:
-        return list(self.topics.keys())
+        return list(self.topics)
