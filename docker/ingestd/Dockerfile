@@ -14,8 +14,7 @@ USER lsst
 
 RUN git config --global --add safe.directory /home/lsst/ctrl_ingestd && \
     source /opt/lsst/software/stack/loadLSST.bash && \
-    setup sconsUtils && \
-    setup utils && \
+    setup lsst_distrib && \
     setup -r ctrl_ingestd && \
     cd ctrl_ingestd && \
     scons
