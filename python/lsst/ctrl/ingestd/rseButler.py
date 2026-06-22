@@ -24,6 +24,7 @@ import logging
 from lsst.ctrl.ingestd.entries.dataType import DataType
 from lsst.daf.butler import Butler, FileDataset
 from lsst.obs.base.ingest import RawIngestConfig, RawIngestTask
+from lsst.pipe.base import Instrument
 
 LOGGER = logging.getLogger(__name__)
 
@@ -37,10 +38,13 @@ class RseButler:
         Butler repo location
     """
 
-    def __init__(self, repo: str):
+    def __init__(self, repo: str, instrument: str = None):
         self.butler = Butler(repo, writeable=True)
         cfg = RawIngestConfig()
         cfg.transfer = "direct"
+        if instrument:
+            instr = Instrument.from_string(instrument)
+            instr.register(self.butler.registry)
         self.task = RawIngestTask(
             config=cfg,
             butler=self.butler,

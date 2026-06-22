@@ -5,6 +5,9 @@ This daemon listens to Kafka messages from the Rucio Hermes daemons and performs
 This can be run stand-alone or via a container.  It is configured with a YAML file, pointed to by
 the enviroment variable CTRL_INGESTD_CONFIG.
 
+Note that when you first create a new butler repo for `ingestd`, you should register instrument(s)
+with that repo before using `ingestd`.  This only needs to be done once.
+
 The daemon listens on Kafka RSE topics that are named in the
 CTRL_INGESTD_CONFIG YAML file.  For example, in the example YAML file below, the
 ingestd daemon will listen on topics XRD1-test and XRD2-test.
